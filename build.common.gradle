@@ -20,9 +20,8 @@ import java.util.regex.Pattern
 apply plugin: 'com.android.application'
 
 android {
-
-    compileSdkVersion 28
-    buildToolsVersion '28.0.3'
+    compileSdkVersion rootProject.compileSdk
+    buildToolsVersion rootProject.buildTools
 
     signingConfigs {
         debug {
@@ -39,8 +38,8 @@ android {
 
     defaultConfig {
         applicationId 'com.qualcomm.ftcrobotcontroller'
-        minSdkVersion 19
-        targetSdkVersion 19
+        minSdkVersion rootProject.minSdk
+        targetSdkVersion rootProject.targetSdk
 
         /**
          * We keep the versionCode and versionName of robot controller applications in sync with

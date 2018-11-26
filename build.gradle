@@ -3,6 +3,13 @@
  *
  * It is extraordinarily rare that you will ever need to edit this file.
  */
+ext {
+    minSdk = 19
+    compileSdk = 28
+    targetSdk = 19
+    buildTools = '28.0.3'
+}
+
 buildscript {
     repositories {
         google()
