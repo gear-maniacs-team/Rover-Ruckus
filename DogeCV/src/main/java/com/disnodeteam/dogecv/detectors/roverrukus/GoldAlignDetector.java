@@ -1,7 +1,5 @@
 package com.disnodeteam.dogecv.detectors.roverrukus;
 
-import android.util.Log;
-
 import com.disnodeteam.dogecv.DogeCV;
 import com.disnodeteam.dogecv.detectors.DogeCVDetector;
 import com.disnodeteam.dogecv.filters.DogeCVColorFilter;
@@ -20,10 +18,6 @@ import org.opencv.imgproc.Imgproc;
 
 import java.util.ArrayList;
 import java.util.List;
-
-/**
- * Created by Victo on 9/17/2018.
- */
 
 public class GoldAlignDetector extends DogeCVDetector {
 
