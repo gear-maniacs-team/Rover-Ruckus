@@ -1,21 +1,20 @@
 package org.firstinspires.ftc.teamcode.autonomous;
 
-@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name = "AutoBlueDepot", group = "Autonomous")
-public class AutoBlueDepot extends Autonomous {
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+
+@Autonomous(name = "AutoBlueDepot", group = "Autonomous")
+public class AutoBlueDepot extends AutonomousOp {
 
     @Override
-    public void start() {
-        super.start();
+    public void runOpMode() throws InterruptedException {
+        super.runOpMode();
 
-    }
+        waitForStart();
 
-    @Override
-    public void loop() {
-        moveForward(1000);
-        stop();
-    }
+        //rotate45();
+        // 10 is 2 seconds
+        moveForward(6);
+        moveRight(6);
 
-    @Override
-    public void stop() {
     }
 }

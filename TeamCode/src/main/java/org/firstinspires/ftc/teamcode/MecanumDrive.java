@@ -15,8 +15,7 @@ public class MecanumDrive extends OpMode {
     }
 
     @Override
-    public void loop()
-    {
+    public void loop() {
         double rightX = gamepad1.right_stick_x;
         double leftX = gamepad1.left_stick_x;
         double leftY = -gamepad1.left_stick_y;
@@ -34,12 +33,14 @@ public class MecanumDrive extends OpMode {
         motors.BL.setPower(v3);
         motors.BR.setPower(v4);
 
+        while(gamepad1.dpad_up)
+            motors.AE.setPower(0.2);
+        while(gamepad1.dpad_down)
+            motors.AE.setPower(-0.2);
+        motors.AE.setPower(0);
+
         telemetry.addData("Speed" , speed);
+        telemetry.update();
     }
 
-    @Override
-    public void stop()
-    {
-        //No action needed
-    }
 }
