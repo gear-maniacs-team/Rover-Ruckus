@@ -16,8 +16,6 @@ public class GoldAlignExample extends OpMode
 
     @Override
     public void init() {
-        telemetry.addData("Status", "DogeCV 2018.0 - Gold Align Example");
-
         // Set up detector
         detector = new GoldAlignDetector(); // Create detector
         detector.init(hardwareMap.appContext, CameraViewDisplay.getInstance()); // Initialize it with the app context and camera
@@ -36,8 +34,6 @@ public class GoldAlignExample extends OpMode
         detector.ratioScorer.perfectRatio = 1.0; // Ratio adjustment
 
         detector.enable(); // Start the detector!
-
-
     }
 
     /*
@@ -62,6 +58,8 @@ public class GoldAlignExample extends OpMode
     public void loop() {
         telemetry.addData("IsAligned" , detector.getAligned()); // Is the bot aligned with the gold mineral?
         telemetry.addData("X Pos" , detector.getXPosition()); // Gold X position.
+        telemetry.addData("Y Pos", detector.getYPosition()); // Gold Y position.
+        telemetry.update();
     }
 
     /*

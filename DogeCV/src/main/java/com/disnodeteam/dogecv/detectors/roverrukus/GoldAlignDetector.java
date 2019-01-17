@@ -31,6 +31,7 @@ public class GoldAlignDetector extends DogeCVDetector {
     private boolean found    = false; // Is the gold mineral found
     private boolean aligned  = false; // Is the gold mineral aligned
     private double  goldXPos = 0;     // X Position (in pixels) of the gold element
+    private double goldYPos = 0;
 
     // Detector settings
     public boolean debugAlignment = true; // Show debug lines to show alignment settings
@@ -65,7 +66,7 @@ public class GoldAlignDetector extends DogeCVDetector {
         input.release();
 
 
-        //Preprocess the working Mat (blur it then apply a yellow filter)
+        // Preprocess the working Mat (blur it then apply a yellow filter)
         Imgproc.GaussianBlur(workingMat,workingMat,new Size(5,5),0);
         yellowFilter.process(workingMat.clone(),maskYellow);
 
@@ -77,19 +78,19 @@ public class GoldAlignDetector extends DogeCVDetector {
 
         // Current result
         Rect bestRect = null;
-        double bestDiffrence = Double.MAX_VALUE; // MAX_VALUE since less diffrence = better
+        double bestDifference = Double.MAX_VALUE; // MAX_VALUE since less difference = better
 
         // Loop through the contours and score them, searching for the best result
         for(MatOfPoint cont : contoursYellow){
-            double score = calculateScore(cont); // Get the diffrence score using the scoring API
+            double score = calculateScore(cont); // Get the difference score using the scoring API
 
             // Get bounding rect of contour
             Rect rect = Imgproc.boundingRect(cont);
             Imgproc.rectangle(displayMat, rect.tl(), rect.br(), new Scalar(0,0,255),2); // Draw rect
 
             // If the result is better then the previously tracked one, set this rect as the new best
-            if(score < bestDiffrence){
-                bestDiffrence = score;
+            if (score < bestDifference) {
+                bestDifference = score;
                 bestRect = rect;
             }
         }
@@ -108,19 +109,16 @@ public class GoldAlignDetector extends DogeCVDetector {
             // Set align X pos
             xPos = bestRect.x + (bestRect.width / 2);
             goldXPos = xPos;
+            goldYPos = bestRect.y + ((bestRect.height) / 2.0f);
 
             // Draw center point
             Imgproc.circle(displayMat, new Point( xPos, bestRect.y + (bestRect.height / 2)), 5, new Scalar(0,255,0),2);
 
             // Check if the mineral is aligned
-            if(xPos < alignXMax && xPos > alignXMin){
-                aligned = true;
-            }else{
-                aligned = false;
-            }
+            aligned = xPos < alignXMax && xPos > alignXMin;
 
-            // Draw Current X
-            Imgproc.putText(displayMat,"Current X: " + bestRect.x,new Point(10,getAdjustedSize().height - 10),0,0.5, new Scalar(255,255,255),1);
+            // Draw Current Y
+            Imgproc.putText(displayMat, "Current YX: " + goldYPos, new Point(10, getAdjustedSize().height - 10), 0, 0.5, new Scalar(255, 255, 255), 1);
             found = true;
         }else{
             found = false;
@@ -129,7 +127,7 @@ public class GoldAlignDetector extends DogeCVDetector {
         if(debugAlignment){
 
             //Draw debug alignment info
-            if(isFound()){
+            if (isFound()) {
                 Imgproc.line(displayMat,new Point(goldXPos, getAdjustedSize().height), new Point(goldXPos, getAdjustedSize().height - 30),new Scalar(255,255,0), 2);
             }
 
@@ -138,7 +136,7 @@ public class GoldAlignDetector extends DogeCVDetector {
         }
 
         //Print result
-        Imgproc.putText(displayMat,"Result: " + aligned,new Point(10,getAdjustedSize().height - 30),0,1, new Scalar(255,255,0),1);
+        Imgproc.putText(displayMat, "Result: " + aligned, new Point(10, getAdjustedSize().height - 30), 0, 1, new Scalar(255, 255, 0), 1);
 
 
         return displayMat;
@@ -149,7 +147,7 @@ public class GoldAlignDetector extends DogeCVDetector {
     public void useDefaults() {
         addScorer(ratioScorer);
 
-        // Add diffrent scoreres depending on the selected mode
+        // Add different scoreres depending on the selected mode
         if(areaScoringMethod == DogeCV.AreaScoringMethod.MAX_AREA){
             addScorer(maxAreaScorer);
         }
@@ -184,6 +182,15 @@ public class GoldAlignDetector extends DogeCVDetector {
      */
     public double getXPosition(){
         return goldXPos;
+    }
+
+    /**
+     * Returns gold element last y-position
+     *
+     * @return last y-position in screen pixels of gold element
+     */
+    public double getYPosition() {
+        return goldYPos;
     }
 
     /**

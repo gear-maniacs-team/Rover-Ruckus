@@ -11,10 +11,9 @@ public class AutoBlueDepot extends AutonomousOp {
 
         waitForStart();
 
-        //rotate45();
-        // 10 is 2 seconds
-        moveForward(6);
-        moveRight(6);
+        moveForward(8);
+        moveRight(8);
+        rotate45();
 
     }
 }
