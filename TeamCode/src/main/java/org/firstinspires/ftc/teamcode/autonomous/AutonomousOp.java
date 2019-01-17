@@ -8,99 +8,99 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Motors;
+import org.firstinspires.ftc.teamcode.motors.WheelMotors;
 
 public abstract class AutonomousOp extends LinearOpMode {
 
     protected GoldAlignDetector detector;
-    protected Motors motors = null;
+    protected WheelMotors wheelMotors = null;
 
     @Override
     public void runOpMode() throws InterruptedException {
-        motors = new Motors(hardwareMap.dcMotor);
+        wheelMotors = new WheelMotors(hardwareMap.dcMotor);
     }
 
-    private void waitForMotors() {
+    private void waitForMotors() throws InterruptedException {
         // Wait for the Motor to stop
         while (opModeIsActive()
-                && motors.TL.isBusy()
-                && motors.TR.isBusy()
-                && motors.BL.isBusy()
-                && motors.BR.isBusy()) {
-            telemetry.addData("Pos", "Front: %d, %d Back: %d, %d",
-                    motors.TL.getCurrentPosition(), motors.TR.getCurrentPosition(),
-                    motors.BL.getCurrentPosition(), motors.BR.getCurrentPosition());
+                && (wheelMotors.TL.isBusy()
+                || wheelMotors.TR.isBusy()
+                || wheelMotors.BL.isBusy()
+                || wheelMotors.BR.isBusy())) {
+            telemetry.addData("Current WheelMotors Position", "Front: %d, %d Back: %d, %d",
+                    wheelMotors.TL.getCurrentPosition(), wheelMotors.TR.getCurrentPosition(),
+                    wheelMotors.BL.getCurrentPosition(), wheelMotors.BR.getCurrentPosition());
             telemetry.update();
-            idle();
+            Thread.sleep(1);
         }
 
-        // Stop the Motors
-        motors.TL.setPower(0);
-        motors.TR.setPower(0);
-        motors.BL.setPower(0);
-        motors.BR.setPower(0);
+        // Stop the WheelMotors
+        wheelMotors.TL.setPower(0);
+        wheelMotors.TR.setPower(0);
+        wheelMotors.BL.setPower(0);
+        wheelMotors.BR.setPower(0);
     }
 
-    void moveForward(final int position) {
+    void moveForward(final int position) throws InterruptedException {
         // Reset Counter
-        motors.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        // Set Motors to run to target position
-        motors.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        wheelMotors.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        // Set WheelMotors to run to target position
+        wheelMotors.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        motors.TL.setTargetPosition(position);
-        motors.TR.setTargetPosition(-position);
-        motors.BL.setTargetPosition(-position);
-        motors.BR.setTargetPosition(position);
+        wheelMotors.TL.setTargetPosition(position);
+        wheelMotors.TR.setTargetPosition(-position);
+        wheelMotors.BL.setTargetPosition(-position);
+        wheelMotors.BR.setTargetPosition(position);
 
         // Set Power
-        motors.TL.setPower(0.5);
-        motors.TR.setPower(-0.5);
-        motors.BL.setPower(-0.5);
-        motors.BR.setPower(0.5);
+        wheelMotors.TL.setPower(0.5);
+        wheelMotors.TR.setPower(-0.5);
+        wheelMotors.BL.setPower(-0.5);
+        wheelMotors.BR.setPower(0.5);
 
         waitForMotors();
     }
 
-    void moveRight(final int position) {
-        motors.TR.setDirection(DcMotorSimple.Direction.REVERSE);
-        motors.BL.setDirection(DcMotorSimple.Direction.REVERSE);
+    void moveRight(final int position) throws InterruptedException {
+        wheelMotors.TR.setDirection(DcMotorSimple.Direction.REVERSE);
+        wheelMotors.BL.setDirection(DcMotorSimple.Direction.REVERSE);
         // Reset Counter
-        motors.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        // Set Motors to run to target position
-        motors.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        wheelMotors.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        // Set WheelMotors to run to target position
+        wheelMotors.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        motors.TL.setTargetPosition(position);
-        motors.TR.setTargetPosition(-position);
-        motors.BL.setTargetPosition(-position);
-        motors.BR.setTargetPosition(position);
+        wheelMotors.TL.setTargetPosition(position);
+        wheelMotors.TR.setTargetPosition(-position);
+        wheelMotors.BL.setTargetPosition(-position);
+        wheelMotors.BR.setTargetPosition(position);
 
         // Set Power
-        final double direction = Math.atan2(0, 1) - Motors.PI_4;
+        final double direction = Math.atan2(0, 1) - WheelMotors.PI_4;
         final double v1 = Math.cos(direction);
 
-        motors.TL.setPower(v1);
-        motors.TR.setPower(v1);
-        motors.BL.setPower(v1);
-        motors.BR.setPower(v1);
+        wheelMotors.TL.setPower(v1);
+        wheelMotors.TR.setPower(v1);
+        wheelMotors.BL.setPower(v1);
+        wheelMotors.BR.setPower(v1);
 
         waitForMotors();
     }
 
-    void rotate45() {
+    void rotate45() throws InterruptedException {
         // Reset Counter
-        motors.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        // Set Motors to run to target position
-        motors.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        wheelMotors.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        // Set WheelMotors to run to target position
+        wheelMotors.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        motors.TL.setTargetPosition(-10);
-        motors.TR.setTargetPosition(-10);
-        motors.BL.setTargetPosition(10);
-        motors.BR.setTargetPosition(10);
+        wheelMotors.TL.setTargetPosition(-10);
+        wheelMotors.TR.setTargetPosition(-10);
+        wheelMotors.BL.setTargetPosition(10);
+        wheelMotors.BR.setTargetPosition(10);
 
-        motors.TL.setPower(-1);
-        motors.TR.setPower(-1);
-        motors.BL.setPower(1);
-        motors.BR.setPower(1);
+        wheelMotors.TL.setPower(-1);
+        wheelMotors.TR.setPower(-1);
+        wheelMotors.BL.setPower(1);
+        wheelMotors.BR.setPower(1);
 
         waitForMotors();
     }

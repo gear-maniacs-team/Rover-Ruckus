@@ -15,13 +15,13 @@ public class AutoBlueDepot extends AutonomousOp {
         waitForStart();
 
         GoldPos goldPos = GoldPos.MIDDLE;
-        int y = (int)detector.getYPosition(); // from 0 to 480
+        double y = detector.getYPosition(); // from 0 to 480
 
-        if (y > 0 && y <= 160)
+        if (y > 0 && y < 160)
             goldPos = GoldPos.LEFT;
-        else if (y >= 320)
+        else if (y > 320)
             goldPos = GoldPos.RIGHT;
-        else {
+        else if (y <= 0) {
             telemetry.addData("Error 404", "Gold not found");
             telemetry.update();
         }
@@ -31,8 +31,8 @@ public class AutoBlueDepot extends AutonomousOp {
         moveRight(10);
 
         if (goldPos == GoldPos.LEFT)
-            moveForward(20);
+            moveForward(10);
         else if (goldPos == GoldPos.RIGHT)
-            moveForward(-20);
+            moveForward(-10);
     }
 }

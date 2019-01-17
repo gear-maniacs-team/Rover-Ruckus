@@ -118,7 +118,7 @@ public class GoldAlignDetector extends DogeCVDetector {
             aligned = xPos < alignXMax && xPos > alignXMin;
 
             // Draw Current Y
-            Imgproc.putText(displayMat, "Current YX: " + goldYPos, new Point(10, getAdjustedSize().height - 10), 0, 0.5, new Scalar(255, 255, 255), 1);
+            Imgproc.putText(displayMat, "Current Y: " + goldYPos, new Point(10, getAdjustedSize().height - 10), 0, 0.5, new Scalar(255, 255, 255), 1);
             found = true;
         }else{
             found = false;
