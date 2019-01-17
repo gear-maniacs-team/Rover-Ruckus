@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.Motors;
 
 public abstract class AutonomousOp extends LinearOpMode {
 
-    private GoldAlignDetector detector;
+    protected GoldAlignDetector detector;
     protected Motors motors = null;
 
     @Override
