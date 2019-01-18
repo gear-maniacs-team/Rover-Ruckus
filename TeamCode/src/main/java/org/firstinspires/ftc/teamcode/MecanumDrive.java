@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.motors.ArmMotors;
 import org.firstinspires.ftc.teamcode.motors.WheelMotors;
 
-@TeleOp(name = "Mecanum")
+@TeleOp(name = "The Good One")
 public class MecanumDrive extends OpMode {
 
     private WheelMotors wheelMotors = null;
@@ -34,6 +34,7 @@ public class MecanumDrive extends OpMode {
         wheelMotors.BL.setPower(v2 * 0.75);
         wheelMotors.BR.setPower(v1 * 0.75);
 
+        //
         while (gamepad1.right_stick_x > 0) {
             wheelMotors.TR.setPower(0.3);
             wheelMotors.TL.setPower(0.3);
