@@ -29,7 +29,21 @@ public class WheelMotors {
         BR.setMode(mode);
     }
 
-    public void getTicks(int cm) {
+    public void setTargetPosition(int position) {
+        TL.setTargetPosition(position);
+        TR.setTargetPosition(position);
+        BL.setTargetPosition(position);
+        BR.setTargetPosition(position);
+    }
 
+    public void setPower(double power) {
+        TL.setPower(power);
+        TR.setPower(power);
+        BL.setPower(power);
+        BR.setPower(power);
+    }
+
+    public int getTicks(int cm) {
+        return cm * (int) TICKS;
     }
 }
