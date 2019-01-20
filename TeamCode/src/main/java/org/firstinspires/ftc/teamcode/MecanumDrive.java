@@ -11,15 +11,20 @@ public class MecanumDrive extends OpMode {
 
     private WheelMotors wheelMotors = null;
     private ArmMotors armMotors = null;
+    private double armSpeed = 1;
+    private double collectorSpeed = 0.4;
+    private boolean breaker = true;
 
     @Override
-    public void init() {
+    public void init()
+    {
         wheelMotors = new WheelMotors(hardwareMap.dcMotor);
         armMotors = new ArmMotors(hardwareMap.dcMotor);
     }
 
     @Override
-    public void loop() {
+    public void loop()
+    {
         double leftX = gamepad1.left_stick_x;
         double leftY = -gamepad1.left_stick_y;
 
@@ -29,12 +34,11 @@ public class MecanumDrive extends OpMode {
         double v1 = speed * Math.cos(direction);
         double v2 = speed * Math.sin(direction);
 
-        wheelMotors.TL.setPower(v1 * 0.75);
-        wheelMotors.TR.setPower(v2 * 0.75);
-        wheelMotors.BL.setPower(v2 * 0.75);
-        wheelMotors.BR.setPower(v1 * 0.75);
+        wheelMotors.TL.setPower(v1);
+        wheelMotors.TR.setPower(v2);
+        wheelMotors.BL.setPower(v2);
+        wheelMotors.BR.setPower(v1);
 
-        //
         while (gamepad1.right_stick_x > 0) {
             wheelMotors.TR.setPower(0.3);
             wheelMotors.TL.setPower(0.3);
@@ -48,19 +52,35 @@ public class MecanumDrive extends OpMode {
             wheelMotors.BR.setPower(0.3);
         }
 
-        wheelMotors.TR.setPower(0);
-        wheelMotors.TL.setPower(0);
-        wheelMotors.BL.setPower(0);
-        wheelMotors.BR.setPower(0);
+        wheelMotors.setPowerAll(0);
 
         // Arms
-        while (gamepad1.dpad_up)
-            armMotors.extender.setPower(0.2);
-        while (gamepad1.dpad_down)
-            armMotors.extender.setPower(-0.2);
+        if (gamepad1.dpad_up)
+            armMotors.extender.setPower(armSpeed);
+        if (gamepad1.dpad_down)
+            armMotors.extender.setPower(-armSpeed);
         armMotors.extender.setPower(0);
 
+        if (gamepad1.a)
+            armMotors.angle.setPower(armSpeed);
+        if (gamepad1.y)
+            armMotors.angle.setPower(-armSpeed);
+        armMotors.angle.setPower(0);
+
+        if(gamepad1.b && breaker)
+        {
+            armMotors.collector.setPower(collectorSpeed);
+            breaker = false;
+        }
+        else
+            if(gamepad1.b && !breaker)
+            {
+                armMotors.collector.setPower(0);
+                breaker = true;
+            }
+
         telemetry.addData("Wheels Speed", speed);
+        telemetry.addData("Arm Extender Speed", armSpeed);
         telemetry.update();
     }
 

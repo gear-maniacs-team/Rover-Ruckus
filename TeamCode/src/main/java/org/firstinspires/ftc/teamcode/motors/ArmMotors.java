@@ -12,7 +12,7 @@ public class ArmMotors {
     public ArmMotors(HardwareMap.DeviceMapping<DcMotor> dcMotors) {
         angle = dcMotors.get("ArmAngle");
         extender = dcMotors.get("ArmExtender");
-        collector = dcMotors.get("ArmExtender");
+        collector = dcMotors.get("ArmCollector");
     }
 }
 

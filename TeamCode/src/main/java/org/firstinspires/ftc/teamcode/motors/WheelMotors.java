@@ -22,21 +22,21 @@ public class WheelMotors {
         BR = dcMotors.get("BR");
     }
 
-    public void setMode(DcMotor.RunMode mode) {
+    public void setModeAll(DcMotor.RunMode mode) {
         TL.setMode(mode);
         TR.setMode(mode);
         BL.setMode(mode);
         BR.setMode(mode);
     }
 
-    public void setTargetPosition(int position) {
+    public void setTargetPositionAll(int position) {
         TL.setTargetPosition(position);
         TR.setTargetPosition(position);
         BL.setTargetPosition(position);
         BR.setTargetPosition(position);
     }
 
-    public void setPower(double power) {
+    public void setPowerAll(double power) {
         TL.setPower(power);
         TR.setPower(power);
         BL.setPower(power);

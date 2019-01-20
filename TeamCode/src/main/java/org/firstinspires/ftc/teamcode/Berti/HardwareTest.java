@@ -27,9 +27,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.autonomous;
+package org.firstinspires.ftc.teamcode.Berti;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -70,23 +69,17 @@ public class HardwareTest
         // Save reference to Hardware map
         hwMap = ahwMap;
 
-        wheelMotors.TR.setDirection(DcMotorSimple.Direction.FORWARD);
-        wheelMotors.TL.setDirection(DcMotorSimple.Direction.REVERSE);
-        wheelMotors.BR.setDirection(DcMotorSimple.Direction.FORWARD);
-        wheelMotors.BL.setDirection(DcMotorSimple.Direction.REVERSE);
+        wheelMotors = new WheelMotors(hwMap.dcMotor);
+
+        wheelMotors.TR.setDirection(DcMotorSimple.Direction.REVERSE);
+        wheelMotors.TL.setDirection(DcMotorSimple.Direction.FORWARD);
+        wheelMotors.BR.setDirection(DcMotorSimple.Direction.REVERSE);
+        wheelMotors.BL.setDirection(DcMotorSimple.Direction.FORWARD);
 
         // Set all motors to zero power
         wheelMotors.TR.setPower(0);
         wheelMotors.TL.setPower(0);
         wheelMotors.BR.setPower(0);
         wheelMotors.BL.setPower(0);
-
-        // Set all motors to run without encoders.
-        // May want to use RUN_USING_ENCODERS if encoders are installed.
-        wheelMotors.TR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        wheelMotors.TL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        wheelMotors.BR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        wheelMotors.BL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
  }
-

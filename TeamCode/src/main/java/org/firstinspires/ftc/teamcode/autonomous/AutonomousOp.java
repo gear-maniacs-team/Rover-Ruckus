@@ -36,19 +36,19 @@ public abstract class AutonomousOp extends LinearOpMode {
         }
 
         // Stop the Motors
-        wheelMotors.setPower(0);
+        wheelMotors.setPowerAll(0);
     }
 
     void moveForward(final int position) throws InterruptedException {
         wheelMotors.TR.setDirection(DcMotorSimple.Direction.REVERSE);
         wheelMotors.BL.setDirection(DcMotorSimple.Direction.REVERSE);
         // Reset Counter
-        wheelMotors.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        wheelMotors.setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         // Set WheelMotors to run to target position
-        wheelMotors.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        wheelMotors.setModeAll(DcMotor.RunMode.RUN_TO_POSITION);
 
-        wheelMotors.setTargetPosition(position);
-        wheelMotors.setPower(DRIVE_POWER);
+        wheelMotors.setTargetPositionAll(position);
+        wheelMotors.setPowerAll(DRIVE_POWER);
 
         waitForMotors();
     }
@@ -57,15 +57,15 @@ public abstract class AutonomousOp extends LinearOpMode {
         wheelMotors.TR.setDirection(DcMotorSimple.Direction.REVERSE);
         wheelMotors.BL.setDirection(DcMotorSimple.Direction.REVERSE);
         // Reset Counter
-        wheelMotors.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        wheelMotors.setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         // Set WheelMotors to run to target position
-        wheelMotors.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        wheelMotors.setModeAll(DcMotor.RunMode.RUN_TO_POSITION);
 
-        wheelMotors.setTargetPosition(position);
+        wheelMotors.setTargetPositionAll(position);
 
         // Set Power
         final double direction = Math.atan2(0, 1) - WheelMotors.PI_4;
-        wheelMotors.setPower(Math.cos(direction));
+        wheelMotors.setPowerAll(Math.cos(direction));
 
         waitForMotors();
     }
@@ -74,12 +74,12 @@ public abstract class AutonomousOp extends LinearOpMode {
         wheelMotors.TL.setDirection(DcMotorSimple.Direction.REVERSE);
         wheelMotors.TR.setDirection(DcMotorSimple.Direction.REVERSE);
         // Reset Counter
-        wheelMotors.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        wheelMotors.setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         // Set WheelMotors to run to target position
-        wheelMotors.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        wheelMotors.setModeAll(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        wheelMotors.setTargetPosition(-50);
-        wheelMotors.setPower(DRIVE_POWER);
+        wheelMotors.setTargetPositionAll(-50);
+        wheelMotors.setPowerAll(DRIVE_POWER);
 
         waitForMotors();
     }
