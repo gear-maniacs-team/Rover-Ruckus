@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.autonomous;
 import com.disnodeteam.dogecv.detectors.roverrukus.GoldAlignDetector;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.GoldPos;
+import org.firstinspires.ftc.teamcode.GoldDetectorManager;
 
 @Autonomous(name = "AutoBlueDepot", group = "Autonomous")
 public class AutoBlueDepot extends AutonomousOp {
@@ -12,9 +12,8 @@ public class AutoBlueDepot extends AutonomousOp {
     public void runOpMode() throws InterruptedException {
         super.runOpMode();
 
-        startDetector();
-
-        detector.setListener(new GoldAlignDetector.GoldAlignListener() {
+        detectorManager.startDetector(hardwareMap);
+        detectorManager.detector.setListener(new GoldAlignDetector.GoldAlignListener() {
             @Override
             public void onAlignChange(boolean found, boolean aligned, double lastXPos, double lastYPos) {
                 if (found) {
@@ -29,24 +28,14 @@ public class AutoBlueDepot extends AutonomousOp {
 
         waitForStart();
 
-        GoldPos goldPos = GoldPos.MIDDLE;
-        double y = detector.getYPosition(); // from 0 to 480
-
-        if (y > 0 && y < 160)
-            goldPos = GoldPos.LEFT;
-        else if (y > 320)
-            goldPos = GoldPos.RIGHT;
-        else if (y <= 0)
-            telemetry.addData("Error 404", "Gold not found");
-        telemetry.update();
-
-        stopDetector();
+        GoldDetectorManager.Pos goldPos = detectorManager.getLastGoldPosition();
+        detectorManager.stopDetector();
 
         moveRight(10);
 
-        if (goldPos == GoldPos.LEFT)
+        if (goldPos == GoldDetectorManager.Pos.LEFT)
             moveForward(10);
-        else if (goldPos == GoldPos.RIGHT)
+        else if (goldPos == GoldDetectorManager.Pos.RIGHT)
             moveForward(-10);
     }
 }

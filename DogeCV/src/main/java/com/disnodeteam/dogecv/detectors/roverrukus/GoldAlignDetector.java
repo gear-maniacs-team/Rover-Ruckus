@@ -26,9 +26,9 @@ public class GoldAlignDetector extends DogeCVDetector {
     public double alignPosOffset = 0;    // How far from center frame is aligned
 
     // Defining Mats to be used.
-    private Mat displayMat = new Mat(); // Display debug info to the screen (this is what is returned)
-    private Mat workingMat = new Mat(); // Used for preprocessing and working with (blurring as an example)
-    private Mat maskYellow = new Mat(); // Yellow Mask returned by color filter
+    private final Mat displayMat = new Mat(); // Display debug info to the screen (this is what is returned)
+    private final Mat workingMat = new Mat(); // Used for preprocessing and working with (blurring as an example)
+    private final Mat maskYellow = new Mat(); // Yellow Mask returned by color filter
     public double alignSize = 100;  // How wide is the margin of error for alignment
     //Create the default filters and scorers
     public DogeCVColorFilter yellowFilter = new LeviColorFilter(LeviColorFilter.ColorPreset.YELLOW); //Default Yellow filter
