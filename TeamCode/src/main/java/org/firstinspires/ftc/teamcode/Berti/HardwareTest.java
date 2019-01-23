@@ -31,7 +31,6 @@ package org.firstinspires.ftc.teamcode.Berti;
 
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.motors.WheelMotors;
 
@@ -57,7 +56,6 @@ public class HardwareTest
 
     /* local OpMode members. */
     HardwareMap hwMap           =  null;
-    private ElapsedTime period  = new ElapsedTime();
 
     /* Constructor */
     public HardwareTest(){

@@ -55,7 +55,7 @@ open class SpeechRecognition : LinearOpMode() {
             override fun onPartialResults(partialResults: Bundle?) {
                 val matches = partialResults?.getStringArrayList(RecognizerIntent.EXTRA_PARTIAL_RESULTS)
 
-                if (matches?.filterNotNull()?.any { it.contains("music", false) } == true) {
+                if (matches?.filterNotNull()?.any { it.contains("music", true) } == true) {
                     speechDone = true
                     speechSuccessful = true
                 }
@@ -99,7 +99,7 @@ open class SpeechRecognition : LinearOpMode() {
                     return
                 }
 
-                if (matches.filterNotNull().any { it.contains("music", false) }) {
+                if (matches.filterNotNull().any { it.contains("music", true) }) {
                     speechSuccessful = true
                 }
             }
