@@ -27,33 +27,41 @@ public class PracticeNoDetector extends LinearOpMode
         telemetry.addData("Front","Run");
         telemetry.update();
 
-        goFront(speed, pause);
+        goFront(speed*1.1, pause);
+
+
 
         telemetry.addData("Back","Run");
         telemetry.update();
 
-        goFront(-speed * 0.75, pause);
+        goFront(-speed*0.8, pause);
+
+
 
         telemetry.addData("Left","Run");
         telemetry.update();
 
-        goLeft(speed * 0.75, pause);
-
-        telemetry.addData("Right","Run");
-        telemetry.update();
-
         goLeft(-speed * 0.75, pause);
+
+        // Pana aici e bine
 
         telemetry.addData("Front","Run");
         telemetry.update();
 
-        goFront(speed * 0.5, pause);
+        goFront(-speed*0.5, pause);
 
-        telemetry.addData("Ready","To Sleep");
+
+
+        telemetry.addData("Left","Run");
         telemetry.update();
 
-        goLeft(speed * 0.5, pause);
-        goFront(-speed, pause);
+        goLeft(-speed * 0.375, pause);
+
+
+
+
+
+
 
         sleep(200000);
 
