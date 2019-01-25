@@ -33,18 +33,23 @@ public class MecanumDrive extends OpMode {
         final double v1 = speed * Math.cos(direction);
         final double v2 = speed * Math.sin(direction);
 
-        wheelMotors.TL.setPower(v1*0.75);
-        wheelMotors.TR.setPower(v2*0.75);
-        wheelMotors.BL.setPower(-v2*0.75);
-        wheelMotors.BR.setPower(-v1*0.75);
+        double speed1 = v1*0.75;
+        double speed2 = v2*0.75;
 
-        while (gamepad1.right_stick_x > 0) {
+        wheelMotors.TL.setPower(speed1);
+        wheelMotors.TR.setPower(speed2);
+        wheelMotors.BL.setPower(-speed2);
+        wheelMotors.BR.setPower(-speed1);
+
+        while (gamepad1.right_stick_x > 0)
+        {
             wheelMotors.TR.setPower(0.3);
             wheelMotors.TL.setPower(0.3);
             wheelMotors.BL.setPower(0.3);
             wheelMotors.BR.setPower(0.3);
         }
-        while (gamepad1.right_stick_x < 0) {
+        while (gamepad1.right_stick_x < 0)
+        {
             wheelMotors.TR.setPower(-0.3);
             wheelMotors.TL.setPower(-0.3);
             wheelMotors.BL.setPower(-0.3);
@@ -79,7 +84,7 @@ public class MecanumDrive extends OpMode {
             }
         */
         telemetry.addData("Wheels Speed", speed);
-        telemetry.addData("Arm Extender Speed", armSpeed);
+        //telemetry.addData("Arm Extender Speed", armSpeed);
         telemetry.update();
     }
 
