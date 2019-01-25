@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 import org.firstinspires.ftc.teamcode.motors.WheelMotors;
 
-@Autonomous(name = "Practice Encoders")
+@Autonomous(name = "Timeout_FromDepo")
 public class PracticeNoDetector extends LinearOpMode
 {
     private WheelMotors wheelMotors = null;
@@ -44,19 +44,29 @@ public class PracticeNoDetector extends LinearOpMode
         goLeft(-speed * 0.75, pause);
 
 
-        // Pana aici e bine
+
+        telemetry.addData("Front","Run");
+        telemetry.update();
+
+        goFront(speed*0.8, pause);
+
+
+
+        telemetry.addData("Left","Run");
+        telemetry.update();
+
+        goLeft(-speed * 0.4, pause);
+
 
 
         telemetry.addData("Front","Run");
         telemetry.update();
 
-        goFront(speed*0.5, pause);
+        goFront(speed*0.7, pause);
 
 
 
-
-
-
+        //Ajunge in Krater
 
 
         sleep(200000);
@@ -91,7 +101,10 @@ public class PracticeNoDetector extends LinearOpMode
 
         sleep(timeout);
 
-        goFront(setedSpeed, timeout);
+        wheelMotors.TR.setPower(0);
+        wheelMotors.TL.setPower(0);
+        wheelMotors.BR.setPower(0);
+        wheelMotors.BL.setPower(0);
 
         sleep(timeout);
     }
