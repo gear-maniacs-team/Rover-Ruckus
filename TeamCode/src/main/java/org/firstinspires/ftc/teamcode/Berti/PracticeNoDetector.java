@@ -13,6 +13,7 @@ public class PracticeNoDetector extends LinearOpMode
 {
     private WheelMotors wheelMotors = null;
     private double speed = 0.4;
+    private int pause = 1000;
 
     @Override
     public void runOpMode() throws InterruptedException
@@ -23,11 +24,36 @@ public class PracticeNoDetector extends LinearOpMode
 
         waitForStart();
 
-        goFront(speed);
-        goFront(-speed);
-        goLeft(speed);
-        goLeft(-speed);
-        goFront(-speed);
+        telemetry.addData("Front","Run");
+        telemetry.update();
+
+        goFront(speed, pause);
+
+        telemetry.addData("Back","Run");
+        telemetry.update();
+
+        goFront(-speed * 0.75, pause);
+
+        telemetry.addData("Left","Run");
+        telemetry.update();
+
+        goLeft(speed * 0.75, pause);
+
+        telemetry.addData("Right","Run");
+        telemetry.update();
+
+        goLeft(-speed * 0.75, pause);
+
+        telemetry.addData("Front","Run");
+        telemetry.update();
+
+        goFront(speed * 0.5, pause);
+
+        telemetry.addData("Ready","To Sleep");
+        telemetry.update();
+
+        goLeft(speed * 0.5, pause);
+        goFront(-speed, pause);
 
         sleep(200000);
 
@@ -35,34 +61,34 @@ public class PracticeNoDetector extends LinearOpMode
         telemetry.update();
     }
 
-    private void goFront(double setedSpeed)
+    private void goFront(double setedSpeed, int timeout)
     {
-        wheelMotors.TR.setPower(setedSpeed);
-        wheelMotors.TL.setPower(-setedSpeed);
-        wheelMotors.BR.setPower(setedSpeed);
-        wheelMotors.BL.setPower(-setedSpeed);
+        wheelMotors.TR.setPower(-setedSpeed);
+        wheelMotors.TL.setPower(setedSpeed);
+        wheelMotors.BR.setPower(-setedSpeed);
+        wheelMotors.BL.setPower(setedSpeed);
 
-        sleep(1000);
+        sleep(timeout);
 
         wheelMotors.TR.setPower(0);
         wheelMotors.TL.setPower(0);
         wheelMotors.BR.setPower(0);
         wheelMotors.BL.setPower(0);
 
-        sleep(1000);
+        sleep(timeout);
     }
 
-    private void goLeft(double setedSpeed)
+    private void goLeft(double setedSpeed, int timeout)
     {
         wheelMotors.TR.setPower(setedSpeed);
         wheelMotors.TL.setPower(setedSpeed);
         wheelMotors.BR.setPower(setedSpeed);
         wheelMotors.BL.setPower(setedSpeed);
 
-        sleep(1000);
+        sleep(timeout);
 
-        goFront(setedSpeed);
+        goFront(setedSpeed, timeout);
 
-        sleep(1000);
+        sleep(timeout);
     }
 }
