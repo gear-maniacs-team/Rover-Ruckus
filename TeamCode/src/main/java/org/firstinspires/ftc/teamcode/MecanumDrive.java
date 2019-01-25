@@ -10,8 +10,8 @@ public class MecanumDrive extends OpMode {
 
     private WheelMotors wheelMotors = null;
     //private ArmMotors armMotors = null;
-    private double armSpeed = 1;
-    private double collectorSpeed = 0.4;
+    //private double armSpeed = 1;
+    //private double collectorSpeed = 0.4;
     private boolean breaker = true;
 
     @Override
@@ -33,8 +33,8 @@ public class MecanumDrive extends OpMode {
         final double v1 = speed * Math.cos(direction);
         final double v2 = speed * Math.sin(direction);
 
-        double speed1 = v1*0.75;
-        double speed2 = v2*0.75;
+        double speed1 = v1*0.9;
+        double speed2 = v2*0.9;
 
         wheelMotors.TL.setPower(speed1);
         wheelMotors.TR.setPower(speed2);
