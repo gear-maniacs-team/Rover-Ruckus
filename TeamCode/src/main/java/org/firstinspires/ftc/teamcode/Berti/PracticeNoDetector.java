@@ -25,6 +25,8 @@ public class PracticeNoDetector extends LinearOpMode
         goLeft(-speed);
         goFront(-speed);
 
+        sleep(200000);
+
         telemetry.addData("Path", "Complete");
         telemetry.update();
     }

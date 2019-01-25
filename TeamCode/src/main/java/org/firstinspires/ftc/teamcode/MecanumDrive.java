@@ -56,7 +56,10 @@ public class MecanumDrive extends OpMode {
             wheelMotors.BR.setPower(-0.3);
         }
 
-        wheelMotors.setPowerAll(0);
+        wheelMotors.TR.setPower(0);
+        wheelMotors.TL.setPower(0);
+        wheelMotors.BL.setPower(0);
+        wheelMotors.BR.setPower(0);
         /*
         // Arms
         if (gamepad1.dpad_up)

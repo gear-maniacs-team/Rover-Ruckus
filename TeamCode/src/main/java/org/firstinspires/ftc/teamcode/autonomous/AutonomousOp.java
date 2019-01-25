@@ -34,7 +34,7 @@ public abstract class AutonomousOp extends LinearOpMode {
         }
 
         // Stop the Motors
-        wheelMotors.setPowerAll(0);
+        //wheelMotors.setPowerAll(0);
     }
 
     void moveForward(final int position) throws InterruptedException {
@@ -46,7 +46,7 @@ public abstract class AutonomousOp extends LinearOpMode {
         wheelMotors.setModeAll(DcMotor.RunMode.RUN_TO_POSITION);
 
         wheelMotors.setTargetPositionAll(position);
-        wheelMotors.setPowerAll(DRIVE_POWER);
+        //wheelMotors.setPowerAll(DRIVE_POWER);
 
         waitForMotors();
     }
@@ -63,7 +63,7 @@ public abstract class AutonomousOp extends LinearOpMode {
 
         // Set Power
         final double direction = Math.atan2(0, 1) - WheelMotors.PI_4;
-        wheelMotors.setPowerAll(Math.cos(direction));
+        //wheelMotors.setPowerAll(Math.cos(direction));
 
         waitForMotors();
     }
@@ -77,7 +77,7 @@ public abstract class AutonomousOp extends LinearOpMode {
         wheelMotors.setModeAll(DcMotor.RunMode.RUN_USING_ENCODER);
 
         wheelMotors.setTargetPositionAll(-50);
-        wheelMotors.setPowerAll(DRIVE_POWER);
+        //wheelMotors.setPowerAll(DRIVE_POWER);
 
         waitForMotors();
     }
