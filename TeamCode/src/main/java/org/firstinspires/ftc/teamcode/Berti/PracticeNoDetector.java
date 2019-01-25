@@ -43,19 +43,15 @@ public class PracticeNoDetector extends LinearOpMode
 
         goLeft(-speed * 0.75, pause);
 
+
         // Pana aici e bine
+
 
         telemetry.addData("Front","Run");
         telemetry.update();
 
-        goFront(-speed*0.5, pause);
+        goFront(speed*0.5, pause);
 
-
-
-        telemetry.addData("Left","Run");
-        telemetry.update();
-
-        goLeft(-speed * 0.375, pause);
 
 
 
