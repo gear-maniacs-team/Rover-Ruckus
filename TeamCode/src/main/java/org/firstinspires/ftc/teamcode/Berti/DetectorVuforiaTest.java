@@ -135,7 +135,7 @@ public class DetectorVuforiaTest extends LinearOpMode {
         frontleft.setPower(-0.2);
         frontright.setPower(0.2);
         backleft.setPower(-0.2);
-        backright.setPower(-0.2);
+        backright.setPower(0.2);
 
         sleep(1000);
 

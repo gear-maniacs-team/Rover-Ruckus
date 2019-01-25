@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.motors.WheelMotors;
 public class PracticeNoDetector extends LinearOpMode
 {
     WheelMotors wheelMotors = new WheelMotors(hardwareMap.dcMotor);
-    private double speed = 0.5;
+    private double speed = 0.4;
 
     @Override
     public void runOpMode() throws InterruptedException
@@ -19,17 +19,22 @@ public class PracticeNoDetector extends LinearOpMode
 
         waitForStart();
 
-        goFront();
+        goFront(speed);
+        goFront(-speed);
+        goLeft(speed);
+        goLeft(-speed);
+        goFront(-speed);
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
     }
 
-    private void goFront() {
-        wheelMotors.TR.setPower(speed);
-        wheelMotors.TL.setPower(speed);
-        wheelMotors.BR.setPower(speed);
-        wheelMotors.BL.setPower(speed);
+    private void goFront(double setedSpeed)
+    {
+        wheelMotors.TR.setPower(setedSpeed);
+        wheelMotors.TL.setPower(setedSpeed);
+        wheelMotors.BR.setPower(setedSpeed);
+        wheelMotors.BL.setPower(setedSpeed);
 
         sleep(1000);
 
@@ -37,5 +42,17 @@ public class PracticeNoDetector extends LinearOpMode
         wheelMotors.TL.setPower(0);
         wheelMotors.BR.setPower(0);
         wheelMotors.BL.setPower(0);
+    }
+
+    private void goLeft(double setedSpeed)
+    {
+        wheelMotors.TR.setPower(setedSpeed);
+        wheelMotors.TL.setPower(-setedSpeed);
+        wheelMotors.BR.setPower(setedSpeed);
+        wheelMotors.BL.setPower(-setedSpeed);
+
+        sleep(1000);
+
+        goFront(setedSpeed);
     }
 }
