@@ -36,13 +36,6 @@ public class WheelMotors {
         BR.setTargetPosition(position);
     }
 
-    public void setPowerAll(double power) {
-        TL.setPower(power);
-        TR.setPower(power);
-        BL.setPower(power);
-        BR.setPower(power);
-    }
-
     public int getTicks(int cm) {
         return cm * (int) TICKS;
     }
