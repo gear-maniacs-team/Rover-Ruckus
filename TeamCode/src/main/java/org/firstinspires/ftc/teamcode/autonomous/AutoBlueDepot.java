@@ -2,9 +2,11 @@ package org.firstinspires.ftc.teamcode.autonomous;
 
 import com.disnodeteam.dogecv.detectors.roverrukus.GoldAlignDetector;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.GoldDetectorManager;
 
+@Disabled
 @Autonomous(name = "AutoBlueDepot", group = "Autonomous")
 public class AutoBlueDepot extends AutonomousOp {
 

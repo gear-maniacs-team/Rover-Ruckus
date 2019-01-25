@@ -3,14 +3,13 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.motors.ArmMotors;
 import org.firstinspires.ftc.teamcode.motors.WheelMotors;
 
 @TeleOp(name = "The Good One")
 public class MecanumDrive extends OpMode {
 
     private WheelMotors wheelMotors = null;
-    private ArmMotors armMotors = null;
+    //private ArmMotors armMotors = null;
     private double armSpeed = 1;
     private double collectorSpeed = 0.4;
     private boolean breaker = true;
@@ -19,7 +18,7 @@ public class MecanumDrive extends OpMode {
     public void init()
     {
         wheelMotors = new WheelMotors(hardwareMap.dcMotor);
-        armMotors = new ArmMotors(hardwareMap.dcMotor);
+        //armMotors = new ArmMotors(hardwareMap.dcMotor);
     }
 
     @Override
@@ -31,29 +30,29 @@ public class MecanumDrive extends OpMode {
         double speed = Math.hypot(leftY, leftX);
         double direction = Math.atan2(leftX, leftY) - WheelMotors.PI_4;
 
-        double v1 = speed * Math.cos(direction);
-        double v2 = speed * Math.sin(direction);
+        final double v1 = speed * Math.cos(direction);
+        final double v2 = speed * Math.sin(direction);
 
-        wheelMotors.TL.setPower(v1);
-        wheelMotors.TR.setPower(v2);
-        wheelMotors.BL.setPower(v2);
-        wheelMotors.BR.setPower(v1);
+        wheelMotors.TL.setPower(v1*0.75);
+        wheelMotors.TR.setPower(v2*0.75);
+        wheelMotors.BL.setPower(-v2*0.75);
+        wheelMotors.BR.setPower(-v1*0.75);
 
         while (gamepad1.right_stick_x > 0) {
             wheelMotors.TR.setPower(0.3);
             wheelMotors.TL.setPower(0.3);
-            wheelMotors.BL.setPower(-0.3);
-            wheelMotors.BR.setPower(-0.3);
+            wheelMotors.BL.setPower(0.3);
+            wheelMotors.BR.setPower(0.3);
         }
         while (gamepad1.right_stick_x < 0) {
             wheelMotors.TR.setPower(-0.3);
             wheelMotors.TL.setPower(-0.3);
-            wheelMotors.BL.setPower(0.3);
-            wheelMotors.BR.setPower(0.3);
+            wheelMotors.BL.setPower(-0.3);
+            wheelMotors.BR.setPower(-0.3);
         }
 
         wheelMotors.setPowerAll(0);
-
+        /*
         // Arms
         if (gamepad1.dpad_up)
             armMotors.extender.setPower(armSpeed);
@@ -78,7 +77,7 @@ public class MecanumDrive extends OpMode {
                 armMotors.collector.setPower(0);
                 breaker = true;
             }
-
+        */
         telemetry.addData("Wheels Speed", speed);
         telemetry.addData("Arm Extender Speed", armSpeed);
         telemetry.update();
