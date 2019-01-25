@@ -30,6 +30,8 @@ public class PracticeNoDetector extends LinearOpMode
         goFront(speed*1.1, pause);
 
 
+        //Introdo servo action
+
 
         telemetry.addData("Back","Run");
         telemetry.update();
@@ -62,7 +64,7 @@ public class PracticeNoDetector extends LinearOpMode
         telemetry.addData("Front","Run");
         telemetry.update();
 
-        goFront(speed*0.7, pause);
+        goFront(speed*0.75, pause);
 
 
 
@@ -89,7 +91,7 @@ public class PracticeNoDetector extends LinearOpMode
         wheelMotors.BR.setPower(0);
         wheelMotors.BL.setPower(0);
 
-        sleep(timeout);
+        sleep(timeout/2);
     }
 
     private void goLeft(double setedSpeed, int timeout)
@@ -106,6 +108,6 @@ public class PracticeNoDetector extends LinearOpMode
         wheelMotors.BR.setPower(0);
         wheelMotors.BL.setPower(0);
 
-        sleep(timeout);
+        sleep(timeout/2);
     }
 }
