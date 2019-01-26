@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.motors.WheelMotors;
 
 @Autonomous(name = "Timeout_FromDepo")
-public class PracticeNoDetector extends LinearOpMode
+public class PracticeDepo extends LinearOpMode
 {
     private WheelMotors wheelMotors = null;
     private double speed = 0.4;
@@ -15,7 +15,7 @@ public class PracticeNoDetector extends LinearOpMode
     private Servo markerServo = null;
 
     @Override
-    public void runOpMode() throws InterruptedException
+    public void runOpMode()
     {
         wheelMotors = new WheelMotors(hardwareMap.dcMotor);
         markerServo = hardwareMap.get(Servo.class, "Marker");
@@ -44,12 +44,12 @@ public class PracticeNoDetector extends LinearOpMode
         telemetry.addData("Left","Run");
         telemetry.update();
 
-        goLeft(-speed * 0.75, pause);
+        goLeft(-speed * 0.85, pause);
 
         telemetry.addData("Front","Run");
         telemetry.update();
 
-        goFront(speed*0.8, pause);
+        goFront(speed, pause);
 
         telemetry.addData("Left","Run");
         telemetry.update();
@@ -59,14 +59,14 @@ public class PracticeNoDetector extends LinearOpMode
         telemetry.addData("Front","Run");
         telemetry.update();
 
-        goFront(speed*0.75, pause);
+        goFront(speed*2, pause);
 
         //Ajunge in crater
 
-        sleep(200000);
-
         telemetry.addData("Path", "Complete");
         telemetry.update();
+
+        sleep(200000);
     }
 
     private void goFront(double setedSpeed, int timeout)

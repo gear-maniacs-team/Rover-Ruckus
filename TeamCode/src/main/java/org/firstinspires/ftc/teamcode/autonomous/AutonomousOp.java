@@ -3,82 +3,68 @@ package org.firstinspires.ftc.teamcode.autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.GoldDetectorManager;
 import org.firstinspires.ftc.teamcode.motors.WheelMotors;
 
 public abstract class AutonomousOp extends LinearOpMode {
 
-    private static final double DRIVE_POWER = 0.2;
+    protected static final double SPEED = 0.4;
+    protected static final int PAUSE = 1000;
+
     protected WheelMotors wheelMotors = null;
+    protected Servo markerServo = null;
     protected final GoldDetectorManager detectorManager = new GoldDetectorManager();
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         wheelMotors = new WheelMotors(hardwareMap.dcMotor);
+        markerServo = hardwareMap.get(Servo.class, "Marker");
     }
 
-    private void waitForMotors() throws InterruptedException {
-        // Wait for the Motor to finish
-        while (opModeIsActive()
-                && (wheelMotors.TL.isBusy()
-                || wheelMotors.TR.isBusy()
-                || wheelMotors.BL.isBusy()
-                || wheelMotors.BR.isBusy())) {
-            telemetry.addData("Current WheelMotors Position",
-                    "Front Left: %d\nFront Right: %d\nBack Left: %d\nBack Right: %d",
-                    wheelMotors.TL.getCurrentPosition(), wheelMotors.TR.getCurrentPosition(),
-                    wheelMotors.BL.getCurrentPosition(), wheelMotors.BR.getCurrentPosition());
-            telemetry.update();
-            Thread.sleep(1);
-        }
-
-        // Stop the Motors
-        //wheelMotors.setPowerAll(0);
+    protected void moveForward(double speed) {
+        moveForward(speed, PAUSE);
     }
 
-    void moveForward(final int position) throws InterruptedException {
-        wheelMotors.TR.setDirection(DcMotorSimple.Direction.REVERSE);
-        wheelMotors.BL.setDirection(DcMotorSimple.Direction.REVERSE);
-        // Reset Counter
-        wheelMotors.setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        // Set WheelMotors to run to target position
-        wheelMotors.setModeAll(DcMotor.RunMode.RUN_TO_POSITION);
+    protected void moveForward(double speed, int timeout) {
+        wheelMotors.TR.setPower(-speed);
+        wheelMotors.TL.setPower(speed);
+        wheelMotors.BR.setPower(-speed);
+        wheelMotors.BL.setPower(speed);
 
-        wheelMotors.setTargetPositionAll(position);
-        //wheelMotors.setPowerAll(DRIVE_POWER);
+        sleep(timeout);
 
-        waitForMotors();
+        wheelMotors.TR.setPower(0);
+        wheelMotors.TL.setPower(0);
+        wheelMotors.BR.setPower(0);
+        wheelMotors.BL.setPower(0);
+
+        sleep(timeout / 2);
     }
 
-    void moveRight(final int position) throws InterruptedException {
-        wheelMotors.TR.setDirection(DcMotorSimple.Direction.REVERSE);
-        wheelMotors.BL.setDirection(DcMotorSimple.Direction.REVERSE);
-        // Reset Counter
-        wheelMotors.setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        // Set WheelMotors to run to target position
-        wheelMotors.setModeAll(DcMotor.RunMode.RUN_TO_POSITION);
-
-        wheelMotors.setTargetPositionAll(position);
-
-        // Set Power
-        final double direction = Math.atan2(0, 1) - WheelMotors.PI_4;
-        //wheelMotors.setPowerAll(Math.cos(direction));
-
-        waitForMotors();
+    protected void rotateLeft(double speed) {
+        rotateLeft(speed, PAUSE);
     }
 
-    void rotate45() throws InterruptedException {
-        wheelMotors.TL.setDirection(DcMotorSimple.Direction.REVERSE);
-        wheelMotors.TR.setDirection(DcMotorSimple.Direction.REVERSE);
-        // Reset Counter
-        wheelMotors.setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        // Set WheelMotors to run to target position
-        wheelMotors.setModeAll(DcMotor.RunMode.RUN_USING_ENCODER);
+    protected void rotateLeft(double speed, int timeout) {
+        wheelMotors.TR.setPower(speed);
+        wheelMotors.TL.setPower(speed);
+        wheelMotors.BR.setPower(speed);
+        wheelMotors.BL.setPower(speed);
 
-        wheelMotors.setTargetPositionAll(-50);
-        //wheelMotors.setPowerAll(DRIVE_POWER);
+        sleep(timeout);
 
-        waitForMotors();
+        wheelMotors.TR.setPower(0);
+        wheelMotors.TL.setPower(0);
+        wheelMotors.BR.setPower(0);
+        wheelMotors.BL.setPower(0);
+
+        sleep(timeout / 2);
+    }
+
+    protected void addTelemetryWithUpdate(String caption, String value) {
+        telemetry.addData(caption, value);
+        telemetry.update();
     }
 }

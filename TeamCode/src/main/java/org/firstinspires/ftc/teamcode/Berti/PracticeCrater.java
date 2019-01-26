@@ -43,7 +43,7 @@ public class PracticeCrater extends LinearOpMode
 
         markerServo.setPosition(0);
 
-        goFront(-speed*1.7, pause);
+        goFront(-speed * 2.3, pause);
 
         //servo
 
