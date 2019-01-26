@@ -32,8 +32,8 @@ public class PracticeNoDetector extends LinearOpMode
         telemetry.addData("Servo","Movement");
         telemetry.update();
 
-        //Introdo servo action
         markerServo.setPosition(1);
+        sleep(3000);
 
         telemetry.addData("Run","back and move servo back.");
         telemetry.update();
