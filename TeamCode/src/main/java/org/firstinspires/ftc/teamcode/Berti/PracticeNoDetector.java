@@ -61,7 +61,7 @@ public class PracticeNoDetector extends LinearOpMode
 
         goFront(speed*0.75, pause);
 
-        //Ajunge in Krater
+        //Ajunge in crater
 
         sleep(200000);
 
