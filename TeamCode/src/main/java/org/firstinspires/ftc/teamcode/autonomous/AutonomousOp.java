@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.GoldDetectorManager;
@@ -43,11 +41,11 @@ public abstract class AutonomousOp extends LinearOpMode {
         sleep(timeout / 2);
     }
 
-    protected void rotateLeft(double speed) {
-        rotateLeft(speed, PAUSE);
+    protected void rotateRight(double speed) {
+        rotateRight(speed, PAUSE);
     }
 
-    protected void rotateLeft(double speed, int timeout) {
+    protected void rotateRight(double speed, int timeout) {
         wheelMotors.TR.setPower(speed);
         wheelMotors.TL.setPower(speed);
         wheelMotors.BR.setPower(speed);

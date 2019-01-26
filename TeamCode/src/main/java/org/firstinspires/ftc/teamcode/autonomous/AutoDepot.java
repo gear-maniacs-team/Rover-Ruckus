@@ -44,17 +44,17 @@ public class AutoDepot extends AutonomousOp {
         markerServo.setPosition(0);
         moveForward(SPEED * -0.7);
 
-        addTelemetryWithUpdate("Rotation", "Right");
-        rotateLeft(SPEED * -0.75);
-
-        addTelemetryWithUpdate("Direction", "Front");
-        moveForward(SPEED * 0.8);
-
         addTelemetryWithUpdate("Rotation", "Left");
-        rotateLeft(SPEED * 0.5);
+        rotateRight(SPEED * -0.85);
 
         addTelemetryWithUpdate("Direction", "Front");
-        moveForward(SPEED * 0.85);
+        moveForward(SPEED);
+
+        addTelemetryWithUpdate("Rotation", "Right");
+        rotateRight(SPEED * 0.5);
+
+        addTelemetryWithUpdate("Direction", "Front");
+        moveForward(SPEED * 2);
 
         addTelemetryWithUpdate("Status", "Path Completed");
     }

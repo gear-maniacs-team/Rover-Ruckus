@@ -15,7 +15,7 @@ public class PracticeCrater extends LinearOpMode
     private Servo markerServo = null;
 
     @Override
-    public void runOpMode() throws InterruptedException
+    public void runOpMode()
     {
         wheelMotors = new WheelMotors(hardwareMap.dcMotor);
         markerServo = hardwareMap.get(Servo.class, "Marker");
@@ -28,7 +28,7 @@ public class PracticeCrater extends LinearOpMode
 
         goFront(-speed*0.8, pause/2);
 
-        goLeft(-speed, pause/2);
+        goLeft(-speed * 1.1, pause/2);
 
         goFront(speed*1.1, pause);
 
@@ -43,7 +43,7 @@ public class PracticeCrater extends LinearOpMode
 
         markerServo.setPosition(0);
 
-        goFront(-speed * 2.3, pause);
+        goFront(-speed * 2.5, pause);
 
         //servo
 
