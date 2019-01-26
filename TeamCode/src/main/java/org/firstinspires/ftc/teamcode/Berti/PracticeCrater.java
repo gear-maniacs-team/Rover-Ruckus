@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.motors.WheelMotors;
 
-@Autonomous(name = "Timeout_FromCrater")
+@Autonomous(name = "Timeout_FromCrater", group = "Practice")
 public class PracticeCrater extends LinearOpMode
 {
     private WheelMotors wheelMotors = null;
@@ -43,7 +43,7 @@ public class PracticeCrater extends LinearOpMode
 
         markerServo.setPosition(0);
 
-        goFront(-speed * 2.5, pause);
+        goFront(-speed * 2.5, pause + 200);
 
         //servo
 

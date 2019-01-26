@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 @Autonomous(name = "Auto_Depot", group = "Autonomous")
-public class AutoDepot extends AutonomousOp {
+public class AutoDepo extends AutonomousOp {
 
     @Override
     public void runOpMode() {
@@ -33,7 +33,7 @@ public class AutoDepot extends AutonomousOp {
         if (goldPos == GoldDetectorManager.Pos.LEFT)
         else if (goldPos == GoldDetectorManager.Pos.RIGHT)*/
 
-        addTelemetryWithUpdate("Status", "Forward");
+        addTelemetryWithUpdate("Status", "Front");
         moveForward(SPEED * 1.1);
 
         addTelemetryWithUpdate("Servo", "Moving");

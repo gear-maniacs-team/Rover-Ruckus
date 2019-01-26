@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.motors.WheelMotors;
 
-@Autonomous(name = "Timeout_FromDepo")
+@Autonomous(name = "Timeout_FromDepo", group = "Practice")
 public class PracticeDepo extends LinearOpMode
 {
     private WheelMotors wheelMotors = null;
@@ -59,7 +59,7 @@ public class PracticeDepo extends LinearOpMode
         telemetry.addData("Front","Run");
         telemetry.update();
 
-        goFront(speed*2, pause);
+        goFront(speed*1.9, pause);
 
         //Ajunge in crater
 
