@@ -6,11 +6,11 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.motors.WheelMotors;
 
-@Autonomous(name = "Timeout_FromDepo")
-public class PracticeNoDetector extends LinearOpMode
+@Autonomous(name = "Timeout_FromCrater")
+public class PracticeCrater extends LinearOpMode
 {
     private WheelMotors wheelMotors = null;
-    private double speed = 0.4;
+    private final double speed = 0.4;
     private int pause = 1000;
     private Servo markerServo = null;
 
@@ -24,44 +24,28 @@ public class PracticeNoDetector extends LinearOpMode
 
         waitForStart();
 
-        telemetry.addData("Front","Run");
-        telemetry.update();
+        goFront(speed*0.7, pause);
+
+        goFront(-speed*0.8, pause/2);
+
+        goLeft(-speed, pause/2);
 
         goFront(speed*1.1, pause);
 
-        telemetry.addData("Servo","Movement");
-        telemetry.update();
+        goLeft(-speed*0.7, pause);
 
-        //Introdo servo action
+        goFront(speed*0.9, pause*2);
+
+        //servo
         markerServo.setPosition(1);
 
-        telemetry.addData("Run","back and move servo back.");
-        telemetry.update();
+        sleep(pause);
 
         markerServo.setPosition(0);
-        goFront(-speed*0.7, pause);
 
-        telemetry.addData("Left","Run");
-        telemetry.update();
+        goFront(-speed*1.4, pause);
 
-        goLeft(-speed * 0.75, pause);
-
-        telemetry.addData("Front","Run");
-        telemetry.update();
-
-        goFront(speed*0.8, pause);
-
-        telemetry.addData("Left","Run");
-        telemetry.update();
-
-        goLeft(-speed * 0.5, pause);
-
-        telemetry.addData("Front","Run");
-        telemetry.update();
-
-        goFront(speed*0.75, pause);
-
-        //Ajunge in Krater
+        //servo
 
         sleep(200000);
 
