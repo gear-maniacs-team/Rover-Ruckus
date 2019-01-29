@@ -5,9 +5,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class WheelMotors {
 
-    private final static double CIRC = 31.9024;
-    private final static double TICKS_PER_ROTATION = 1120;
-    private final static double TICKS = CIRC / TICKS_PER_ROTATION;
     public final static double PI_4 = Math.PI / 4;
 
     public final DcMotor TL;
@@ -36,7 +33,10 @@ public class WheelMotors {
         BR.setTargetPosition(position);
     }
 
-    public int getTicks(int cm) {
-        return cm * (int) TICKS;
+    public void setPowerAll(double power) {
+        TL.setPower(power);
+        TR.setPower(power);
+        BL.setPower(power);
+        BR.setPower(power);
     }
 }

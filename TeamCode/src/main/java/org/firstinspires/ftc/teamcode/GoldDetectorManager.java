@@ -3,11 +3,12 @@ package org.firstinspires.ftc.teamcode;
 import com.disnodeteam.dogecv.CameraViewDisplay;
 import com.disnodeteam.dogecv.DogeCV;
 import com.disnodeteam.dogecv.detectors.roverrukus.GoldAlignDetector;
+import com.disnodeteam.dogecv.detectors.roverrukus.GoldDetector;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class GoldDetectorManager {
 
-    public GoldAlignDetector detector;
+    private GoldAlignDetector detector;
 
     public void startDetector(HardwareMap hardwareMap) {
         // Set up detector
@@ -28,6 +29,10 @@ public class GoldDetectorManager {
         detector.ratioScorer.perfectRatio = 1.0; // Ratio adjustment
 
         detector.enable(); // Start the detector!
+    }
+
+    public void setListener(GoldAlignDetector.GoldAlignListener listener) {
+        detector.setListener(listener);
     }
 
     public Pos getLastGoldPosition() {
