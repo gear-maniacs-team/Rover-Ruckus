@@ -26,18 +26,39 @@ public class EncodersCrater extends EncodersAuto {
 
         waitForStart();
 
-        /*iGoldDetectorManager.Pos goldPos = detectorManager.getLastGoldPosition();
+        /*GoldDetectorManager.Pos goldPos = detectorManager.getLastGoldPosition();
         detectorManager.stopDetector();
 
-        f (goldPos == GoldDetectorManager.Pos.LEFT)
+        if (goldPos == GoldDetectorManager.Pos.LEFT)
         else if (goldPos == GoldDetectorManager.Pos.RIGHT)*/
 
-         moveRight(1200);
+        moveRight(1500);
 
-         moveForward(-800);
-         moveForward(400);moveForward(-400);
+        moveForward(-300);
+        sleep(500);
+        moveForward(900);
+        sleep(500);
+        moveForward(900);
+        sleep(500);
 
-         moveForward(800);
-         rotate(1080); // 1080 = 90 degrees
+        moveForward(1300);
+        rotate(-580);
+
+        moveForward(2800);
+
+        // Servo
+        addTelemetryWithUpdate("Servo", "Moving Forward");
+        markerServo.setPosition(1);
+        sleep(2500);
+
+        addTelemetryWithUpdate("Servo", "Moving Backwards");
+        markerServo.setPosition(0);
+
+        moveForward(-2000);
+        rotate(2160);
+        moveRight(-430);
+        moveForward(2000);
+
+        addTelemetryWithUpdate("Status", "Path Completed");
     }
 }

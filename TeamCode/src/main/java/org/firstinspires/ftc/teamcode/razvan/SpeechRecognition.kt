@@ -19,8 +19,8 @@ import kotlinx.coroutines.withContext
 import org.firstinspires.ftc.teamcode.R
 import java.util.*
 
-@Autonomous(name = "SpeechRecognition", group = "Autonomous")
-open class SpeechRecognition : LinearOpMode() {
+@Autonomous(name = "SpeechRecognition")
+class SpeechRecognition : LinearOpMode() {
 
     companion object {
         private const val LOG_TAG = "Music/Speech"
