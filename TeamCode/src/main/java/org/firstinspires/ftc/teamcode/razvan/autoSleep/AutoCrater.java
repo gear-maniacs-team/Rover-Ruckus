@@ -1,8 +1,9 @@
-package org.firstinspires.ftc.teamcode.autonomousSleep;
+package org.firstinspires.ftc.teamcode.razvan.autoSleep;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
-@Autonomous(name = "Auto_Crater", group = "Autonomous")
+@Deprecated @Disabled @Autonomous(name = "Auto_Crater", group = "Autonomous")
 public class AutoCrater extends AutonomousOp {
 
     @Override

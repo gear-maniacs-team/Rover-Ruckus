@@ -1,7 +1,9 @@
-package org.firstinspires.ftc.teamcode.autonomousSleep;
+package org.firstinspires.ftc.teamcode.razvan.autoSleep;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
+@Deprecated @Disabled
 @Autonomous(name = "Auto_Depot", group = "Autonomous")
 public class AutoDepo extends AutonomousOp {
 

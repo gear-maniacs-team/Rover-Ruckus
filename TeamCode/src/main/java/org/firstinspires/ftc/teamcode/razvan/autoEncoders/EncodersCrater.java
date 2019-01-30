@@ -1,9 +1,6 @@
-package org.firstinspires.ftc.teamcode.autonomousEncoders;
+package org.firstinspires.ftc.teamcode.razvan.autoEncoders;
 
-import com.disnodeteam.dogecv.detectors.roverrukus.GoldAlignDetector;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-
-import org.firstinspires.ftc.teamcode.GoldDetectorManager;
 
 @Autonomous(name = "Encoder-Crater", group = "Encoder")
 public class EncodersCrater extends EncodersAuto {
@@ -35,6 +32,12 @@ public class EncodersCrater extends EncodersAuto {
         f (goldPos == GoldDetectorManager.Pos.LEFT)
         else if (goldPos == GoldDetectorManager.Pos.RIGHT)*/
 
-         moveRight(-800);
+         moveRight(1200);
+
+         moveForward(-800);
+         moveForward(400);moveForward(-400);
+
+         moveForward(800);
+         rotate(1080); // 1080 = 90 degrees
     }
 }

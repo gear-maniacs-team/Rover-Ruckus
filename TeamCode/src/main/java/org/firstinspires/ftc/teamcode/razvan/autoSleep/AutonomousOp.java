@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.autonomousSleep;
+package org.firstinspires.ftc.teamcode.razvan.autoSleep;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.GoldDetectorManager;
 import org.firstinspires.ftc.teamcode.motors.WheelMotors;
 
+@Deprecated
 public abstract class AutonomousOp extends LinearOpMode {
 
     protected static final double SPEED = 0.4;
