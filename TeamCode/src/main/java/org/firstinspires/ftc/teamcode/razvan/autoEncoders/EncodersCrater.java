@@ -18,7 +18,7 @@ public class EncodersCrater extends EncodersAuto {
                     telemetry.addData("Gold Status", "Last X Pos: %d, Last Y Pos: %d",
                             lastXPos, lastYPos);
                 } else {
-                    telemetry.addData("Gold Status", "No Gold found yet");
+                    telemetry.addData("Error 404", "No Gold Found");
                 }
                 telemetry.update();
             }

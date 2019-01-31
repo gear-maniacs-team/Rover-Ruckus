@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode.razvan.autoEncoders;
 
-import com.disnodeteam.dogecv.detectors.roverrukus.GoldAlignDetector;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 @Autonomous(name = "Encoder-Depo", group = "Encoder")
 public class EncodersDepo extends EncodersAuto {
@@ -28,8 +26,7 @@ public class EncodersDepo extends EncodersAuto {
 
         moveForward(2400);
 
-        //Servo
-
+        // Servo
         addTelemetryWithUpdate("Servo", "Moving Forward");
         markerServo.setPosition(1);
         sleep(2500);

@@ -23,22 +23,20 @@ import java.util.List;
 
 public class GoldAlignDetector extends DogeCVDetector {
 
-    public double alignPosOffset = 0;    // How far from center frame is aligned
-
     // Defining Mats to be used.
     private final Mat displayMat = new Mat(); // Display debug info to the screen (this is what is returned)
     private final Mat workingMat = new Mat(); // Used for preprocessing and working with (blurring as an example)
     private final Mat maskYellow = new Mat(); // Yellow Mask returned by color filter
     public double alignSize = 100;  // How wide is the margin of error for alignment
-    //Create the default filters and scorers
-    public DogeCVColorFilter yellowFilter = new LeviColorFilter(LeviColorFilter.ColorPreset.YELLOW); //Default Yellow filter
+    private final Mat hierarchy = new Mat(); // hierarchy used by coutnours
     public RatioScorer ratioScorer = new RatioScorer(1.0, 3);          // Used to find perfect squares
     public MaxAreaScorer maxAreaScorer = new MaxAreaScorer(0.01);                    // Used to find largest objects
     public PerfectAreaScorer perfectAreaScorer = new PerfectAreaScorer(5000, 0.05); // Used to find objects near a tuned area value
 
     // Detector settings
     public boolean debugAlignment = true; // Show debug lines to show alignment settings
-    private Mat hierarchy = new Mat(); // hierarchy used by coutnours
+    //Create the default filters and scorers
+    private DogeCVColorFilter yellowFilter = new LeviColorFilter(LeviColorFilter.ColorPreset.YELLOW); //Default Yellow filter
     // Results of the detector
     private boolean found = false; // Is the gold mineral found
 
@@ -48,6 +46,11 @@ public class GoldAlignDetector extends DogeCVDetector {
     private double goldYPos = 0; // Y Position (in pixels) of the gold element
     private GoldAlignListener listener = null;
 
+    public GoldAlignDetector() {
+        super();
+        detectorName = "Gold Align Detector"; // Set the detector name
+    }
+
     @Override
     public Mat process(Mat input) {
 
@@ -55,7 +58,6 @@ public class GoldAlignDetector extends DogeCVDetector {
         input.copyTo(displayMat);
         input.copyTo(workingMat);
         input.release();
-
 
         // Preprocess the working Mat (blur it then apply a yellow filter)
         Imgproc.GaussianBlur(workingMat, workingMat, new Size(5, 5), 0);
@@ -87,10 +89,9 @@ public class GoldAlignDetector extends DogeCVDetector {
         }
 
         // Vars to calculate the alignment logic.
-        double alignX = (getAdjustedSize().width / 2) + alignPosOffset; // Center point in X Pixels
-        double alignXMin = alignX - (alignSize / 2); // Min X Pos in pixels
-        double alignXMax = alignX + (alignSize / 2); // Max X pos in pixels
-        double xPos; // Current Gold X Pos
+        double alignX = getAdjustedSize().width / 2; // Center point in X Pixels
+        double alignXMin = alignX - alignSize / 2; // Min X Pos in pixels
+        double alignXMax = alignX + alignSize / 2; // Max X pos in pixels
 
         if (bestRect != null) {
             // Show chosen result
@@ -98,15 +99,14 @@ public class GoldAlignDetector extends DogeCVDetector {
             Imgproc.putText(displayMat, "Chosen", bestRect.tl(), 0, 1, new Scalar(255, 255, 255));
 
             // Set align X pos
-            xPos = bestRect.x + (bestRect.width / 2);
-            goldXPos = xPos;
-            goldYPos = bestRect.y + ((bestRect.height) / 2.0f);
+            goldXPos = bestRect.x + bestRect.width / 2.0f;
+            goldYPos = bestRect.y + bestRect.height / 2.0f;
 
             // Draw center point
-            Imgproc.circle(displayMat, new Point(xPos, bestRect.y + (bestRect.height / 2)), 5, new Scalar(0, 255, 0), 2);
+            Imgproc.circle(displayMat, new Point(goldXPos, bestRect.y + bestRect.height / 2.0f), 5, new Scalar(0, 255, 0), 2);
 
             // Check if the mineral is aligned
-            aligned = xPos < alignXMax && xPos > alignXMin;
+            aligned = goldXPos < alignXMax && goldXPos > alignXMin;
 
             // Draw Current Y
             Imgproc.putText(displayMat, "Current Y: " + goldYPos, new Point(10, getAdjustedSize().height - 10), 0, 0.5, new Scalar(255, 255, 255), 1);
@@ -115,9 +115,10 @@ public class GoldAlignDetector extends DogeCVDetector {
             found = false;
             aligned = false;
         }
+
         if (debugAlignment) {
 
-            //Draw debug alignment info
+            // Draw debug alignment info
             if (isFound()) {
                 Imgproc.line(displayMat, new Point(goldXPos, getAdjustedSize().height), new Point(goldXPos, getAdjustedSize().height - 30), new Scalar(255, 255, 0), 2);
             }
@@ -129,17 +130,10 @@ public class GoldAlignDetector extends DogeCVDetector {
         //Print result
         Imgproc.putText(displayMat, "Result: " + aligned, new Point(10, getAdjustedSize().height - 30), 0, 1, new Scalar(255, 255, 0), 1);
 
-        listener.onAlignChange(found, aligned, goldXPos, goldYPos);
+        if (listener != null)
+            listener.onAlignChange(found, aligned, goldXPos, goldYPos);
 
         return displayMat;
-    }
-
-    /**
-     * Simple constructor
-     */
-    public GoldAlignDetector() {
-        super();
-        detectorName = "Gold Align Detector"; // Set the detector name
     }
 
     @Override
@@ -149,9 +143,7 @@ public class GoldAlignDetector extends DogeCVDetector {
         // Add different scoreres depending on the selected mode
         if (areaScoringMethod == DogeCV.AreaScoringMethod.MAX_AREA) {
             addScorer(maxAreaScorer);
-        }
-
-        if (areaScoringMethod == DogeCV.AreaScoringMethod.PERFECT_AREA) {
+        } else if (areaScoringMethod == DogeCV.AreaScoringMethod.PERFECT_AREA) {
             addScorer(perfectAreaScorer);
         }
     }
@@ -163,11 +155,9 @@ public class GoldAlignDetector extends DogeCVDetector {
     /**
      * Set the alignment settings for GoldAlign
      *
-     * @param offset - How far from center frame (in pixels)
      * @param width  - How wide the margin is (in pixels, on each side of offset)
      */
-    public void setAlignSettings(int offset, int width) {
-        alignPosOffset = offset;
+    public void setAlignSize(int width) {
         alignSize = width;
     }
 
