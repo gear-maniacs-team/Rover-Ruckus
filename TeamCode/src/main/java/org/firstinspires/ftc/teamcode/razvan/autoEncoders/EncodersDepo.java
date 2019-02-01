@@ -6,22 +6,18 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 public class EncodersDepo extends EncodersAuto {
 
     @Override
-    public void runOpMode() {
-        super.runOpMode();
-
-        waitForStart();
-
+    protected void onStart() {
         moveRight(1500);
 
         moveForward(-300);
-        sleep(500);
+        hitGoldIfDetected();
         moveForward(900);
-        sleep(500);
+        hitGoldIfDetected();
         moveForward(900);
-        sleep(500);
+        hitGoldIfDetected();
 
         moveForward(1300);
-        rotate(1580);
+        rotateRight(1580);
         moveRight(150);
 
         moveForward(2400);
@@ -34,10 +30,9 @@ public class EncodersDepo extends EncodersAuto {
         addTelemetryWithUpdate("Servo", "Moving Backwards");
         markerServo.setPosition(0);
 
-
         moveForward(-2400);
         moveRight(-400);
-        rotate(2160);
+        rotateRight(2160);
         moveRight(400);
         moveForward(2000);
 

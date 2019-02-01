@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.razvan.autoEncoders;
 
+import com.disnodeteam.dogecv.detectors.roverrukus.GoldAlignDetector;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -8,19 +9,52 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.GoldDetectorManager;
 import org.firstinspires.ftc.teamcode.motors.WheelMotors;
 
+@SuppressWarnings("WeakerAccess")
 public abstract class EncodersAuto extends LinearOpMode {
 
-    protected static final double DRIVE_POWER = 0.35;
-    protected WheelMotors wheelMotors = null;
-    protected GoldDetectorManager detectorManager = null;
+    private static final double DRIVE_POWER = 0.35;
+
+    private boolean goldHit;
+    private WheelMotors wheelMotors = null;
     protected Servo markerServo = null;
+    private GoldDetectorManager detectorManager = null;
 
     @Override
-    public void runOpMode() {
+    public final void runOpMode() {
+        goldHit = false;
         wheelMotors = new WheelMotors(hardwareMap.dcMotor);
-        detectorManager = new GoldDetectorManager();
         markerServo = hardwareMap.get(Servo.class, "Marker");
+
+        // Start the Gold Detector
+        detectorManager = new GoldDetectorManager();
+        detectorManager.startDetector(hardwareMap);
+
+        addTelemetryWithUpdate("Status", "Looking for Gold");
+
+        detectorManager.setListener(new GoldAlignDetector.GoldAlignListener() {
+            @Override
+            public void onAlignChange(boolean found, boolean aligned, double lastXPos, double lastYPos) {
+                if (found) {
+                    telemetry.addData("Gold Status", "Last X Pos: %f, Last Y Pos: %f",
+                            lastXPos, lastYPos);
+                    telemetry.addData("Gold Pos", detectorManager.getLastGoldPosition().toString());
+                } else {
+                    telemetry.addData("Error 404", "No Gold Found");
+                }
+                telemetry.update();
+            }
+        });
+
+        onInit();
+        waitForStart();
+        onStart();
     }
+
+    protected void onInit() {
+
+    }
+
+    abstract protected void onStart();
 
     private void waitForMotors() {
         // Wait for the Motor to finish
@@ -34,7 +68,7 @@ public abstract class EncodersAuto extends LinearOpMode {
                     wheelMotors.TL.getCurrentPosition(), wheelMotors.TR.getCurrentPosition(),
                     wheelMotors.BL.getCurrentPosition(), wheelMotors.BR.getCurrentPosition());
             telemetry.update();
-            sleep(5);
+            sleep(10);
         }
 
         sleep(100);
@@ -43,7 +77,20 @@ public abstract class EncodersAuto extends LinearOpMode {
         wheelMotors.setPowerAll(0);
     }
 
-    protected void moveForward(int position) {
+    protected final void hitGoldIfDetected() {
+        if (goldHit) return;
+
+        sleep(600);
+        GoldDetectorManager.Pos goldPos = detectorManager.getLastGoldPosition();
+
+        if (goldPos == GoldDetectorManager.Pos.MIDDLE) {
+            goldHit = true;
+            moveForward(800); // TODO: Check this value
+            detectorManager.stopDetector();
+        }
+    }
+
+    protected final void moveForward(int position) {
         wheelMotors.TR.setDirection(DcMotorSimple.Direction.REVERSE);
         wheelMotors.TL.setDirection(DcMotorSimple.Direction.FORWARD);
         wheelMotors.BR.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -59,7 +106,7 @@ public abstract class EncodersAuto extends LinearOpMode {
         waitForMotors();
     }
 
-    protected void moveRight(int position) {
+    protected final void moveRight(int position) {
         wheelMotors.TR.setDirection(DcMotorSimple.Direction.FORWARD);
         wheelMotors.TL.setDirection(DcMotorSimple.Direction.FORWARD);
         wheelMotors.BR.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -77,11 +124,12 @@ public abstract class EncodersAuto extends LinearOpMode {
     }
 
     /*
+     * <b>Approximate values:</b>
      * 540 = 45 degrees
      * 1080 = 90 degrees
      * 2160 = 180 degrees
      */
-    protected void rotate(int position) {
+    protected final void rotateRight(int position) {
         wheelMotors.TR.setDirection(DcMotorSimple.Direction.FORWARD);
         wheelMotors.TL.setDirection(DcMotorSimple.Direction.FORWARD);
         wheelMotors.BR.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -98,7 +146,7 @@ public abstract class EncodersAuto extends LinearOpMode {
         waitForMotors();
     }
 
-    protected void addTelemetryWithUpdate(String caption, String value) {
+    protected final void addTelemetryWithUpdate(String caption, String value) {
         telemetry.addData(caption, value);
         telemetry.update();
     }
