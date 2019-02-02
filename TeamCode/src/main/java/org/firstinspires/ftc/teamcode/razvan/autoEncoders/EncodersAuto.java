@@ -35,8 +35,8 @@ public abstract class EncodersAuto extends LinearOpMode {
             @Override
             public void onAlignChange(boolean found, boolean aligned, double lastXPos, double lastYPos) {
                 if (found) {
-                    telemetry.addData("Gold Status", "Last X Pos: %f, Last Y Pos: %f",
-                            lastXPos, lastYPos);
+                    telemetry.addData("Gold Status", "Last X Pos: %d, Last Y Pos: %d",
+                            (int)lastXPos, (int)lastYPos);
                     telemetry.addData("Gold Pos", detectorManager.getLastGoldPosition().toString());
                 } else {
                     telemetry.addData("Error 404", "No Gold Found");
@@ -85,8 +85,11 @@ public abstract class EncodersAuto extends LinearOpMode {
 
         if (goldPos == GoldDetectorManager.Pos.MIDDLE) {
             goldHit = true;
-            moveForward(800); // TODO: Check this value
             detectorManager.stopDetector();
+
+            // TODO: Check this values:
+            moveForward(800);
+            moveForward(-800);
         }
     }
 
