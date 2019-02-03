@@ -12,8 +12,12 @@ public class EncodersTrial extends LinearOpMode
 {
     private WheelMotors wheelMotors = null;
     private Servo markerServo = null;
-    private double speed = 0.8;
-    private int dist = 800;
+    private double power = 0.4;
+    private double dist_tile = 24.5;
+    private double circumference = 4 * Math.PI;
+    private double rotationsNeeded = dist_tile / circumference;
+    private static final int TICK_COUNTS_PER_MOTOR = 1120;
+    private int drivingTarget = (int)rotationsNeeded * TICK_COUNTS_PER_MOTOR;
 
     @Override
     public void runOpMode()
@@ -26,13 +30,13 @@ public class EncodersTrial extends LinearOpMode
         //Wait for the game start
         waitForStart();
 
-        DriveForwardDistance(speed, dist);
-        DriveBackwardDistance(speed,dist/2);
-        TurnLeftDistance(speed, dist);
-        DriveForwardDistance(speed,dist);
-        TurnLeftDistance(speed, dist/2);
-        DriveForwardDistance(speed, dist);
-        DriveForwardDistance(speed, dist*2);
+        DriveForwardDistance(drivingTarget*3/4);
+        DriveBackwardDistance(drivingTarget/2);
+        TurnLeftDistance(drivingTarget/2);
+        DriveForwardDistance(drivingTarget);
+        TurnLeftDistance(drivingTarget/2);
+        DriveForwardDistance(drivingTarget);
+        DriveForwardDistance(drivingTarget*2);
     }
 
     private void initialise()
@@ -41,7 +45,8 @@ public class EncodersTrial extends LinearOpMode
         markerServo = hardwareMap.get(Servo.class, "Marker");
     }
 
-    private void DriveForwardDistance(double power, int distance) {
+    private void DriveForwardDistance(int distance)
+    {
         //Reset encoders
         wheelMotors.setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
@@ -63,20 +68,20 @@ public class EncodersTrial extends LinearOpMode
         StopDriving();
     }
 
-    private void DriveBackwardDistance(double power, int distance)
+    private void DriveBackwardDistance(int distance)
     {
-        DriveForwardDistance(power, -distance);
+        DriveForwardDistance(-distance);
     }
 
-    private void TurnLeftDistance(double power, int distance)
+    private void TurnLeftDistance(int distance)
     {
         //Reset encoders
         wheelMotors.setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         //Set target position
-        wheelMotors.TR.setTargetPosition(-distance);
+        wheelMotors.TR.setTargetPosition(distance);
         wheelMotors.TL.setTargetPosition(distance);
-        wheelMotors.BR.setTargetPosition(-distance);
+        wheelMotors.BR.setTargetPosition(distance);
         wheelMotors.BL.setTargetPosition(distance);
 
         //Set drive power
@@ -96,9 +101,9 @@ public class EncodersTrial extends LinearOpMode
 
     private void DriveForward(double power)
     {
-        wheelMotors.TR.setPower(power);
+        wheelMotors.TR.setPower(-power);
         wheelMotors.TL.setPower(power);
-        wheelMotors.BR.setPower(power);
+        wheelMotors.BR.setPower(-power);
         wheelMotors.BL.setPower(power);
     }
 
