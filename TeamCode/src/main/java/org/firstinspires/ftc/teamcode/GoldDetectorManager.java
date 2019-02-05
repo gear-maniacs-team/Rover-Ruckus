@@ -50,6 +50,7 @@ public class GoldDetectorManager {
     }
 
     public void stopDetector() {
+        detector.setListener(null);
         detector.disable();
         detector = null;
     }

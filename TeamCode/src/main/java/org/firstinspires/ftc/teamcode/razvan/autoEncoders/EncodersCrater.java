@@ -6,19 +6,14 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 public class EncodersCrater extends EncodersAuto {
 
     @Override
-    protected void onInit() {
-        // DO NOTHING
-    }
-
-    @Override
     protected void onStart() {
-        moveRight(1500);
+        moveRight(1000);
 
-        moveForward(-300);
+        moveForward(-800);
         hitGoldIfDetected();
-        moveForward(900);
+        moveForward(800);
         hitGoldIfDetected();
-        moveForward(900);
+        moveForward(800);
         hitGoldIfDetected();
 
         moveForward(1300);

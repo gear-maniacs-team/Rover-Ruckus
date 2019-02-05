@@ -1,23 +1,37 @@
 package org.firstinspires.ftc.teamcode.razvan.autoEncoders;
 
-import com.disnodeteam.dogecv.detectors.roverrukus.GoldAlignDetector;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.GoldDetectorManager;
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.teamcode.motors.WheelMotors;
+
+import java.util.List;
 
 @SuppressWarnings("WeakerAccess")
 public abstract class EncodersAuto extends LinearOpMode {
 
-    private static final double DRIVE_POWER = 0.35;
+    private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
+    private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
+    private static final String LABEL_SILVER_MINERAL = "Silver Mineral";
+
+    private static final String VUFORIA_KEY = "AZnVnoj/////AAABmdXzVSC7bkZik9EURkca9g5GwHTQjL0SB5CABkSEajM1oX/nSOWoXxcxH/watnjKf3WlWcGhyPvV0E8eMNZmTbTgrB/8OJhqAflMV+CjgBtERmweuXjLiPcvEgJNrZD7USn+LK53L0VuSYdi4NwJxy7ypbse7jbXlOmJVgogCXbD4+yjYDbnVmBkkMQMhLgIFQZ0wRApvdxc7R/O/rhsQfWrWWekxjIp4wNeYh5JBsCrCRjdPu1P7QLKAMSOpK5lXqJjmD36TPDxqrQEGfdKxkMe2SJta/3tyzc+v/mFRmNDJjqVMYu69eEy6jh7u/KQA2Uj4pdcIfnZhMWwBO58guP2TPl5HCof4weEEUI6ZF8w";
+
+    private VuforiaLocalizer vuforia;
+    private TFObjectDetector tfod;
+
+    private static final double DRIVE_POWER = 0.375;
 
     private boolean goldHit;
     private WheelMotors wheelMotors = null;
     protected Servo markerServo = null;
-    private GoldDetectorManager detectorManager = null;
+    //private GoldDetectorManager detectorManager = null;
 
     @Override
     public final void runOpMode() {
@@ -25,8 +39,56 @@ public abstract class EncodersAuto extends LinearOpMode {
         wheelMotors = new WheelMotors(hardwareMap.dcMotor);
         markerServo = hardwareMap.get(Servo.class, "Marker");
 
-        // Start the Gold Detector
-        detectorManager = new GoldDetectorManager();
+        startDetector();
+
+        onInit();
+        waitForStart();
+        onStart();
+    }
+
+    private boolean doTheCam() {
+
+        if (tfod != null) {
+            tfod.activate();
+        }
+
+        goldHit = false;
+        if (tfod != null) {
+            List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+            if (updatedRecognitions != null) {
+                telemetry.addData("# Object Detected", updatedRecognitions.size());
+                for (Recognition recognition : updatedRecognitions) {
+                    if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
+                        goldHit = true;
+                        telemetry.addData("# Found", LABEL_GOLD_MINERAL);
+                    }
+                }
+            }
+        }
+        telemetry.update();
+
+        if (tfod != null) {
+            tfod.shutdown();
+        }
+
+        return goldHit;
+    }
+
+    protected void onInit() {
+    }
+
+    abstract protected void onStart();
+
+    private void startDetector() {
+
+        initVuforia();
+        if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
+            initTfod();
+        } else {
+            telemetry.addData("Sorry!", "This device is not compatible with TFOD");
+        }
+
+        /*detectorManager = new GoldDetectorManager();
         detectorManager.startDetector(hardwareMap);
 
         addTelemetryWithUpdate("Status", "Looking for Gold");
@@ -39,22 +101,48 @@ public abstract class EncodersAuto extends LinearOpMode {
                             (int)lastXPos, (int)lastYPos);
                     telemetry.addData("Gold Pos", detectorManager.getLastGoldPosition().toString());
                 } else {
-                    telemetry.addData("Error 404", "No Gold Found");
+                    telemetry.addData("Error 404", "Gold Not Found");
                 }
                 telemetry.update();
             }
-        });
-
-        onInit();
-        waitForStart();
-        onStart();
+        });*/
     }
 
-    protected void onInit() {
+    private void initVuforia() {
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
+        parameters.vuforiaLicenseKey = VUFORIA_KEY;
+        parameters.cameraDirection = CameraDirection.BACK;
+
+
+        vuforia = ClassFactory.getInstance().createVuforia(parameters);
     }
 
-    abstract protected void onStart();
+    private void initTfod() {
+        int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
+                "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
+        tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
+        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
+    }
+
+    protected final void hitGoldIfDetected() {
+        if (doTheCam())
+            moveRight(500);
+
+        sleep(600);
+
+        /*GoldDetectorManager.Pos pos = detectorManager.getLastGoldPosition();
+
+        if (pos == GoldDetectorManager.Pos.MIDDLE) {
+            goldHit = true;
+            detectorManager.stopDetector();
+            telemetry.clear();
+
+            moveRight(700);
+            moveRight(-700);
+        }*/
+    }
 
     private void waitForMotors() {
         // Wait for the Motor to finish
@@ -75,22 +163,6 @@ public abstract class EncodersAuto extends LinearOpMode {
 
         // Stop the Motors
         wheelMotors.setPowerAll(0);
-    }
-
-    protected final void hitGoldIfDetected() {
-        if (goldHit) return;
-
-        sleep(600);
-        GoldDetectorManager.Pos goldPos = detectorManager.getLastGoldPosition();
-
-        if (goldPos == GoldDetectorManager.Pos.MIDDLE) {
-            goldHit = true;
-            detectorManager.stopDetector();
-
-            // TODO: Check this values:
-            moveForward(800);
-            moveForward(-800);
-        }
     }
 
     protected final void moveForward(int position) {

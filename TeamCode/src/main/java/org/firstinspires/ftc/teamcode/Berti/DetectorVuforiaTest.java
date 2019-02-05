@@ -2,15 +2,12 @@ package org.firstinspires.ftc.teamcode.Berti;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
-import org.firstinspires.ftc.teamcode.motors.WheelMotors;
 
 import java.util.List;
 
@@ -26,20 +23,10 @@ public class DetectorVuforiaTest extends LinearOpMode {
     private VuforiaLocalizer vuforia;
     private TFObjectDetector tfod;
 
-    private WheelMotors wheelMotors = null;
-    private static final double COUNTS_PER_MOTOR_REV = 1120;
-    private static final double DRIVE_GEAR_REDUCTION = 2.0;
-    private static final double WHEEL_DIAMETER_INCHES = 4.0;
-    private static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV*DRIVE_GEAR_REDUCTION)/(WHEEL_DIAMETER_INCHES*Math.PI);
-
-    private double speedModerate = 0.5;
-    private int distanceTile = 24;
-
     @Override
     public void runOpMode() {
 
         initVuforia();
-        initMotors();
 
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
             initTfod();
@@ -47,213 +34,65 @@ public class DetectorVuforiaTest extends LinearOpMode {
             telemetry.addData("Sorry!", "This device is not compatible with TFOD");
         }
 
-        wheelMotors.setModeAll(DcMotor.RunMode.RUN_USING_ENCODER);
-
         telemetry.addData(">", "Press Play to start tracking");
         telemetry.update();
         waitForStart();
 
-        if (opModeIsActive())
-        {
-            if (tfod != null)
-            {
+        if (opModeIsActive()) {
+            if (tfod != null) {
                 tfod.activate();
             }
-            while (opModeIsActive())
-            {
-                if (tfod != null)
-                {
+            while (opModeIsActive()) {
+                if (tfod != null) {
                     List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-                    if (updatedRecognitions != null)
-                    {
+                    if (updatedRecognitions != null) {
                         telemetry.addData("# Object Detected", updatedRecognitions.size());
-                        if (updatedRecognitions.size() == 3)
-                        {
+                        if (updatedRecognitions.size() == 3) {
                             int goldMineralX = -1;
                             int silverMineral1X = -1;
                             int silverMineral2X = -1;
-                            for (Recognition recognition : updatedRecognitions)
-                            {
-                                if (recognition.getLabel().equals(LABEL_GOLD_MINERAL))
-                                {
-                                    goldMineralX = (int) recognition.getBottom();
+                            for (Recognition recognition : updatedRecognitions) {
+                                if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
+                                    goldMineralX = (int) recognition.getLeft();
                                 } else if (silverMineral1X == -1) {
-                                    silverMineral1X = (int) recognition.getBottom();
+                                    silverMineral1X = (int) recognition.getLeft();
                                 } else {
-                                    silverMineral2X = (int) recognition.getBottom();
+                                    silverMineral2X = (int) recognition.getLeft();
                                 }
                             }
 
-                            if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1)
-                            {
-                                if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X)
-                                {
+                            if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
+                                if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
                                     telemetry.addData("Gold Mineral Position is", "Right");
                                     telemetry.update();
-                                    break;
                                 } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
                                     telemetry.addData("Gold Mineral Position is", "Left");
                                     telemetry.update();
-                                    break;
                                 } else {
-                                    Center();
-                                    telemetry.addData("Gold Mineral Position is","Center");
+                                    telemetry.addData("Gold Mineral Position is", "Center");
                                     telemetry.update();
-                                    break;
                                 }
-
                             }
                         }
-                        telemetry.addData("Robot is going","to sleep.");
-                        telemetry.update();
-                        sleep(10000);
                     }
+
+                    telemetry.addData("Robot is going", "to sleep.");
+                    telemetry.update();
                 }
             }
         }
 
-        if (tfod != null)
-        {
+        if (tfod != null) {
             tfod.shutdown();
         }
         afterDetection();
     }
 
-    private void initMotors()
-    {
-        wheelMotors = new WheelMotors(hardwareMap.dcMotor);
-
-        wheelMotors.TL.setDirection(DcMotorSimple.Direction.REVERSE);
-        wheelMotors.BL.setDirection(DcMotorSimple.Direction.REVERSE);
-    }
-
-    private void Center()
-    {
-        DriveRightDistance(distanceTile);
-        DriveRightDistance(-distanceTile/2);
-        DriveForwardDistance(distanceTile*2);
-        TurnRightDistance(distanceTile);
-        DriveRightDistance(distanceTile/4);
-        DriveForwardDistance(-distanceTile);
-        DriveForwardDistance(distanceTile*4);
-    }
-
-    private void DriveForwardDistance(int distance)
-    {
-        //Reset encoders
-        wheelMotors.setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        //Set target position
-        wheelMotors.TR.setTargetPosition(wheelMotors.TR.getCurrentPosition() + (int)(distance*COUNTS_PER_INCH));
-        wheelMotors.TL.setTargetPosition(wheelMotors.TL.getCurrentPosition() + (int)(distance*COUNTS_PER_INCH));
-        wheelMotors.BR.setTargetPosition(wheelMotors.BR.getCurrentPosition() + (int)(distance*COUNTS_PER_INCH));
-        wheelMotors.BL.setTargetPosition(wheelMotors.BL.getCurrentPosition() + (int)(distance*COUNTS_PER_INCH));
-
-        //Set drive power
-        DriveForward(speedModerate);
-
-        //Set to RUN_TO_POSITION mode
-        wheelMotors.TR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        wheelMotors.TL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        wheelMotors.BR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        wheelMotors.BL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        while (wheelMotors.TR.isBusy() && wheelMotors.TR.isBusy() && wheelMotors.TL.isBusy() && wheelMotors.BR.isBusy() && wheelMotors.BL.isBusy())
-        {
-            //Wait until target position is reached
-        }
-
-        //Stop and change modes back to normal
-        StopDriving();
-    }
-
-    private void DriveRightDistance(int distance)
-    {
-        //Reset encoders
-        wheelMotors.setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        //Set target position
-        wheelMotors.TR.setTargetPosition(wheelMotors.TR.getCurrentPosition() + (int)(distance*COUNTS_PER_INCH));
-        wheelMotors.TL.setTargetPosition(wheelMotors.TL.getCurrentPosition() + (int)(distance*COUNTS_PER_INCH));
-        wheelMotors.BR.setTargetPosition(wheelMotors.BR.getCurrentPosition() + (int)(distance*COUNTS_PER_INCH));
-        wheelMotors.BL.setTargetPosition(wheelMotors.BL.getCurrentPosition() + (int)(distance*COUNTS_PER_INCH));
-
-        //Set drive power
-        wheelMotors.TR.setPower(-speedModerate);
-        wheelMotors.TL.setPower(speedModerate);
-        wheelMotors.BR.setPower(speedModerate);
-        wheelMotors.BL.setPower(-speedModerate);
-
-        //Set to RUN_TO_POSITION mode
-        wheelMotors.TR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        wheelMotors.TL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        wheelMotors.BR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        wheelMotors.BL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        while (wheelMotors.TR.isBusy() && wheelMotors.TR.isBusy() && wheelMotors.TL.isBusy() && wheelMotors.BR.isBusy() && wheelMotors.BL.isBusy())
-        {
-            //Wait until target position is reached
-        }
-
-        //Stop and change modes back to normal
-        StopDriving();
-    }
-
-    private void TurnRightDistance(int distance)
-    {
-        //Reset encoders
-        wheelMotors.setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        //Set target position
-        wheelMotors.TR.setTargetPosition(wheelMotors.TR.getCurrentPosition() + (int)(distance*COUNTS_PER_INCH));
-        wheelMotors.TL.setTargetPosition(wheelMotors.TL.getCurrentPosition() + (int)(distance*COUNTS_PER_INCH));
-        wheelMotors.BR.setTargetPosition(wheelMotors.BR.getCurrentPosition() + (int)(distance*COUNTS_PER_INCH));
-        wheelMotors.BL.setTargetPosition(wheelMotors.BL.getCurrentPosition() + (int)(distance*COUNTS_PER_INCH));
-
-        //Set drive power
-        wheelMotors.TR.setPower(speedModerate);
-        wheelMotors.TL.setPower(-speedModerate);
-        wheelMotors.BR.setPower(speedModerate);
-        wheelMotors.BL.setPower(-speedModerate);
-
-        //Set to RUN_TO_POSITION mode
-        wheelMotors.TR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        wheelMotors.TL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        wheelMotors.BR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        wheelMotors.BL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        while(wheelMotors.TR.isBusy() && wheelMotors.TR.isBusy() && wheelMotors.TL.isBusy() && wheelMotors.BR.isBusy() && wheelMotors.BL.isBusy())
-        {
-            //Wait until target position is reached
-        }
-
-        //Stop and change modes back to normal
-        StopDriving();
-    }
-
-    private void DriveForward(double power)
-    {
-        wheelMotors.TR.setPower(power);
-        wheelMotors.TL.setPower(power);
-        wheelMotors.BR.setPower(power);
-        wheelMotors.BL.setPower(power);
-    }
-
-    private void StopDriving()
-    {
-        wheelMotors.TR.setPower(0);
-        wheelMotors.TL.setPower(0);
-        wheelMotors.BR.setPower(0);
-        wheelMotors.BL.setPower(0);
-    }
-
-    private void afterDetection()
-    {
+    private void afterDetection() {
 
     }
 
-    private void initVuforia()
-    {
+    private void initVuforia() {
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
@@ -263,8 +102,7 @@ public class DetectorVuforiaTest extends LinearOpMode {
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
     }
 
-    private void initTfod()
-    {
+    private void initTfod() {
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
                 "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
