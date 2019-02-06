@@ -7,16 +7,18 @@ public class EncodersCrater extends EncodersAuto {
 
     @Override
     protected void onStart() {
-        moveRight(1000);
+        moveRight(1250);
 
-        moveForward(-800);
+        moveForward(-1100);
         hitGoldIfDetected();
         moveForward(800);
         hitGoldIfDetected();
         moveForward(800);
         hitGoldIfDetected();
 
-        moveForward(1300);
+        // StopCam();
+
+        moveForward(1600);
         rotateRight(-580);
 
         moveForward(2800);
@@ -31,7 +33,7 @@ public class EncodersCrater extends EncodersAuto {
 
         moveForward(-2000);
         rotateRight(2160);
-        moveRight(-430);
+        moveRight(-350);
         moveForward(2000);
 
         addTelemetryWithUpdate("Status", "Path Completed");

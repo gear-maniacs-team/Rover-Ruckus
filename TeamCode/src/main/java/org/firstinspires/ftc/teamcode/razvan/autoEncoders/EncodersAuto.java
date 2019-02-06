@@ -53,6 +53,9 @@ public abstract class EncodersAuto extends LinearOpMode {
         }
 
         goldHit = false;
+
+        sleep(500);
+
         if (tfod != null) {
             List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
             if (updatedRecognitions != null) {
@@ -67,9 +70,9 @@ public abstract class EncodersAuto extends LinearOpMode {
         }
         telemetry.update();
 
-        if (tfod != null) {
-            tfod.shutdown();
-        }
+        // if (tfod != null) {
+        //    tfod.shutdown();
+        // }
 
         return goldHit;
     }
@@ -127,11 +130,14 @@ public abstract class EncodersAuto extends LinearOpMode {
     }
 
     protected final void hitGoldIfDetected() {
-        if (doTheCam())
-            moveRight(500);
+        sleep(300);
+        if (doTheCam()) {
+            moveRight(800);
+            sleep(600);
 
-        sleep(600);
-
+            moveRight(-800);
+            sleep(600);
+        }
         /*GoldDetectorManager.Pos pos = detectorManager.getLastGoldPosition();
 
         if (pos == GoldDetectorManager.Pos.MIDDLE) {
@@ -143,6 +149,13 @@ public abstract class EncodersAuto extends LinearOpMode {
             moveRight(-700);
         }*/
     }
+
+    // TODO make a funcion which stops the cam and use it
+
+    //private void StopCam () {
+    //           tfod.shutdown();
+    //}
+
 
     private void waitForMotors() {
         // Wait for the Motor to finish
