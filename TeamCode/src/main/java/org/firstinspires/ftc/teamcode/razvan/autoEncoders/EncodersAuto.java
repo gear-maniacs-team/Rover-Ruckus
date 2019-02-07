@@ -26,7 +26,7 @@ public abstract class EncodersAuto extends LinearOpMode {
     private VuforiaLocalizer vuforia;
     private TFObjectDetector tfod;
 
-    private static final double DRIVE_POWER = 0.375;
+    private static final double DRIVE_POWER = 0.4;
 
     private WheelMotors wheelMotors = null;
     protected Servo markerServo = null;
@@ -135,10 +135,10 @@ public abstract class EncodersAuto extends LinearOpMode {
             goldHit = true;
 
             moveRight(800);
-            sleep(600);
+            sleep(300);
 
             moveRight(-800);
-            sleep(600);
+            sleep(300);
         }
 
         return goldHit;

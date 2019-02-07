@@ -7,20 +7,44 @@ public class EncodersDepo extends EncodersAuto {
 
     @Override
     protected void onStart() {
-        moveRight(1500);
+        int dist = 1600;
+        int restDist = 0;
 
-        moveForward(-300);
-        hitGoldIfDetected();
-        moveForward(900);
-        hitGoldIfDetected();
-        moveForward(900);
-        hitGoldIfDetected();
+        moveRight(1250);
 
-        moveForward(1300);
-        rotateRight(1580);
-        moveRight(150);
+        if(hitGoldIfDetected()) {
+            restDist = 1600 - dist;
+            moveForward(dist + restDist + 600);
+            StopCam();
+        }
+        else {
+            moveForward(-800);
+            if(hitGoldIfDetected()) {
+                restDist = dist - 800;
+                moveForward(dist + restDist + 600);
+                StopCam();
+            }
+            else {
+                moveForward(dist);
 
-        moveForward(2400);
+                moveRight(900);
+                sleep(300);
+
+                moveRight(-800);
+                sleep(300);
+
+                restDist = 800 - dist;
+                moveForward(dist + restDist + 600);
+                StopCam();
+
+
+            }
+        }
+
+        rotateRight(1600);
+        moveRight(-300);
+        moveForward(2600);
+
 
         // Servo
         addTelemetryWithUpdate("Servo", "Moving Forward");
@@ -30,10 +54,10 @@ public class EncodersDepo extends EncodersAuto {
         addTelemetryWithUpdate("Servo", "Moving Backwards");
         markerServo.setPosition(0);
 
-        moveForward(-2400);
-        moveRight(-400);
-        rotateRight(2160);
+        moveForward(-2000);
         moveRight(400);
+        rotateRight(2160);
+        moveRight(-600);
         moveForward(2000);
 
         addTelemetryWithUpdate("Status", "Path Completed");
