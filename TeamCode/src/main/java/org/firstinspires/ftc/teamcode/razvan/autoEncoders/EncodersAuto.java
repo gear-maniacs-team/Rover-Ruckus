@@ -28,14 +28,12 @@ public abstract class EncodersAuto extends LinearOpMode {
 
     private static final double DRIVE_POWER = 0.375;
 
-    private boolean goldHit;
     private WheelMotors wheelMotors = null;
     protected Servo markerServo = null;
     //private GoldDetectorManager detectorManager = null;
 
     @Override
     public final void runOpMode() {
-        goldHit = false;
         wheelMotors = new WheelMotors(hardwareMap.dcMotor);
         markerServo = hardwareMap.get(Servo.class, "Marker");
 
@@ -52,7 +50,7 @@ public abstract class EncodersAuto extends LinearOpMode {
             tfod.activate();
         }
 
-        goldHit = false;
+        boolean goldHit = false;
 
         sleep(500);
 
@@ -129,15 +127,22 @@ public abstract class EncodersAuto extends LinearOpMode {
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
     }
 
-    protected final void hitGoldIfDetected() {
+    protected final boolean hitGoldIfDetected() {
+        boolean goldHit = false;
         sleep(300);
         if (doTheCam()) {
+
+            goldHit = true;
+
             moveRight(800);
             sleep(600);
 
             moveRight(-800);
             sleep(600);
         }
+
+        return goldHit;
+
         /*GoldDetectorManager.Pos pos = detectorManager.getLastGoldPosition();
 
         if (pos == GoldDetectorManager.Pos.MIDDLE) {
@@ -150,11 +155,11 @@ public abstract class EncodersAuto extends LinearOpMode {
         }*/
     }
 
-    // TODO make a funcion which stops the cam and use it
+    // TODO make a function which stops the cam and use it
 
-    //private void StopCam () {
-    //           tfod.shutdown();
-    //}
+    public void StopCam () {
+               tfod.shutdown();
+    }
 
 
     private void waitForMotors() {

@@ -7,20 +7,38 @@ public class EncodersCrater extends EncodersAuto {
 
     @Override
     protected void onStart() {
+        int dist = 1600;
+        int restDist = 0;
+
         moveRight(1250);
 
-        moveForward(-1100);
-        hitGoldIfDetected();
-        moveForward(800);
-        hitGoldIfDetected();
-        moveForward(800);
-        hitGoldIfDetected();
+        if(hitGoldIfDetected()) {
+            restDist = 1600 - dist;
+            moveForward(dist + restDist + 100);
+            StopCam();
+        }
+        else {
+            moveForward(-800);
+            if(hitGoldIfDetected()) {
+                restDist = dist - 800;
+                moveForward(dist + restDist + 100);
+                StopCam();
+            }
+            else {
+                moveForward(dist);
+                if(hitGoldIfDetected()) {
+                    restDist = 800 - dist;
+                    moveForward(dist + restDist + 100);
+                    StopCam();
+                }
+                else {
+                    moveForward(dist + restDist + 100);
+                    StopCam();
+                }
+            }
+        }
 
-        // StopCam();
-
-        moveForward(1600);
         rotateRight(-580);
-
         moveForward(2800);
 
         // Servo
