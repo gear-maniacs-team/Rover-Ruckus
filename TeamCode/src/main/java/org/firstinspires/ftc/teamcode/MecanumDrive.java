@@ -41,6 +41,9 @@ public class MecanumDrive extends OpMode {
         wheelMotors.BL.setPower(-speed2);
         wheelMotors.BR.setPower(-speed1);
 
+        //TODO Combine rotational movement with forwards, backwards movement
+
+
         while (gamepad1.right_stick_x > 0)
         {
             wheelMotors.TR.setPower(0.3);

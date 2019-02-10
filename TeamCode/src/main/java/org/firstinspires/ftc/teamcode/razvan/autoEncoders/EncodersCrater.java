@@ -7,10 +7,13 @@ public class EncodersCrater extends EncodersAuto {
 
     @Override
     protected void onStart() {
+        DRIVE_POWER = 0.5;
+
         int dist = 1600;
         int restDist = 0;
 
-        moveRight(1250);
+        moveRight(1000);
+        moveForward(50);
 
         if(hitGoldIfDetected()) {
             restDist = 1600 - dist;
@@ -21,7 +24,7 @@ public class EncodersCrater extends EncodersAuto {
             moveForward(-800);
             if(hitGoldIfDetected()) {
                 restDist = dist - 800;
-                moveForward(dist + restDist + 600);
+                moveForward(dist + restDist + 450);
                 StopCam();
             }
             else {
@@ -34,15 +37,18 @@ public class EncodersCrater extends EncodersAuto {
                 sleep(300);
 
                     restDist = 800 - dist;
-                    moveForward(dist + restDist + 600);
+                    moveForward(dist + restDist + 450);
                     StopCam();
 
 
             }
         }
 
-        rotateRight(-580);
-        moveForward(2600);
+        rotateRight(-600);
+        moveRight(500);
+        //moveRight(-300);
+
+        moveForward(2500);
 
         // Servo
         addTelemetryWithUpdate("Servo", "Moving Forward");
@@ -52,10 +58,13 @@ public class EncodersCrater extends EncodersAuto {
         addTelemetryWithUpdate("Servo", "Moving Backwards");
         markerServo.setPosition(0);
 
-        moveForward(-2000);
-        rotateRight(2160);
-        moveRight(-600);
-        moveForward(2000);
+        moveForward(-1000);
+        //rotateRight(2160);
+        //moveRight(600);
+
+        DRIVE_POWER = 0.8;
+
+        moveForward(-3200);
 
         addTelemetryWithUpdate("Status", "Path Completed");
     }

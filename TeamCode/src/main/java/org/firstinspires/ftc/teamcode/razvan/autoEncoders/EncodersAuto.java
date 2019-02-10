@@ -26,7 +26,7 @@ public abstract class EncodersAuto extends LinearOpMode {
     private VuforiaLocalizer vuforia;
     private TFObjectDetector tfod;
 
-    private static final double DRIVE_POWER = 0.4;
+    public static double DRIVE_POWER = 0.5;
 
     private WheelMotors wheelMotors = null;
     protected Servo markerServo = null;

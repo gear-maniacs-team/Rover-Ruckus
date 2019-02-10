@@ -42,7 +42,8 @@ public class EncodersDepo extends EncodersAuto {
         }
 
         rotateRight(1600);
-        moveRight(-300);
+        moveRight(-700);
+        moveRight(200);
         moveForward(2600);
 
 
@@ -54,11 +55,11 @@ public class EncodersDepo extends EncodersAuto {
         addTelemetryWithUpdate("Servo", "Moving Backwards");
         markerServo.setPosition(0);
 
-        moveForward(-2000);
+        moveForward(-1200);
         moveRight(400);
-        rotateRight(2160);
-        moveRight(-600);
-        moveForward(2000);
+        //rotateRight(2160);
+        moveRight(600);
+        moveForward(-3300);
 
         addTelemetryWithUpdate("Status", "Path Completed");
     }
