@@ -1,10 +1,11 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.razvan;
 
 import com.disnodeteam.dogecv.CameraViewDisplay;
 import com.disnodeteam.dogecv.DogeCV;
 import com.disnodeteam.dogecv.detectors.roverrukus.GoldAlignDetector;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+@Deprecated
 public class GoldDetectorManager {
 
     private GoldAlignDetector detector;

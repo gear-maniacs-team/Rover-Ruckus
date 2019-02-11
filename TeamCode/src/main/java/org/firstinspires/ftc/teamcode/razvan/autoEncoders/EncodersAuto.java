@@ -14,23 +14,21 @@ import org.firstinspires.ftc.teamcode.motors.WheelMotors;
 
 import java.util.List;
 
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "SameParameterValue"})
 public abstract class EncodersAuto extends LinearOpMode {
 
+    private final static double DEFAULT_DRIVE_POWER = 0.5;
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
     private static final String LABEL_SILVER_MINERAL = "Silver Mineral";
 
     private static final String VUFORIA_KEY = "AZnVnoj/////AAABmdXzVSC7bkZik9EURkca9g5GwHTQjL0SB5CABkSEajM1oX/nSOWoXxcxH/watnjKf3WlWcGhyPvV0E8eMNZmTbTgrB/8OJhqAflMV+CjgBtERmweuXjLiPcvEgJNrZD7USn+LK53L0VuSYdi4NwJxy7ypbse7jbXlOmJVgogCXbD4+yjYDbnVmBkkMQMhLgIFQZ0wRApvdxc7R/O/rhsQfWrWWekxjIp4wNeYh5JBsCrCRjdPu1P7QLKAMSOpK5lXqJjmD36TPDxqrQEGfdKxkMe2SJta/3tyzc+v/mFRmNDJjqVMYu69eEy6jh7u/KQA2Uj4pdcIfnZhMWwBO58guP2TPl5HCof4weEEUI6ZF8w";
 
-    private VuforiaLocalizer vuforia;
-    private TFObjectDetector tfod;
-
-    public static double DRIVE_POWER = 0.5;
+    private VuforiaLocalizer vuforia = null;
+    private TFObjectDetector tfod = null;
 
     private WheelMotors wheelMotors = null;
     protected Servo markerServo = null;
-    //private GoldDetectorManager detectorManager = null;
 
     @Override
     public final void runOpMode() {
@@ -44,15 +42,47 @@ public abstract class EncodersAuto extends LinearOpMode {
         onStart();
     }
 
-    private boolean doTheCam() {
+    protected void onInit() {
+    }
 
-        if (tfod != null) {
-            tfod.activate();
+    abstract protected void onStart();
+
+    //region Detector
+
+    private void startDetector() {
+        initVuforia();
+
+        if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
+            initTfod();
+        } else {
+            telemetry.addData("Sorry!", "This device is not compatible with TFOD");
         }
+    }
+
+    private void initVuforia() {
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+
+        parameters.vuforiaLicenseKey = VUFORIA_KEY;
+        parameters.cameraDirection = CameraDirection.BACK;
+
+        vuforia = ClassFactory.getInstance().createVuforia(parameters);
+    }
+
+    private void initTfod() {
+        int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
+                "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        TFObjectDetector.Parameters tfodParams = new TFObjectDetector.Parameters(tfodMonitorViewId);
+        tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParams, vuforia);
+        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
+    }
+
+    private boolean searchForGold() {
+        if (tfod != null)
+            tfod.activate();
 
         boolean goldHit = false;
 
-        sleep(500);
+        sleep(800);
 
         if (tfod != null) {
             List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
@@ -75,63 +105,10 @@ public abstract class EncodersAuto extends LinearOpMode {
         return goldHit;
     }
 
-    protected void onInit() {
-    }
-
-    abstract protected void onStart();
-
-    private void startDetector() {
-
-        initVuforia();
-        if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
-            initTfod();
-        } else {
-            telemetry.addData("Sorry!", "This device is not compatible with TFOD");
-        }
-
-        /*detectorManager = new GoldDetectorManager();
-        detectorManager.startDetector(hardwareMap);
-
-        addTelemetryWithUpdate("Status", "Looking for Gold");
-
-        detectorManager.setListener(new GoldAlignDetector.GoldAlignListener() {
-            @Override
-            public void onAlignChange(boolean found, boolean aligned, double lastXPos, double lastYPos) {
-                if (found) {
-                    telemetry.addData("Gold Status", "Last X Pos: %d, Last Y Pos: %d",
-                            (int)lastXPos, (int)lastYPos);
-                    telemetry.addData("Gold Pos", detectorManager.getLastGoldPosition().toString());
-                } else {
-                    telemetry.addData("Error 404", "Gold Not Found");
-                }
-                telemetry.update();
-            }
-        });*/
-    }
-
-    private void initVuforia() {
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
-
-        parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        parameters.cameraDirection = CameraDirection.BACK;
-
-
-        vuforia = ClassFactory.getInstance().createVuforia(parameters);
-    }
-
-    private void initTfod() {
-        int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
-                "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-        tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
-        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
-    }
-
     protected final boolean hitGoldIfDetected() {
         boolean goldHit = false;
-        sleep(300);
-        if (doTheCam()) {
 
+        if (searchForGold()) {
             goldHit = true;
 
             moveRight(800);
@@ -142,25 +119,16 @@ public abstract class EncodersAuto extends LinearOpMode {
         }
 
         return goldHit;
-
-        /*GoldDetectorManager.Pos pos = detectorManager.getLastGoldPosition();
-
-        if (pos == GoldDetectorManager.Pos.MIDDLE) {
-            goldHit = true;
-            detectorManager.stopDetector();
-            telemetry.clear();
-
-            moveRight(700);
-            moveRight(-700);
-        }*/
     }
 
     // TODO make a function which stops the cam and use it
-
-    public void StopCam () {
-               tfod.shutdown();
+    public void stopCamera() {
+        tfod.shutdown();
     }
 
+    //endregion Detector
+
+    //region Motors
 
     private void waitForMotors() {
         // Wait for the Motor to finish
@@ -184,6 +152,10 @@ public abstract class EncodersAuto extends LinearOpMode {
     }
 
     protected final void moveForward(int position) {
+        moveForward(position, DEFAULT_DRIVE_POWER);
+    }
+
+    protected final void moveForward(int position, double power) {
         wheelMotors.TR.setDirection(DcMotorSimple.Direction.REVERSE);
         wheelMotors.TL.setDirection(DcMotorSimple.Direction.FORWARD);
         wheelMotors.BR.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -194,12 +166,16 @@ public abstract class EncodersAuto extends LinearOpMode {
         wheelMotors.setModeAll(DcMotor.RunMode.RUN_TO_POSITION);
 
         wheelMotors.setTargetPositionAll(position);
-        wheelMotors.setPowerAll(DRIVE_POWER);
+        wheelMotors.setPowerAll(power);
 
         waitForMotors();
     }
 
     protected final void moveRight(int position) {
+        moveRight(position, DEFAULT_DRIVE_POWER);
+    }
+
+    protected final void moveRight(int position, double power) {
         wheelMotors.TR.setDirection(DcMotorSimple.Direction.FORWARD);
         wheelMotors.TL.setDirection(DcMotorSimple.Direction.FORWARD);
         wheelMotors.BR.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -211,18 +187,22 @@ public abstract class EncodersAuto extends LinearOpMode {
         wheelMotors.setModeAll(DcMotor.RunMode.RUN_TO_POSITION);
 
         wheelMotors.setTargetPositionAll(position);
-        wheelMotors.setPowerAll(DRIVE_POWER);
+        wheelMotors.setPowerAll(power);
 
         waitForMotors();
     }
 
+    protected final void rotateRight(int position) {
+        rotateRight(position, DEFAULT_DRIVE_POWER);
+    }
+
     /*
-     * <b>Approximate values:</b>
+     * Approximate values:
      * 540 = 45 degrees
      * 1080 = 90 degrees
      * 2160 = 180 degrees
      */
-    protected final void rotateRight(int position) {
+    protected final void rotateRight(int position, double power) {
         wheelMotors.TR.setDirection(DcMotorSimple.Direction.FORWARD);
         wheelMotors.TL.setDirection(DcMotorSimple.Direction.FORWARD);
         wheelMotors.BR.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -234,7 +214,7 @@ public abstract class EncodersAuto extends LinearOpMode {
         wheelMotors.setModeAll(DcMotor.RunMode.RUN_TO_POSITION);
 
         wheelMotors.setTargetPositionAll(position);
-        wheelMotors.setPowerAll(DRIVE_POWER);
+        wheelMotors.setPowerAll(power);
 
         waitForMotors();
     }
@@ -243,4 +223,6 @@ public abstract class EncodersAuto extends LinearOpMode {
         telemetry.addData(caption, value);
         telemetry.update();
     }
+
+    //endregion Motors
 }

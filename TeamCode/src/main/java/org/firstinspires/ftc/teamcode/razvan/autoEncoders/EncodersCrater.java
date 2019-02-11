@@ -7,27 +7,23 @@ public class EncodersCrater extends EncodersAuto {
 
     @Override
     protected void onStart() {
-        DRIVE_POWER = 0.5;
-
         int dist = 1600;
-        int restDist = 0;
+        int restDist;
 
         moveRight(1000);
         moveForward(50);
 
-        if(hitGoldIfDetected()) {
+        if (hitGoldIfDetected()) {
             restDist = 1600 - dist;
             moveForward(dist + restDist + 600);
-            StopCam();
-        }
-        else {
+            stopCamera();
+        } else {
             moveForward(-800);
-            if(hitGoldIfDetected()) {
+            if (hitGoldIfDetected()) {
                 restDist = dist - 800;
                 moveForward(dist + restDist + 450);
-                StopCam();
-            }
-            else {
+                stopCamera();
+            } else {
                 moveForward(dist);
 
                 moveRight(900);
@@ -36,11 +32,9 @@ public class EncodersCrater extends EncodersAuto {
                 moveRight(-800);
                 sleep(300);
 
-                    restDist = 800 - dist;
-                    moveForward(dist + restDist + 450);
-                    StopCam();
-
-
+                restDist = 800 - dist;
+                moveForward(dist + restDist + 450);
+                stopCamera();
             }
         }
 
@@ -62,9 +56,7 @@ public class EncodersCrater extends EncodersAuto {
         //rotateRight(2160);
         //moveRight(600);
 
-        DRIVE_POWER = 0.8;
-
-        moveForward(-3200);
+        moveForward(-3200, 0.8);
 
         addTelemetryWithUpdate("Status", "Path Completed");
     }

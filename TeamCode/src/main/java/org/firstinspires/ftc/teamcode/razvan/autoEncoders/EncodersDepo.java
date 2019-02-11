@@ -8,23 +8,21 @@ public class EncodersDepo extends EncodersAuto {
     @Override
     protected void onStart() {
         int dist = 1600;
-        int restDist = 0;
+        int restDist;
 
         moveRight(1250);
 
-        if(hitGoldIfDetected()) {
+        if (hitGoldIfDetected()) {
             restDist = 1600 - dist;
             moveForward(dist + restDist + 600);
-            StopCam();
-        }
-        else {
+            stopCamera();
+        } else {
             moveForward(-800);
-            if(hitGoldIfDetected()) {
+            if (hitGoldIfDetected()) {
                 restDist = dist - 800;
                 moveForward(dist + restDist + 600);
-                StopCam();
-            }
-            else {
+                stopCamera();
+            } else {
                 moveForward(dist);
 
                 moveRight(900);
@@ -35,9 +33,7 @@ public class EncodersDepo extends EncodersAuto {
 
                 restDist = 800 - dist;
                 moveForward(dist + restDist + 600);
-                StopCam();
-
-
+                stopCamera();
             }
         }
 
@@ -45,7 +41,6 @@ public class EncodersDepo extends EncodersAuto {
         moveRight(-700);
         moveRight(200);
         moveForward(2600);
-
 
         // Servo
         addTelemetryWithUpdate("Servo", "Moving Forward");

@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcode.razvan.autoSleep;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.GoldDetectorManager;
 import org.firstinspires.ftc.teamcode.motors.WheelMotors;
+import org.firstinspires.ftc.teamcode.razvan.GoldDetectorManager;
 
 @Deprecated
 public abstract class AutonomousOp extends LinearOpMode {
