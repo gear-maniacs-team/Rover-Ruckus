@@ -10,6 +10,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+import org.firstinspires.ftc.teamcode.ExceptionHandler;
 import org.firstinspires.ftc.teamcode.motors.WheelMotors;
 
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.List;
 @SuppressWarnings({"WeakerAccess", "SameParameterValue"})
 public abstract class EncodersAuto extends LinearOpMode {
 
-    private final static double DEFAULT_DRIVE_POWER = 0.5;
+    private static final double DEFAULT_DRIVE_POWER = 0.5;
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
     private static final String LABEL_SILVER_MINERAL = "Silver Mineral";
@@ -27,11 +28,13 @@ public abstract class EncodersAuto extends LinearOpMode {
     private VuforiaLocalizer vuforia = null;
     private TFObjectDetector tfod = null;
 
+    private final ExceptionHandler exceptionHandler = new ExceptionHandler();
     private WheelMotors wheelMotors = null;
     protected Servo markerServo = null;
 
     @Override
     public final void runOpMode() {
+        exceptionHandler.clear();
         wheelMotors = new WheelMotors(hardwareMap.dcMotor);
         markerServo = hardwareMap.get(Servo.class, "Marker");
 
@@ -39,7 +42,14 @@ public abstract class EncodersAuto extends LinearOpMode {
 
         onInit();
         waitForStart();
-        onStart();
+        try {
+            onStart();
+        } catch (Exception e) {
+            exceptionHandler.parseException(e);
+            exceptionHandler.writeToFile(true, "Autonomous-Encoder");
+            exceptionHandler.clear();
+            throw e;
+        }
     }
 
     protected void onInit() {
