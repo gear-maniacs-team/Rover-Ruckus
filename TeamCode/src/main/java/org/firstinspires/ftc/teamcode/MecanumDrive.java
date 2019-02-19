@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.motors.WheelMotors;
 
-@TeleOp(name = "The Good One")
+@TeleOp(name = "The Good One", group = "Good")
 public class MecanumDrive extends OpMode {
 
     private WheelMotors wheelMotors = null;
