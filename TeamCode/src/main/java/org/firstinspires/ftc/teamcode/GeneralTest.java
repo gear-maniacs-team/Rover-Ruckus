@@ -16,13 +16,17 @@ public class GeneralTest extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         initialise();
 
-        double leftY = gamepad1.left_stick_y;
+        waitForStart();
 
-        if (gamepad1.dpad_up)
-            armMotor.setPower(leftY);
-        if (gamepad1.dpad_down)
-            armMotor.setPower(-leftY);
-        armMotor.setPower(0);
+        while(opModeIsActive()) {
+            double leftY = gamepad1.left_stick_y;
+
+            if (gamepad1.dpad_up)
+                armMotor.setPower(leftY);
+            if (gamepad1.dpad_down)
+                armMotor.setPower(-leftY);
+            armMotor.setPower(0);
+        }
     }
 
     private void initialise() {
