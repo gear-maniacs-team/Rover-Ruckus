@@ -21,11 +21,7 @@ public class GeneralTest extends LinearOpMode {
         while(opModeIsActive()) {
             double leftY = gamepad1.left_stick_y;
 
-            if (gamepad1.dpad_up)
-                armMotor.setPower(leftY);
-            if (gamepad1.dpad_down)
-                armMotor.setPower(-leftY);
-            armMotor.setPower(0);
+            armMotor.setPower(leftY);
         }
     }
 
