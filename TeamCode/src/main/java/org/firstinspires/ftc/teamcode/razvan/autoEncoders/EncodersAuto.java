@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.razvan.autoEncoders;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
@@ -30,13 +29,13 @@ public abstract class EncodersAuto extends LinearOpMode {
 
     private final ExceptionHandler exceptionHandler = new ExceptionHandler();
     private WheelMotors wheelMotors = null;
-    protected Servo markerServo = null;
+    //protected Servo markerServo = null;
 
     @Override
     public final void runOpMode() {
         exceptionHandler.clear();
         wheelMotors = new WheelMotors(hardwareMap.dcMotor);
-        markerServo = hardwareMap.get(Servo.class, "Marker");
+        //markerServo = hardwareMap.get(Servo.class, "Marker");
 
         startDetector();
 

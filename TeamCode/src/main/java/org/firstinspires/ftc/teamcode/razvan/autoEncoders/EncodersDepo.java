@@ -42,6 +42,7 @@ public class EncodersDepo extends EncodersAuto {
         moveRight(200);
         moveForward(2600);
 
+        /*
         // Servo
         addTelemetryWithUpdate("Servo", "Moving Forward");
         markerServo.setPosition(1);
@@ -49,6 +50,7 @@ public class EncodersDepo extends EncodersAuto {
 
         addTelemetryWithUpdate("Servo", "Moving Backwards");
         markerServo.setPosition(0);
+        */
 
         moveForward(-1200);
         moveRight(400);

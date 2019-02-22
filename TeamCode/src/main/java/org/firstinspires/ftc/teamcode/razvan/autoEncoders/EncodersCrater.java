@@ -44,6 +44,7 @@ public class EncodersCrater extends EncodersAuto {
 
         moveForward(2500);
 
+        /*
         // Servo
         addTelemetryWithUpdate("Servo", "Moving Forward");
         markerServo.setPosition(1);
@@ -51,7 +52,7 @@ public class EncodersCrater extends EncodersAuto {
 
         addTelemetryWithUpdate("Servo", "Moving Backwards");
         markerServo.setPosition(0);
-
+        */
         moveForward(-1000);
         //rotateRight(2160);
         //moveRight(600);

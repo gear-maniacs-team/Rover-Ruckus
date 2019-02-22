@@ -3,22 +3,23 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.motors.ArmMotors;
 import org.firstinspires.ftc.teamcode.motors.WheelMotors;
 
 @TeleOp(name = "The Good One", group = "Good")
 public class MecanumDrive extends OpMode {
 
     private WheelMotors wheelMotors = null;
-    //private ArmMotors armMotors = null;
+    private ArmMotors armMotors = null;
+    private double latchSpeed = 1;
     //private double armSpeed = 1;
     //private double collectorSpeed = 0.4;
-    private boolean breaker = true;
 
     @Override
     public void init()
     {
         wheelMotors = new WheelMotors(hardwareMap.dcMotor);
-        //armMotors = new ArmMotors(hardwareMap.dcMotor);
+        armMotors = new ArmMotors(hardwareMap.dcMotor);
     }
 
     @Override
@@ -43,7 +44,6 @@ public class MecanumDrive extends OpMode {
 
         //TODO Combine rotational movement with forwards, backwards movement
 
-
         while (gamepad1.right_stick_x > 0)
         {
             wheelMotors.TR.setPower(0.3);
@@ -63,32 +63,16 @@ public class MecanumDrive extends OpMode {
         wheelMotors.TL.setPower(0);
         wheelMotors.BL.setPower(0);
         wheelMotors.BR.setPower(0);
-        /*
+
         // Arms
+
+        //Latching
         if (gamepad1.dpad_up)
-            armMotors.extender.setPower(armSpeed);
+            armMotors.latchMotor.setPower(-latchSpeed);
         if (gamepad1.dpad_down)
-            armMotors.extender.setPower(-armSpeed);
-        armMotors.extender.setPower(0);
+            armMotors.latchMotor.setPower(latchSpeed);
+        armMotors.latchMotor.setPower(0);
 
-        if (gamepad1.a)
-            armMotors.angle.setPower(armSpeed);
-        if (gamepad1.y)
-            armMotors.angle.setPower(-armSpeed);
-        armMotors.angle.setPower(0);
-
-        if(gamepad1.b && breaker)
-        {
-            armMotors.collector.setPower(collectorSpeed);
-            breaker = false;
-        }
-        else
-            if(gamepad1.b && !breaker)
-            {
-                armMotors.collector.setPower(0);
-                breaker = true;
-            }
-        */
         telemetry.addData("Wheels Speed", speed);
         //telemetry.addData("Arm Extender Speed", armSpeed);
         telemetry.update();

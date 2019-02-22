@@ -13,10 +13,10 @@ public class WheelMotors {
     public final DcMotor BR;
 
     public WheelMotors(HardwareMap.DeviceMapping<DcMotor> dcMotors) {
-        TL = dcMotors.get("TopLeft");
-        TR = dcMotors.get("TopRight");
-        BL = dcMotors.get("BackLeft");
-        BR = dcMotors.get("BackRight");
+        TL = dcMotors.get("TL");
+        TR = dcMotors.get("TR");
+        BL = dcMotors.get("BL");
+        BR = dcMotors.get("BR");
     }
 
     public void setModeAll(DcMotor.RunMode mode) {
