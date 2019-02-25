@@ -10,6 +10,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.Came
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.teamcode.ExceptionHandler;
+import org.firstinspires.ftc.teamcode.motors.ArmMotors;
 import org.firstinspires.ftc.teamcode.motors.WheelMotors;
 
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.List;
 @SuppressWarnings({"WeakerAccess", "SameParameterValue"})
 public abstract class EncodersAuto extends LinearOpMode {
 
-    private static final double DEFAULT_DRIVE_POWER = 0.5;
+    private static final double DEFAULT_DRIVE_POWER = 0.4;
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
     private static final String LABEL_SILVER_MINERAL = "Silver Mineral";
@@ -29,17 +30,22 @@ public abstract class EncodersAuto extends LinearOpMode {
 
     private final ExceptionHandler exceptionHandler = new ExceptionHandler();
     private WheelMotors wheelMotors = null;
+    private ArmMotors armMotors = null;
     //protected Servo markerServo = null;
+
+    public final static double CIRC = 31.9024;
+    public final static double TICKS_PER_ROTATION = 1120;
+    public final static double TICKS = CIRC * TICKS_PER_ROTATION;
 
     @Override
     public final void runOpMode() {
         exceptionHandler.clear();
         wheelMotors = new WheelMotors(hardwareMap.dcMotor);
+        armMotors = new ArmMotors(hardwareMap.dcMotor);
         //markerServo = hardwareMap.get(Servo.class, "Marker");
 
         startDetector();
 
-        onInit();
         waitForStart();
         try {
             onStart();
@@ -49,9 +55,10 @@ public abstract class EncodersAuto extends LinearOpMode {
             exceptionHandler.clear();
             throw e;
         }
-    }
 
-    protected void onInit() {
+        //lowerArm();
+
+        addTelemetryWithUpdate("Status", "Path Completed");
     }
 
     abstract protected void onStart();
@@ -64,7 +71,7 @@ public abstract class EncodersAuto extends LinearOpMode {
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
             initTfod();
         } else {
-            telemetry.addData("Sorry!", "This device is not compatible with TFOD");
+            addTelemetryWithUpdate("Sorry!", "This device is not compatible with TFOD");
         }
     }
 
@@ -130,7 +137,6 @@ public abstract class EncodersAuto extends LinearOpMode {
         return goldHit;
     }
 
-    // TODO make a function which stops the cam and use it
     public void stopCamera() {
         tfod.shutdown();
     }
@@ -138,6 +144,29 @@ public abstract class EncodersAuto extends LinearOpMode {
     //endregion Detector
 
     //region Motors
+
+    // Latching Motor
+    protected void lowerRobot() {
+        // Starting and resetting counter
+        armMotors.latchMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        armMotors.latchMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        armMotors.latchMotor.setTargetPosition(100);
+        armMotors.latchMotor.setPower(1);
+
+        addTelemetryWithUpdate("Status", "Lowering robot");
+
+        while (armMotors.latchMotor.isBusy()) {
+            telemetry.addData("Current Latching Position",
+                    armMotors.latchMotor.getController());
+            telemetry.update();
+            sleep(10);
+        }
+
+        sleep(100);
+
+        armMotors.latchMotor.setPower(0);
+    }
 
     private void waitForMotors() {
         // Wait for the Motor to finish
@@ -158,6 +187,35 @@ public abstract class EncodersAuto extends LinearOpMode {
 
         // Stop the Motors
         wheelMotors.setPowerAll(0);
+    }
+
+    private void waitForArms() {
+        // Wait for the Arms to finish
+        while (armMotors.armAngle.isBusy() && armMotors.armExtension.isBusy()) {
+            telemetry.addData("Current Arm Position",
+                    "\nArm Angle: %d\nArm Extension: %d",
+                    armMotors.armAngle.getCurrentPosition(), armMotors.armAngle.getCurrentPosition());
+            telemetry.update();
+            sleep(10);
+        }
+
+        sleep(100);
+
+        // Stop the Motors
+        armMotors.armAngle.setPower(0);
+        armMotors.armExtension.setPower(0);
+    }
+
+    protected void lowerArm() {
+        armMotors.armAngle.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        armMotors.armAngle.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        armMotors.armExtension.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        armMotors.armExtension.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        armMotors.armAngle.setPower(0);
+        waitForArms();
+        armMotors.armExtension.setPower(0);
+        waitForArms();
     }
 
     protected final void moveForward(int position) {

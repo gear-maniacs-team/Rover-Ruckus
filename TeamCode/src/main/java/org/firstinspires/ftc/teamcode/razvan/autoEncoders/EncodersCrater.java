@@ -10,7 +10,12 @@ public class EncodersCrater extends EncodersAuto {
         int dist = 1600;
         int restDist;
 
-        moveRight(1000);
+        //lowerRobot();
+        moveForward(50);
+        moveRight(100);
+        moveForward(-50);
+
+        moveRight(900);
         moveForward(50);
 
         if (hitGoldIfDetected()) {
@@ -58,7 +63,5 @@ public class EncodersCrater extends EncodersAuto {
         //moveRight(600);
 
         moveForward(-3200, 0.8);
-
-        addTelemetryWithUpdate("Status", "Path Completed");
     }
 }

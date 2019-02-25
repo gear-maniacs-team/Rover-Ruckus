@@ -57,7 +57,5 @@ public class EncodersDepo extends EncodersAuto {
         //rotateRight(2160);
         moveRight(600);
         moveForward(-3300);
-
-        addTelemetryWithUpdate("Status", "Path Completed");
     }
 }
