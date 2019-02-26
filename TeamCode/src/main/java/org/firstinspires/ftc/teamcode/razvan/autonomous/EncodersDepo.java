@@ -1,22 +1,16 @@
-package org.firstinspires.ftc.teamcode.razvan.autoEncoders;
+package org.firstinspires.ftc.teamcode.razvan.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-@Autonomous(name = "Encoder-Crater", group = "Encoder")
-public class EncodersCrater extends EncodersAuto {
+@Autonomous(name = "Encoder-Depo", group = "Encoder")
+public class EncodersDepo extends EncodersAuto {
 
     @Override
     protected void onStart() {
         int dist = 1600;
         int restDist;
 
-        //lowerRobot();
-        moveForward(50);
-        moveRight(100);
-        moveForward(-50);
-
-        moveRight(900);
-        moveForward(50);
+        moveRight(1250);
 
         if (hitGoldIfDetected()) {
             restDist = 1600 - dist;
@@ -26,7 +20,7 @@ public class EncodersCrater extends EncodersAuto {
             moveForward(-800);
             if (hitGoldIfDetected()) {
                 restDist = dist - 800;
-                moveForward(dist + restDist + 450);
+                moveForward(dist + restDist + 600);
                 stopCamera();
             } else {
                 moveForward(dist);
@@ -38,30 +32,30 @@ public class EncodersCrater extends EncodersAuto {
                 sleep(300);
 
                 restDist = 800 - dist;
-                moveForward(dist + restDist + 450);
+                moveForward(dist + restDist + 600);
                 stopCamera();
             }
         }
 
-        rotateRight(-600);
-        moveRight(500);
-        //moveRight(-300);
-
-        moveForward(2500);
+        rotateRight(1600);
+        moveRight(-700);
+        moveRight(200);
+        moveForward(2600);
 
         /*
         // Servo
         addTelemetryWithUpdate("Servo", "Moving Forward");
         markerServo.setPosition(1);
-        sleep(2300);
+        sleep(2500);
 
         addTelemetryWithUpdate("Servo", "Moving Backwards");
         markerServo.setPosition(0);
         */
-        moveForward(-1000);
-        //rotateRight(2160);
-        //moveRight(600);
 
-        moveForward(-3200, 0.8);
+        moveForward(-1200);
+        moveRight(400);
+        //rotateRight(2160);
+        moveRight(600);
+        moveForward(-3300);
     }
 }

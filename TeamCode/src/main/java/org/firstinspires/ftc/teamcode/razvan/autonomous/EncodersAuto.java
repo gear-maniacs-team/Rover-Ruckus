@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.razvan.autoEncoders;
+package org.firstinspires.ftc.teamcode.razvan.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
