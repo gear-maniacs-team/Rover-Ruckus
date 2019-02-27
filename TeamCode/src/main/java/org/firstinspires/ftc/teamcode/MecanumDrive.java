@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.motors.ArmMotors;
 import org.firstinspires.ftc.teamcode.motors.WheelMotors;
 
-@TeleOp(name = "The Good One", group = "Good")
+@TeleOp(name = "Driving test", group = "Test")
 public class MecanumDrive extends OpMode {
 
     private static final double PRECISION_MODE_MULTIPLIER = 0.55;
@@ -56,6 +56,8 @@ public class MecanumDrive extends OpMode {
         wheelMotors.BR.setPower(-speed1);
 
         // TODO Combine rotational movement with forwards, backwards movement
+
+
 
         while (gamepad1.right_stick_x > 0)
             wheelMotors.setPowerAll(MOTOR_SPEED_ROTATION);

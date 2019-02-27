@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode
 
 import android.os.Environment
 import android.text.format.DateFormat
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.File
@@ -49,20 +50,21 @@ class ExceptionHandler {
         private const val FOLDER_NAME = "FTC: Crash Logs/"
 
         @JvmStatic
-        fun writeLogFileAsync(content: String, tag: CharSequence?) = GlobalScope.launch {
-            writeLogFile(content, tag)
-        }
+        fun writeLogFileAsync(content: String, tag: CharSequence?)
+                = GlobalScope.launch(Dispatchers.IO) { writeLogFile(content, tag) }
 
         @JvmStatic
         fun writeLogFile(content: String, tag: CharSequence?) {
-            val name = StringBuilder(FOLDER_NAME)
+            val folder = File(Environment.getExternalStorageDirectory(), FOLDER_NAME)
+            folder.mkdir()
+
             val date: CharSequence = DateFormat.format("m:k_dd/MM", Calendar.getInstance())
-            name.append(date)
+            val name = StringBuilder(date)
 
             if (!tag.isNullOrBlank())
                 name.append('_').append(tag)
 
-            File(Environment.getExternalStorageDirectory(), name.toString()).writeText(content)
+            File(folder, name.toString()).writeText(content)
         }
     }
 }
