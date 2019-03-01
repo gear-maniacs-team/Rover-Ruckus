@@ -146,6 +146,7 @@ public abstract class EncodersAuto extends LinearOpMode {
     //region Motors
 
     // Latching Motor
+
     protected void lowerRobot() {
         // Starting and resetting counter
         armMotors.latchMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -166,6 +167,12 @@ public abstract class EncodersAuto extends LinearOpMode {
         sleep(100);
 
         armMotors.latchMotor.setPower(0);
+    }
+
+    protected void deployMarker() {
+        armMotors.collector.setPower(-1);
+        sleep(800);
+        armMotors.collector.setPower(0);
     }
 
     private void waitForMotors() {

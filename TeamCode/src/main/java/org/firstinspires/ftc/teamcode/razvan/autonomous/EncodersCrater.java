@@ -49,6 +49,8 @@ public class EncodersCrater extends EncodersAuto {
 
         moveForward(2500);
 
+        deployMarker();
+
         /*
         // Servo
         addTelemetryWithUpdate("Servo", "Moving Forward");

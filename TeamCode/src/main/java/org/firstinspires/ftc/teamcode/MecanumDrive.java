@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.motors.ArmMotors;
 import org.firstinspires.ftc.teamcode.motors.WheelMotors;
 
+@Disabled
 @TeleOp(name = "Driving test", group = "Test")
 public class MecanumDrive extends OpMode {
 
@@ -56,8 +58,6 @@ public class MecanumDrive extends OpMode {
         wheelMotors.BR.setPower(-speed1);
 
         // TODO Combine rotational movement with forwards, backwards movement
-
-
 
         while (gamepad1.right_stick_x > 0)
             wheelMotors.setPowerAll(MOTOR_SPEED_ROTATION);
