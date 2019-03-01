@@ -10,7 +10,8 @@ public class EncodersCrater extends EncodersAuto {
         int dist = 1600;
         int restDist;
 
-        //lowerRobot();
+        lowerRobot();
+
         moveForward(50);
         moveRight(100);
         moveForward(-50);

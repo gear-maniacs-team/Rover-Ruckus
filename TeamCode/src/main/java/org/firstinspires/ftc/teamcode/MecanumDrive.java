@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.motors.ArmMotors;
 import org.firstinspires.ftc.teamcode.motors.WheelMotors;
 
+@Deprecated
 @Disabled
 @TeleOp(name = "Driving test", group = "Test")
 public class MecanumDrive extends OpMode {

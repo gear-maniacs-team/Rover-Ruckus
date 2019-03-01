@@ -145,21 +145,18 @@ public abstract class EncodersAuto extends LinearOpMode {
 
     //region Motors
 
-    // Latching Motor
-
     protected void lowerRobot() {
         // Starting and resetting counter
         armMotors.latchMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         armMotors.latchMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        armMotors.latchMotor.setTargetPosition(100);
+        armMotors.latchMotor.setTargetPosition(-13000);
         armMotors.latchMotor.setPower(1);
 
-        addTelemetryWithUpdate("Status", "Lowering robot");
-
+        // Wait for the Latching to finish
         while (armMotors.latchMotor.isBusy()) {
             telemetry.addData("Current Latching Position",
-                    armMotors.latchMotor.getController());
+                    armMotors.latchMotor.getCurrentPosition());
             telemetry.update();
             sleep(10);
         }

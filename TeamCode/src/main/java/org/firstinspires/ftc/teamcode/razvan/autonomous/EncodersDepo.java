@@ -10,7 +10,13 @@ public class EncodersDepo extends EncodersAuto {
         int dist = 1600;
         int restDist;
 
-        moveRight(1250); 
+        lowerRobot();
+
+        moveForward(50);
+        moveRight(100);
+        moveForward(-50);
+
+        moveRight(1150);
 
         if (hitGoldIfDetected()) {
             restDist = 1600 - dist;

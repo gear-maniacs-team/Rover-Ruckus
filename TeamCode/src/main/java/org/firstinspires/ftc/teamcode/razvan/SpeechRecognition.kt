@@ -20,7 +20,7 @@ import org.firstinspires.ftc.teamcode.R
 import java.util.*
 
 @Autonomous(name = "SpeechRecognition")
-class SpeechRecognition : LinearOpMode() {
+class SpeechRecognition : LinearOpMode(), RecognitionListener {
 
     companion object {
         private const val LOG_TAG = "Music/Speech"
@@ -49,7 +49,7 @@ class SpeechRecognition : LinearOpMode() {
                 if (!SpeechRecognizer.isRecognitionAvailable(hardwareMap.appContext))
                     throw IllegalArgumentException("No Recognizer Found")
                 val speech = SpeechRecognizer.createSpeechRecognizer(hardwareMap.appContext)
-                speech.setRecognitionListener(getSpeechListener())
+                speech.setRecognitionListener(this@SpeechRecognition)
 
                 val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
                     putExtra(
@@ -85,82 +85,80 @@ class SpeechRecognition : LinearOpMode() {
         delay(50000L)
     }
 
-    private fun getSpeechListener() = object : RecognitionListener {
-        override fun onReadyForSpeech(params: Bundle?) {
-            Log.i(LOG_TAG, "onReadyForSpeech")
-            telemetry.addData(LOG_TAG, "onReadyForSpeech")
-            telemetry.update()
-        }
+    override fun onReadyForSpeech(params: Bundle?) {
+        Log.i(LOG_TAG, "onReadyForSpeech")
+        telemetry.addData(LOG_TAG, "onReadyForSpeech")
+        telemetry.update()
+    }
 
-        override fun onRmsChanged(rmsdB: Float) {
-            Log.i(LOG_TAG, "onRmsChanged: $rmsdB")
-        }
+    override fun onRmsChanged(rmsdB: Float) {
+        Log.i(LOG_TAG, "onRmsChanged: $rmsdB")
+    }
 
-        override fun onBufferReceived(buffer: ByteArray?) {
-            Log.i(LOG_TAG, "onBufferReceived: $buffer")
-        }
+    override fun onBufferReceived(buffer: ByteArray?) {
+        Log.i(LOG_TAG, "onBufferReceived: $buffer")
+    }
 
-        override fun onPartialResults(partialResults: Bundle?) {
-            val matches = partialResults?.getStringArrayList(RecognizerIntent.EXTRA_PARTIAL_RESULTS)
-                    ?.filterNotNull() ?: return
+    override fun onPartialResults(partialResults: Bundle?) {
+        val matches = partialResults?.getStringArrayList(RecognizerIntent.EXTRA_PARTIAL_RESULTS)
+                ?.filterNotNull() ?: return
 
-            if (matches.any { it.contains(RESULT_MUSIC, true) }) {
-                speechDone = true
-                speechSuccessful = true
-                speechResult = RESULT_MUSIC
-            } else if (matches.any { it.contains(RESULT_NAME, true) }) {
-                speechDone = true
-                speechSuccessful = true
-                speechResult = RESULT_NAME
-            }
-
-            Log.i(LOG_TAG, "onPartialResults")
-            telemetry.addData(LOG_TAG, "onPartialResults")
-            telemetry.update()
-        }
-
-        override fun onEvent(eventType: Int, params: Bundle?) {
-            Log.i(LOG_TAG, "onEvent $eventType")
-        }
-
-        override fun onBeginningOfSpeech() {
-            Log.i(LOG_TAG, "onBeginningOfSpeech")
-            telemetry.addData(LOG_TAG, "onBeginningOfSpeech")
-            telemetry.update()
-        }
-
-        override fun onEndOfSpeech() {
-            Log.i(LOG_TAG, "onEndOfSpeech")
-            telemetry.addData(LOG_TAG, "onEndOfSpeech")
-            telemetry.update()
-        }
-
-        override fun onError(error: Int) {
-            Log.e(LOG_TAG, "onError: $error")
-            telemetry.addData(LOG_TAG, "onError: $error")
-            telemetry.update()
+        if (matches.any { it.contains(RESULT_MUSIC, true) }) {
             speechDone = true
+            speechSuccessful = true
+            speechResult = RESULT_MUSIC
+        } else if (matches.any { it.contains(RESULT_NAME, true) }) {
+            speechDone = true
+            speechSuccessful = true
+            speechResult = RESULT_NAME
         }
 
-        override fun onResults(results: Bundle) {
-            speechDone = true
-            val matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
-                    ?.filterNotNull() ?: return
+        Log.i(LOG_TAG, "onPartialResults")
+        telemetry.addData(LOG_TAG, "onPartialResults")
+        telemetry.update()
+    }
 
-            if (matches.isNullOrEmpty()) {
-                Log.i(LOG_TAG, "Results are empty")
-                telemetry.addData(LOG_TAG, "Results are empty")
-                telemetry.update()
-                return
-            }
+    override fun onEvent(eventType: Int, params: Bundle?) {
+        Log.i(LOG_TAG, "onEvent $eventType")
+    }
 
-            if (matches.any { it.contains(RESULT_MUSIC, true) }) {
-                speechSuccessful = true
-                speechResult = RESULT_MUSIC
-            } else if (matches.any { it.contains(RESULT_NAME, true) }) {
-                speechSuccessful = true
-                speechResult = RESULT_NAME
-            }
+    override fun onBeginningOfSpeech() {
+        Log.i(LOG_TAG, "onBeginningOfSpeech")
+        telemetry.addData(LOG_TAG, "onBeginningOfSpeech")
+        telemetry.update()
+    }
+
+    override fun onEndOfSpeech() {
+        Log.i(LOG_TAG, "onEndOfSpeech")
+        telemetry.addData(LOG_TAG, "onEndOfSpeech")
+        telemetry.update()
+    }
+
+    override fun onError(error: Int) {
+        Log.e(LOG_TAG, "onError: $error")
+        telemetry.addData(LOG_TAG, "onError: $error")
+        telemetry.update()
+        speechDone = true
+    }
+
+    override fun onResults(results: Bundle) {
+        speechDone = true
+        val matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
+                ?.filterNotNull() ?: return
+
+        if (matches.isNullOrEmpty()) {
+            Log.i(LOG_TAG, "Results are empty")
+            telemetry.addData(LOG_TAG, "Results are empty")
+            telemetry.update()
+            return
+        }
+
+        if (matches.any { it.contains(RESULT_MUSIC, true) }) {
+            speechSuccessful = true
+            speechResult = RESULT_MUSIC
+        } else if (matches.any { it.contains(RESULT_NAME, true) }) {
+            speechSuccessful = true
+            speechResult = RESULT_NAME
         }
     }
 
