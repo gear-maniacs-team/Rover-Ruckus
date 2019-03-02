@@ -12,9 +12,9 @@ public class EncodersDepo extends EncodersAuto {
 
         lowerRobot();
 
-        moveForward(50);
-        moveRight(100);
-        moveForward(-50);
+        moveForward(300);
+        moveRight(1000);
+        moveForward(-300);
 
         moveRight(1150);
 

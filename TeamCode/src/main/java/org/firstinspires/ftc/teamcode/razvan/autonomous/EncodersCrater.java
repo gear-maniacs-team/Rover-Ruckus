@@ -12,9 +12,10 @@ public class EncodersCrater extends EncodersAuto {
 
         lowerRobot();
 
-        moveForward(50);
-        moveRight(100);
-        moveForward(-50);
+        moveForward(300);
+        moveRight(1000);
+        sleep(10000);
+        moveForward(-300);
 
         moveRight(900);
         moveForward(50);

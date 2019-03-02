@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.teamcode.motors.ArmMotors;
 import org.firstinspires.ftc.teamcode.motors.WheelMotors;
@@ -18,6 +19,7 @@ public class FinalTeleOp extends OpMode {
 
     private WheelMotors wheelMotors = null;
     private ArmMotors armMotors = null;
+    private TouchSensor latchSense = null;
     private boolean precisionModeOn;
 
     @Override
@@ -25,6 +27,7 @@ public class FinalTeleOp extends OpMode {
     {
         wheelMotors = new WheelMotors(hardwareMap.dcMotor);
         armMotors = new ArmMotors(hardwareMap.dcMotor);
+        latchSense = hardwareMap.touchSensor.get("LatchSensor");
         precisionModeOn = false;
     }
 
@@ -115,10 +118,16 @@ public class FinalTeleOp extends OpMode {
     private void Latching()
     {
         double latchingPower = 0;
+
         if (gamepad1.dpad_up)
             latchingPower = -LATCH_SPEED;
         else if (gamepad1.dpad_down)
             latchingPower = LATCH_SPEED;
+
+        if(latchSense.getValue() != 0 && gamepad1.dpad_down) {
+            latchingPower = 0;
+            telemetry.addData("Impossible", "to go down");
+        }
         armMotors.latchMotor.setPower(latchingPower);
 
         telemetry.addData("Latching Power", latchingPower);
@@ -126,7 +135,7 @@ public class FinalTeleOp extends OpMode {
 
     private void ArmMovement()
     {
-        final double armAnglePower = -gamepad2.left_stick_y * ARM_SPEED_MULTIPLIER;
+        final double armAnglePower = gamepad2.left_stick_y * ARM_SPEED_MULTIPLIER;
         armMotors.armAngle.setPower(armAnglePower);
 
         final double armExtensionPower = -gamepad2.right_stick_y * ARM_SPEED_MULTIPLIER;
