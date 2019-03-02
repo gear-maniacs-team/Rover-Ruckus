@@ -55,5 +55,28 @@ public class EncodersDepo extends EncodersAuto {
                 stopCamera();
             }
         }
+
+        rotateRight(-540);
+        moveRight(700,0.2);
+        moveRight(-200);
+        moveForward(-1500);
+
+        deployMarker();
+
+        /*
+        // Servo
+        addTelemetryWithUpdate("Servo", "Moving Forward");
+        markerServo.setPosition(1);
+        sleep(2500);
+
+        addTelemetryWithUpdate("Servo", "Moving Backwards");
+        markerServo.setPosition(0);
+        */
+
+        moveForward(-1200);
+        moveRight(400);
+        //rotateRight(2160);
+        moveRight(600);
+        moveForward(-3300);
     }
 }
