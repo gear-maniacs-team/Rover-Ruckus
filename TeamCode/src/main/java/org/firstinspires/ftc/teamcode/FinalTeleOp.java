@@ -35,7 +35,6 @@ public class FinalTeleOp extends OpMode {
     public void loop()
     {
         Movement();
-        //Strafe();
         Latching();
         ArmMovement();
         Collector();
@@ -68,17 +67,17 @@ public class FinalTeleOp extends OpMode {
         // Strafe Right
         while (gamepad1.right_stick_x > 0) {
             wheelMotors.TR.setPower(MOTOR_SPEED_STRAFE);
-            wheelMotors.TL.setPower(MOTOR_SPEED_STRAFE);
+            wheelMotors.TL.setPower(-MOTOR_SPEED_STRAFE);
             wheelMotors.BR.setPower(-MOTOR_SPEED_STRAFE);
-            wheelMotors.BL.setPower(-MOTOR_SPEED_STRAFE);
+            wheelMotors.BL.setPower(MOTOR_SPEED_STRAFE);
         }
 
         // Strafe Left
         while (gamepad1.right_stick_x < 0) {
             wheelMotors.TR.setPower(-MOTOR_SPEED_STRAFE);
-            wheelMotors.TL.setPower(-MOTOR_SPEED_STRAFE);
+            wheelMotors.TL.setPower(MOTOR_SPEED_STRAFE);
             wheelMotors.BR.setPower(MOTOR_SPEED_STRAFE);
-            wheelMotors.BL.setPower(MOTOR_SPEED_STRAFE);
+            wheelMotors.BL.setPower(-MOTOR_SPEED_STRAFE);
         }
 
         if (gamepad1.a) {
@@ -105,16 +104,6 @@ public class FinalTeleOp extends OpMode {
         telemetry.addData("Precision Mode On", "%b\n", precisionModeOn);
     }
 
-    private void Strafe()
-    {
-        final double rightX = gamepad1.right_stick_x;
-
-        wheelMotors.TR.setPower(rightX);
-        wheelMotors.TL.setPower(rightX);
-        wheelMotors.BR.setPower(-rightX);
-        wheelMotors.BL.setPower(-rightX);
-    }
-
     private void Latching()
     {
         double latchingPower = 0;
@@ -130,7 +119,7 @@ public class FinalTeleOp extends OpMode {
         }
         armMotors.latchMotor.setPower(latchingPower);
 
-        telemetry.addData("Latching Power", latchingPower);
+        telemetry.addData("ArmTest Power", latchingPower);
     }
 
     private void ArmMovement()

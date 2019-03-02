@@ -13,12 +13,8 @@ public class EncodersCrater extends EncodersAuto {
         lowerRobot();
 
         moveForward(300);
-        moveRight(1000);
-        sleep(10000);
-        moveForward(-300);
-
-        moveRight(900);
-        moveForward(50);
+        moveRight(1250);
+        moveForward(-170);
 
         if (hitGoldIfDetected()) {
             restDist = 1600 - dist;
@@ -40,18 +36,18 @@ public class EncodersCrater extends EncodersAuto {
                 sleep(300);
 
                 restDist = 800 - dist;
-                moveForward(dist + restDist + 450);
+                moveForward(dist + restDist + 500);
                 stopCamera();
             }
         }
 
-        rotateRight(-600);
-        moveRight(500);
-        //moveRight(-300);
+        rotateRight(1600);
+        moveRight(-800, 0.2);
+        moveRight(300);
 
-        moveForward(2500);
+        moveForward(-2500);
 
-        deployMarker();
+        //deployMarker();
 
         /*
         // Servo
@@ -62,10 +58,8 @@ public class EncodersCrater extends EncodersAuto {
         addTelemetryWithUpdate("Servo", "Moving Backwards");
         markerServo.setPosition(0);
         */
-        moveForward(-1000);
-        //rotateRight(2160);
-        //moveRight(600);
+        moveForward(3300);
 
-        moveForward(-3200, 0.8);
+        lowerArm();
     }
 }

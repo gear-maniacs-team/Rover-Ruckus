@@ -56,8 +56,6 @@ public abstract class EncodersAuto extends LinearOpMode {
             throw e;
         }
 
-        //lowerArm();
-
         addTelemetryWithUpdate("Status", "Path Completed");
     }
 
@@ -153,7 +151,7 @@ public abstract class EncodersAuto extends LinearOpMode {
         armMotors.latchMotor.setTargetPosition(-13000);
         armMotors.latchMotor.setPower(1);
 
-        // Wait for the Latching to finish
+        // Wait for the Latching Motor to finish
         while (armMotors.latchMotor.isBusy()) {
             telemetry.addData("Current Latching Position",
                     armMotors.latchMotor.getCurrentPosition());
@@ -211,15 +209,23 @@ public abstract class EncodersAuto extends LinearOpMode {
     }
 
     protected void lowerArm() {
+        /*// Arm Angle
         armMotors.armAngle.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         armMotors.armAngle.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        armMotors.armAngle.setTargetPosition(4200);
+        armMotors.armAngle.setPower(0.8);
+        waitForArms();
+
+        // Arm Extension
         armMotors.armExtension.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         armMotors.armExtension.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        armMotors.armAngle.setPower(0);
-        waitForArms();
-        armMotors.armExtension.setPower(0);
-        waitForArms();
+        armMotors.armExtension.setTargetPosition(800);
+        armMotors.armExtension.setPower(0.8);
+        waitForArms();*/
+        armMotors.armAngle.setPower(0.5);
+        sleep(1100);
     }
 
     protected final void moveForward(int position) {
@@ -248,9 +254,9 @@ public abstract class EncodersAuto extends LinearOpMode {
 
     protected final void moveRight(int position, double power) {
         wheelMotors.TR.setDirection(DcMotorSimple.Direction.FORWARD);
-        wheelMotors.TL.setDirection(DcMotorSimple.Direction.FORWARD);
+        wheelMotors.TL.setDirection(DcMotorSimple.Direction.REVERSE);
         wheelMotors.BR.setDirection(DcMotorSimple.Direction.REVERSE);
-        wheelMotors.BL.setDirection(DcMotorSimple.Direction.REVERSE);
+        wheelMotors.BL.setDirection(DcMotorSimple.Direction.FORWARD);
 
         // Reset Counter
         wheelMotors.setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

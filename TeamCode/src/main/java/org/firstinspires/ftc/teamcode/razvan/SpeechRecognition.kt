@@ -11,6 +11,7 @@ import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import android.util.Log
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -19,6 +20,7 @@ import kotlinx.coroutines.withContext
 import org.firstinspires.ftc.teamcode.R
 import java.util.*
 
+@Disabled
 @Autonomous(name = "SpeechRecognition")
 class SpeechRecognition : LinearOpMode(), RecognitionListener {
 

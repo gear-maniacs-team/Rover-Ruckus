@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode.Berti.ClujDemo;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.motors.WheelMotors;
 
+@Disabled
 @Autonomous(name = "Timeout_FromDepo", group = "Practice")
 public class PracticeDepo extends LinearOpMode
 {

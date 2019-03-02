@@ -10,13 +10,11 @@ public class EncodersDepo extends EncodersAuto {
         int dist = 1600;
         int restDist;
 
-        lowerRobot();
+        //lowerRobot();
 
         moveForward(300);
-        moveRight(1000);
-        moveForward(-300);
-
-        moveRight(1150);
+        moveRight(1300);
+        moveForward(-200);
 
         if (hitGoldIfDetected()) {
             restDist = 1600 - dist;
@@ -26,7 +24,7 @@ public class EncodersDepo extends EncodersAuto {
             moveForward(-800);
             if (hitGoldIfDetected()) {
                 restDist = dist - 800;
-                moveForward(dist + restDist + 600);
+                moveForward(dist + restDist + 450);
                 stopCamera();
             } else {
                 moveForward(dist);
@@ -38,17 +36,17 @@ public class EncodersDepo extends EncodersAuto {
                 sleep(300);
 
                 restDist = 800 - dist;
-                moveForward(dist + restDist + 600);
+                moveForward(dist + restDist + 500);
                 stopCamera();
             }
         }
 
-        rotateRight(1600);
-        moveRight(-700);
-        moveRight(200);
-        moveForward(2600);
+        rotateRight(-540);
+        moveRight(700,0.2);
+        moveRight(-200);
+        moveForward(-1500);
 
-        deployMarker();
+        //deployMarker();
 
         /*
         // Servo
@@ -60,10 +58,7 @@ public class EncodersDepo extends EncodersAuto {
         markerServo.setPosition(0);
         */
 
-        moveForward(-1200);
-        moveRight(400);
-        //rotateRight(2160);
-        moveRight(600);
-        moveForward(-3300);
+        moveForward(2600);
+
     }
 }
