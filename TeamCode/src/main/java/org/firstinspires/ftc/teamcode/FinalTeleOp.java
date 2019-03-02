@@ -67,17 +67,17 @@ public class FinalTeleOp extends OpMode {
         // Strafe Right
         while (gamepad1.right_stick_x > 0) {
             wheelMotors.TR.setPower(MOTOR_SPEED_STRAFE);
-            wheelMotors.TL.setPower(-MOTOR_SPEED_STRAFE);
+            wheelMotors.TL.setPower(MOTOR_SPEED_STRAFE);
             wheelMotors.BR.setPower(-MOTOR_SPEED_STRAFE);
-            wheelMotors.BL.setPower(MOTOR_SPEED_STRAFE);
+            wheelMotors.BL.setPower(-MOTOR_SPEED_STRAFE);
         }
 
         // Strafe Left
         while (gamepad1.right_stick_x < 0) {
             wheelMotors.TR.setPower(-MOTOR_SPEED_STRAFE);
-            wheelMotors.TL.setPower(MOTOR_SPEED_STRAFE);
+            wheelMotors.TL.setPower(-MOTOR_SPEED_STRAFE);
             wheelMotors.BR.setPower(MOTOR_SPEED_STRAFE);
-            wheelMotors.BL.setPower(-MOTOR_SPEED_STRAFE);
+            wheelMotors.BL.setPower(MOTOR_SPEED_STRAFE);
         }
 
         if (gamepad1.a) {

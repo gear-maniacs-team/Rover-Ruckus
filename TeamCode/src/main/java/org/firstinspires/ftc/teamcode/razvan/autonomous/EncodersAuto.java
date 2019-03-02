@@ -19,23 +19,23 @@ import java.util.List;
 public abstract class EncodersAuto extends LinearOpMode {
 
     private static final double DEFAULT_DRIVE_POWER = 0.4;
+
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
     private static final String LABEL_SILVER_MINERAL = "Silver Mineral";
-
     private static final String VUFORIA_KEY = "AZnVnoj/////AAABmdXzVSC7bkZik9EURkca9g5GwHTQjL0SB5CABkSEajM1oX/nSOWoXxcxH/watnjKf3WlWcGhyPvV0E8eMNZmTbTgrB/8OJhqAflMV+CjgBtERmweuXjLiPcvEgJNrZD7USn+LK53L0VuSYdi4NwJxy7ypbse7jbXlOmJVgogCXbD4+yjYDbnVmBkkMQMhLgIFQZ0wRApvdxc7R/O/rhsQfWrWWekxjIp4wNeYh5JBsCrCRjdPu1P7QLKAMSOpK5lXqJjmD36TPDxqrQEGfdKxkMe2SJta/3tyzc+v/mFRmNDJjqVMYu69eEy6jh7u/KQA2Uj4pdcIfnZhMWwBO58guP2TPl5HCof4weEEUI6ZF8w";
 
     private VuforiaLocalizer vuforia = null;
     private TFObjectDetector tfod = null;
 
     private final ExceptionHandler exceptionHandler = new ExceptionHandler();
-    private WheelMotors wheelMotors = null;
+    protected WheelMotors wheelMotors = null;
     private ArmMotors armMotors = null;
     //protected Servo markerServo = null;
 
-    public final static double CIRC = 31.9024;
-    public final static double TICKS_PER_ROTATION = 1120;
-    public final static double TICKS = CIRC * TICKS_PER_ROTATION;
+    //public final static double CIRC = 31.9024;
+    //public final static double TICKS_PER_ROTATION = 1120;
+    //public final static double TICKS = CIRC * TICKS_PER_ROTATION;
 
     @Override
     public final void runOpMode() {
@@ -135,7 +135,7 @@ public abstract class EncodersAuto extends LinearOpMode {
         return goldHit;
     }
 
-    public void stopCamera() {
+    public final void stopCamera() {
         tfod.shutdown();
     }
 
@@ -143,7 +143,7 @@ public abstract class EncodersAuto extends LinearOpMode {
 
     //region Motors
 
-    protected void lowerRobot() {
+    protected final void lowerRobot() {
         // Starting and resetting counter
         armMotors.latchMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         armMotors.latchMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -164,7 +164,7 @@ public abstract class EncodersAuto extends LinearOpMode {
         armMotors.latchMotor.setPower(0);
     }
 
-    protected void deployMarker() {
+    protected final void deployMarker() {
         armMotors.collector.setPower(1);
         sleep(600);
         armMotors.collector.setPower(0);
@@ -208,7 +208,7 @@ public abstract class EncodersAuto extends LinearOpMode {
         armMotors.armExtension.setPower(0);
     }
 
-    protected void lowerArm() {
+    protected final void lowerArm() {
         /*// Arm Angle
         armMotors.armAngle.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         armMotors.armAngle.setMode(DcMotor.RunMode.RUN_TO_POSITION);

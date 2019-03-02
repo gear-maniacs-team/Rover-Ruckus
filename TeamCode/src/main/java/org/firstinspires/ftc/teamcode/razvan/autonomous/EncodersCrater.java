@@ -43,21 +43,12 @@ public class EncodersCrater extends EncodersAuto {
 
         rotateRight(1600);
         moveRight(-800, 0.2);
-        moveRight(300);
+        moveRight(280);
 
         moveForward(-2500);
 
         deployMarker();
 
-        /*
-        // Servo
-        addTelemetryWithUpdate("Servo", "Moving Forward");
-        markerServo.setPosition(1);
-        sleep(2300);
-
-        addTelemetryWithUpdate("Servo", "Moving Backwards");
-        markerServo.setPosition(0);
-        */
         moveForward(3300);
 
         lowerArm();
