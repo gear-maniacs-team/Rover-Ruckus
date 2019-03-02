@@ -47,7 +47,7 @@ public class EncodersCrater extends EncodersAuto {
 
         moveForward(-2500);
 
-        //deployMarker();
+        deployMarker();
 
         /*
         // Servo

@@ -165,8 +165,8 @@ public abstract class EncodersAuto extends LinearOpMode {
     }
 
     protected void deployMarker() {
-        armMotors.collector.setPower(-1);
-        sleep(800);
+        armMotors.collector.setPower(1);
+        sleep(600);
         armMotors.collector.setPower(0);
     }
 
