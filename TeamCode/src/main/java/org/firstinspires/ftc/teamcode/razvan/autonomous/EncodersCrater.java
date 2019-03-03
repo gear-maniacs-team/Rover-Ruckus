@@ -13,7 +13,7 @@ public class EncodersCrater extends EncodersAuto {
         lowerRobot();
 
         moveForward(300);
-        moveRight(1250);
+        moveRight(900);
         moveForward(-170);
 
         if (hitGoldIfDetected()) {
@@ -29,10 +29,10 @@ public class EncodersCrater extends EncodersAuto {
             } else {
                 moveForward(dist);
 
-                moveRight(900);
+                moveRight(500);
                 sleep(300);
 
-                moveRight(-800);
+                moveRight(-400);
                 sleep(300);
 
                 restDist = 800 - dist;
@@ -51,6 +51,6 @@ public class EncodersCrater extends EncodersAuto {
 
         moveForward(3300);
 
-        lowerArm();
+        //lowerArm();
     }
 }

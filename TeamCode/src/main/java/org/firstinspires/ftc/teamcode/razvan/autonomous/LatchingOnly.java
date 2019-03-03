@@ -10,6 +10,6 @@ public class LatchingOnly extends EncodersAuto {
         stopCamera();
         lowerRobot();
         //moveForward(300);
-        moveRight(800);
+        //moveRight(300);
     }
 }

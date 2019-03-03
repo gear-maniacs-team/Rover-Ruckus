@@ -7,15 +7,15 @@ public class EncodersDepo extends EncodersAuto {
 
     @Override
     protected void onStart() {
-        //lowerRobot();
+        lowerRobot();
 
         moveForward(300);
-        moveRight(1250);
+        moveRight(900);
         moveForward(-170);
 
         sampling();
 
-        rotateRight(-540);
+        /*rotateRight(-540);
         moveRight(800,0.2);
         moveRight(-280);
         moveForward(-1500);
@@ -24,7 +24,7 @@ public class EncodersDepo extends EncodersAuto {
 
         moveForward(2600);
 
-        //lowerArm();
+        //lowerArm();*/
     }
 
     private void sampling() {
@@ -44,10 +44,10 @@ public class EncodersDepo extends EncodersAuto {
             } else {
                 moveForward(dist);
 
-                moveRight(900);
+                moveRight(500);
                 sleep(300);
 
-                moveRight(-800);
+                moveRight(-400);
                 sleep(300);
 
                 restDist = 800 - dist;
@@ -55,28 +55,5 @@ public class EncodersDepo extends EncodersAuto {
                 stopCamera();
             }
         }
-
-        rotateRight(-540);
-        moveRight(700,0.2);
-        moveRight(-200);
-        moveForward(-1500);
-
-        deployMarker();
-
-        /*
-        // Servo
-        addTelemetryWithUpdate("Servo", "Moving Forward");
-        markerServo.setPosition(1);
-        sleep(2500);
-
-        addTelemetryWithUpdate("Servo", "Moving Backwards");
-        markerServo.setPosition(0);
-        */
-
-        moveForward(-1200);
-        moveRight(400);
-        //rotateRight(2160);
-        moveRight(600);
-        moveForward(-3300);
     }
 }

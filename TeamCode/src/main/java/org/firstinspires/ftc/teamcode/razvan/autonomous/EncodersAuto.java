@@ -125,10 +125,10 @@ public abstract class EncodersAuto extends LinearOpMode {
         if (searchForGold()) {
             goldHit = true;
 
-            moveRight(800);
+            moveRight(400);
             sleep(300);
 
-            moveRight(-800);
+            moveRight(-400);
             sleep(300);
         }
 
@@ -148,7 +148,7 @@ public abstract class EncodersAuto extends LinearOpMode {
         armMotors.latchMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         armMotors.latchMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        armMotors.latchMotor.setTargetPosition(-13000);
+        armMotors.latchMotor.setTargetPosition(-14800);
         armMotors.latchMotor.setPower(1);
 
         // Wait for the Latching Motor to finish
@@ -159,9 +159,10 @@ public abstract class EncodersAuto extends LinearOpMode {
             sleep(10);
         }
 
-        sleep(100);
+        sleep(500);
 
         armMotors.latchMotor.setPower(0);
+        moveRight(-100, 0.1);
     }
 
     protected final void deployMarker() {
@@ -254,9 +255,9 @@ public abstract class EncodersAuto extends LinearOpMode {
 
     protected final void moveRight(int position, double power) {
         wheelMotors.TR.setDirection(DcMotorSimple.Direction.FORWARD);
-        wheelMotors.TL.setDirection(DcMotorSimple.Direction.REVERSE);
+        wheelMotors.TL.setDirection(DcMotorSimple.Direction.FORWARD);
         wheelMotors.BR.setDirection(DcMotorSimple.Direction.REVERSE);
-        wheelMotors.BL.setDirection(DcMotorSimple.Direction.FORWARD);
+        wheelMotors.BL.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // Reset Counter
         wheelMotors.setModeAll(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

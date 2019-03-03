@@ -109,9 +109,9 @@ public class FinalTeleOp extends OpMode {
         double latchingPower = 0;
 
         if (gamepad1.dpad_up)
-            latchingPower = -LATCH_SPEED;
-        else if (gamepad1.dpad_down)
             latchingPower = LATCH_SPEED;
+        else if (gamepad1.dpad_down)
+            latchingPower = -LATCH_SPEED;
 
         if(latchSense.getValue() != 0 && gamepad1.dpad_down) {
             latchingPower = 0;
@@ -119,7 +119,7 @@ public class FinalTeleOp extends OpMode {
         }
         armMotors.latchMotor.setPower(latchingPower);
 
-        telemetry.addData("ArmTest Power", latchingPower);
+        telemetry.addData("Latching Power", latchingPower);
     }
 
     private void ArmMovement()
