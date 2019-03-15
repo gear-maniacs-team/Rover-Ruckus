@@ -7,39 +7,8 @@ public class EncodersCrater extends EncodersAuto {
 
     @Override
     protected void onStart() {
-        int dist = 1600;
-        int restDist;
-
         lowerRobot();
-
-        moveForward(300);
-        moveRight(900);
-        moveForward(-170);
-
-        if (hitGoldIfDetected()) {
-            restDist = 1600 - dist;
-            moveForward(dist + restDist + 600);
-            stopCamera();
-        } else {
-            moveForward(-800);
-            if (hitGoldIfDetected()) {
-                restDist = dist - 800;
-                moveForward(dist + restDist + 450);
-                stopCamera();
-            } else {
-                moveForward(dist);
-
-                moveRight(500);
-                sleep(300);
-
-                moveRight(-400);
-                sleep(300);
-
-                restDist = 800 - dist;
-                moveForward(dist + restDist + 500);
-                stopCamera();
-            }
-        }
+        movementWithSampling();
 
         rotateRight(1600);
         moveRight(-800, 0.2);
@@ -49,8 +18,8 @@ public class EncodersCrater extends EncodersAuto {
 
         deployMarker();
 
-        moveForward(3300);
+        moveForward(3400);
 
-        //lowerArm();
+        lowerArm();
     }
 }

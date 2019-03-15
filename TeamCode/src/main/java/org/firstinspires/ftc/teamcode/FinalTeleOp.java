@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.teamcode.motors.ArmMotors;
@@ -29,6 +30,8 @@ public class FinalTeleOp extends OpMode {
         armMotors = new ArmMotors(hardwareMap.dcMotor);
         latchSense = hardwareMap.touchSensor.get("LatchSensor");
         precisionModeOn = false;
+
+        wheelMotors.setModeAll(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     @Override
@@ -127,7 +130,7 @@ public class FinalTeleOp extends OpMode {
         final double armAnglePower = gamepad2.left_stick_y * ARM_SPEED_MULTIPLIER;
         armMotors.armAngle.setPower(armAnglePower);
 
-        final double armExtensionPower = -gamepad2.right_stick_y * ARM_SPEED_MULTIPLIER;
+        final double armExtensionPower = gamepad2.right_stick_y * ARM_SPEED_MULTIPLIER;
         armMotors.armExtension.setPower(armExtensionPower);
 
         telemetry.addData("Arm Angle Power", armAnglePower);

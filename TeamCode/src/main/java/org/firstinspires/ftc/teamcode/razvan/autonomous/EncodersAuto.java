@@ -148,7 +148,7 @@ public abstract class EncodersAuto extends LinearOpMode {
         armMotors.latchMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         armMotors.latchMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        armMotors.latchMotor.setTargetPosition(-14800);
+        armMotors.latchMotor.setTargetPosition(-12000);
         armMotors.latchMotor.setPower(1);
 
         // Wait for the Latching Motor to finish
@@ -162,7 +162,7 @@ public abstract class EncodersAuto extends LinearOpMode {
         sleep(500);
 
         armMotors.latchMotor.setPower(0);
-        moveRight(-100, 0.1);
+        moveRight(-100, 0.2);
     }
 
     protected final void deployMarker() {
@@ -192,40 +192,8 @@ public abstract class EncodersAuto extends LinearOpMode {
         wheelMotors.setPowerAll(0);
     }
 
-    private void waitForArms() {
-        // Wait for the Arms to finish
-        while (armMotors.armAngle.isBusy() && armMotors.armExtension.isBusy()) {
-            telemetry.addData("Current Arm Position",
-                    "\nArm Angle: %d\nArm Extension: %d",
-                    armMotors.armAngle.getCurrentPosition(), armMotors.armAngle.getCurrentPosition());
-            telemetry.update();
-            sleep(10);
-        }
-
-        sleep(100);
-
-        // Stop the Motors
-        armMotors.armAngle.setPower(0);
-        armMotors.armExtension.setPower(0);
-    }
-
     protected final void lowerArm() {
-        /*// Arm Angle
-        armMotors.armAngle.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        armMotors.armAngle.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        armMotors.armAngle.setTargetPosition(4200);
-        armMotors.armAngle.setPower(0.8);
-        waitForArms();
-
-        // Arm Extension
-        armMotors.armExtension.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        armMotors.armExtension.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        armMotors.armExtension.setTargetPosition(800);
-        armMotors.armExtension.setPower(0.8);
-        waitForArms();*/
-        armMotors.armAngle.setPower(0.5);
+        armMotors.armAngle.setPower(0.45);
         sleep(1100);
     }
 
@@ -303,4 +271,46 @@ public abstract class EncodersAuto extends LinearOpMode {
     }
 
     //endregion Motors
+
+    //region Path
+
+    protected final void movementWithSampling() {
+        moveForward(-300);
+        moveRight(1600);
+        moveForward(170);
+
+        sampling();
+    }
+
+    private void sampling() {
+        int dist = 1600;
+        int restDist;
+
+        if (hitGoldIfDetected()) {
+            restDist = 1600 - dist;
+            moveForward(dist + restDist + 600);
+            stopCamera();
+        } else {
+            moveForward(-700);
+            if (hitGoldIfDetected()) {
+                restDist = dist - 700;
+                moveForward(dist + restDist + 450);
+                stopCamera();
+            } else {
+                moveForward(dist);
+
+                moveRight(500);
+                sleep(300);
+
+                moveRight(-400);
+                sleep(300);
+
+                restDist = 800 - dist;
+                moveForward(dist + restDist + 500);
+                stopCamera();
+            }
+        }
+    }
+
+    //endregion Path
 }
