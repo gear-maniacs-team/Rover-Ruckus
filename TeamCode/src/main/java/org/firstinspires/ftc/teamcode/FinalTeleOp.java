@@ -19,7 +19,6 @@ public class FinalTeleOp extends OpMode {
 
     private WheelMotors wheelMotors = null;
     private ArmMotors armMotors = null;
-    //private TouchSensor latchSense = null;
     private boolean precisionModeOn;
 
     @Override
@@ -27,7 +26,6 @@ public class FinalTeleOp extends OpMode {
     {
         wheelMotors = new WheelMotors(hardwareMap.dcMotor);
         armMotors = new ArmMotors(hardwareMap.dcMotor);
-        //latchSense = hardwareMap.touchSensor.get("LatchSensor");
         precisionModeOn = false;
 
         wheelMotors.setModeAll(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -37,6 +35,7 @@ public class FinalTeleOp extends OpMode {
     public void loop()
     {
         Movement();
+        Strafe();
         Latching();
         ArmMovement();
         Collector();
@@ -66,22 +65,6 @@ public class FinalTeleOp extends OpMode {
             pbr /= max;
         }
 
-        // Strafe Right
-        while (gamepad1.right_stick_x > 0) {
-            wheelMotors.TR.setPower(MOTOR_SPEED_STRAFE);
-            wheelMotors.TL.setPower(MOTOR_SPEED_STRAFE);
-            wheelMotors.BR.setPower(-MOTOR_SPEED_STRAFE);
-            wheelMotors.BL.setPower(-MOTOR_SPEED_STRAFE);
-        }
-
-        // Strafe Left
-        while (gamepad1.right_stick_x < 0) {
-            wheelMotors.TR.setPower(-MOTOR_SPEED_STRAFE);
-            wheelMotors.TL.setPower(-MOTOR_SPEED_STRAFE);
-            wheelMotors.BR.setPower(MOTOR_SPEED_STRAFE);
-            wheelMotors.BL.setPower(MOTOR_SPEED_STRAFE);
-        }
-
         if (gamepad1.a) {
             precisionModeOn = !precisionModeOn;
             try {
@@ -106,6 +89,34 @@ public class FinalTeleOp extends OpMode {
         telemetry.addData("Precision Mode On", "%b\n", precisionModeOn);
     }
 
+    private void Strafe()
+    {
+        final double rightX = gamepad1.right_stick_x;
+        final double rightY = -gamepad1.right_stick_y;
+
+        final double wheelsSpeed = Math.hypot(rightY, rightX);
+        final double direction = Math.atan2(rightX, rightY) - WheelMotors.PI_4;
+
+        double speed1 = wheelsSpeed * Math.cos(direction) * MOTOR_SPEED_MULTIPLIER;
+        double speed2 = wheelsSpeed * Math.sin(direction) * MOTOR_SPEED_MULTIPLIER;
+
+        // Strafe Right
+        /*while (gamepad1.right_stick_x > 0) {
+            wheelMotors.TR.setPower(MOTOR_SPEED_STRAFE);
+            wheelMotors.TL.setPower(MOTOR_SPEED_STRAFE);
+            wheelMotors.BR.setPower(-MOTOR_SPEED_STRAFE);
+            wheelMotors.BL.setPower(-MOTOR_SPEED_STRAFE);
+        }
+
+        // Strafe Left
+        while (gamepad1.right_stick_x < 0) {
+            wheelMotors.TR.setPower(-MOTOR_SPEED_STRAFE);
+            wheelMotors.TL.setPower(-MOTOR_SPEED_STRAFE);
+            wheelMotors.BR.setPower(MOTOR_SPEED_STRAFE);
+            wheelMotors.BL.setPower(MOTOR_SPEED_STRAFE);
+        }*/
+    }
+
     private void Latching()
     {
         double latchingPower = 0;
@@ -115,11 +126,7 @@ public class FinalTeleOp extends OpMode {
         else if (gamepad1.dpad_down)
             latchingPower = -LATCH_SPEED;
 
-        /*if(latchSense.getValue() != 0 && gamepad1.dpad_down) {
-            latchingPower = 0;
-            telemetry.addData("Impossible", "to go down");
-        }
-        armMotors.latchMotor.setPower(latchingPower);*/
+        armMotors.latchMotor.setPower(latchingPower);
 
         telemetry.addData("Latching Power", latchingPower);
     }

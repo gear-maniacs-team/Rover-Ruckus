@@ -276,7 +276,7 @@ public abstract class EncodersAuto extends LinearOpMode {
 
     protected final void movementWithSampling() {
         moveForward(-300);
-        moveRight(1600);
+        moveRight(1500);
         moveForward(170);
 
         sampling();
