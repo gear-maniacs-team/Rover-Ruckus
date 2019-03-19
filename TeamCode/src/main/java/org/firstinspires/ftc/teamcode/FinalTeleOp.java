@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.teamcode.motors.ArmMotors;
 import org.firstinspires.ftc.teamcode.motors.WheelMotors;
@@ -20,7 +19,7 @@ public class FinalTeleOp extends OpMode {
 
     private WheelMotors wheelMotors = null;
     private ArmMotors armMotors = null;
-    private TouchSensor latchSense = null;
+    //private TouchSensor latchSense = null;
     private boolean precisionModeOn;
 
     @Override
@@ -28,7 +27,7 @@ public class FinalTeleOp extends OpMode {
     {
         wheelMotors = new WheelMotors(hardwareMap.dcMotor);
         armMotors = new ArmMotors(hardwareMap.dcMotor);
-        latchSense = hardwareMap.touchSensor.get("LatchSensor");
+        //latchSense = hardwareMap.touchSensor.get("LatchSensor");
         precisionModeOn = false;
 
         wheelMotors.setModeAll(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -116,11 +115,11 @@ public class FinalTeleOp extends OpMode {
         else if (gamepad1.dpad_down)
             latchingPower = -LATCH_SPEED;
 
-        if(latchSense.getValue() != 0 && gamepad1.dpad_down) {
+        /*if(latchSense.getValue() != 0 && gamepad1.dpad_down) {
             latchingPower = 0;
             telemetry.addData("Impossible", "to go down");
         }
-        armMotors.latchMotor.setPower(latchingPower);
+        armMotors.latchMotor.setPower(latchingPower);*/
 
         telemetry.addData("Latching Power", latchingPower);
     }
