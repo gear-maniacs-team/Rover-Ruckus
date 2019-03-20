@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.razvan.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-@Autonomous(name = "Encoder-Depo", group = "Encoder")
+@Autonomous(name = "Depo", group = "Encoder")
 public class EncodersDepo extends EncodersAuto {
 
     @Override
