@@ -8,6 +8,7 @@ public class EncodersDepo extends EncodersAuto {
     @Override
     protected void onStart() {
         lowerRobot();
+        waitForDetector();
         movementWithSampling();
 
         rotateRight(-540);

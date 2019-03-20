@@ -70,7 +70,7 @@ public class FinalTeleOp extends OpMode {
             try {
                 Thread.sleep(200);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                Thread.currentThread().interrupt();
             }
         }
 
@@ -91,17 +91,17 @@ public class FinalTeleOp extends OpMode {
 
     private void Strafe()
     {
-        final double rightX = gamepad1.right_stick_x;
+        /*final double rightX = gamepad1.right_stick_x;
         final double rightY = -gamepad1.right_stick_y;
 
         final double wheelsSpeed = Math.hypot(rightY, rightX);
         final double direction = Math.atan2(rightX, rightY) - WheelMotors.PI_4;
 
         double speed1 = wheelsSpeed * Math.cos(direction) * MOTOR_SPEED_MULTIPLIER;
-        double speed2 = wheelsSpeed * Math.sin(direction) * MOTOR_SPEED_MULTIPLIER;
+        double speed2 = wheelsSpeed * Math.sin(direction) * MOTOR_SPEED_MULTIPLIER;*/
 
         // Strafe Right
-        /*while (gamepad1.right_stick_x > 0) {
+        while (gamepad1.right_stick_x > 0) {
             wheelMotors.TR.setPower(MOTOR_SPEED_STRAFE);
             wheelMotors.TL.setPower(MOTOR_SPEED_STRAFE);
             wheelMotors.BR.setPower(-MOTOR_SPEED_STRAFE);
@@ -114,7 +114,7 @@ public class FinalTeleOp extends OpMode {
             wheelMotors.TL.setPower(-MOTOR_SPEED_STRAFE);
             wheelMotors.BR.setPower(MOTOR_SPEED_STRAFE);
             wheelMotors.BL.setPower(MOTOR_SPEED_STRAFE);
-        }*/
+        }
     }
 
     private void Latching()
@@ -133,7 +133,7 @@ public class FinalTeleOp extends OpMode {
 
     private void ArmMovement()
     {
-        final double armAnglePower = gamepad2.left_stick_y * ARM_SPEED_MULTIPLIER;
+        final double armAnglePower = -gamepad2.left_stick_y * ARM_SPEED_MULTIPLIER;
         armMotors.armAngle.setPower(armAnglePower);
 
         final double armExtensionPower = gamepad2.right_stick_y * ARM_SPEED_MULTIPLIER;

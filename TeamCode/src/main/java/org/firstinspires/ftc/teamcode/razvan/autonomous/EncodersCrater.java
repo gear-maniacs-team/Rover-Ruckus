@@ -8,6 +8,7 @@ public class EncodersCrater extends EncodersAuto {
     @Override
     protected void onStart() {
         lowerRobot();
+        waitForDetector();
         movementWithSampling();
 
         rotateRight(1600);

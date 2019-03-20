@@ -7,7 +7,7 @@ public class Test extends EncodersAuto {
 
     @Override
     protected void onStart() {
-        stopCamera();
+        //stopCamera();
         moveForward(500);
     }
 }
