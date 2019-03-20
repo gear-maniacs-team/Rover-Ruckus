@@ -50,8 +50,8 @@ class ExceptionHandler {
         private const val FOLDER_NAME = "FTC: Crash Logs/"
 
         @JvmStatic
-        fun writeLogFileAsync(content: String, tag: CharSequence?)
-                = GlobalScope.launch(Dispatchers.IO) { writeLogFile(content, tag) }
+        fun writeLogFileAsync(content: String, tag: CharSequence?) =
+            GlobalScope.launch(Dispatchers.IO) { writeLogFile(content, tag) }
 
         @JvmStatic
         fun writeLogFile(content: String, tag: CharSequence?) {
