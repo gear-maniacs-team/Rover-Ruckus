@@ -31,7 +31,7 @@ public abstract class EncodersAuto extends LinearOpMode {
         armMotors = new ArmMotors(hardwareMap.dcMotor);
         //markerServo = hardwareMap.get(Servo.class, "Marker");
 
-        vuforiaManager.startDetectorAsync(hardwareMap.appContext);
+        vuforiaManager.startDetectorAsync(hardwareMap);
 
         waitForStart();
         try {

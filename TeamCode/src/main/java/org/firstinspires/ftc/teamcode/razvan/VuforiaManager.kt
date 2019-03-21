@@ -1,20 +1,26 @@
 package org.firstinspires.ftc.teamcode.razvan
 
 import android.content.Context
+import com.qualcomm.robotcore.hardware.HardwareMap
 import kotlinx.coroutines.*
 import org.firstinspires.ftc.robotcore.external.ClassFactory
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector
 
 class VuforiaManager {
 
+    private lateinit var webcamName: WebcamName
     @Volatile
     private var initializing = false
     private var job: Job? = null
     private var vuforia: VuforiaLocalizer? = null
     private var tfod: TFObjectDetector? = null
 
-    fun startDetectorAsync(context: Context) {
+    fun startDetectorAsync(hardwareMap: HardwareMap) {
+        if (!this::webcamName.isInitialized)
+            webcamName = hardwareMap.get(WebcamName::class.java, "Webcam 1")
+
         if (initializing) return
 
         job = GlobalScope.launch(Dispatchers.Default) {
@@ -22,7 +28,7 @@ class VuforiaManager {
             initVuforia()
 
             if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
-                initTfod(context)
+                initTfod(hardwareMap.appContext)
             } else {
                 throw IllegalStateException("This device is not compatible with TFOD")
             }
@@ -31,7 +37,7 @@ class VuforiaManager {
         }
     }
 
-    fun stopCamera() {
+    fun stopCamera() = GlobalScope.launch(Dispatchers.Default) {
         job?.cancel()
         tfod?.shutdown()
     }
@@ -39,8 +45,8 @@ class VuforiaManager {
     private fun initVuforia() {
         val parameters = VuforiaLocalizer.Parameters().apply {
             vuforiaLicenseKey = VUFORIA_KEY
-            cameraDirection = VuforiaLocalizer.CameraDirection.BACK
-            //cameraName = WebcamNameImpl.forSerialNumber(SerialNumber.fromString(""))
+            //cameraDirection = VuforiaLocalizer.CameraDirection.BACK
+            cameraName = webcamName
         }
 
         vuforia = ClassFactory.getInstance().createVuforia(parameters)
