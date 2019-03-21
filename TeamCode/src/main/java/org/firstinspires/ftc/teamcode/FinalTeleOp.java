@@ -10,8 +10,8 @@ import org.firstinspires.ftc.teamcode.motors.WheelMotors;
 @TeleOp(name = "Final: TeleOp", group = "Good")
 public class FinalTeleOp extends OpMode {
 
-    private static final double PRECISION_MODE_MULTIPLIER = 0.3;
-    private static final double MOTOR_SPEED_MULTIPLIER = 0.9;
+    private static final double PRECISION_MODE_MULTIPLIER = 0.45;
+    private static final double MOTOR_SPEED_MULTIPLIER = 0.8;
     private static final double MOTOR_SPEED_STRAFE = 0.6;
     private static final double ARM_SPEED_MULTIPLIER = 0.4;
     private static final double COLLECTOR_SPEED = 0.3;

@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.razvan.VuforiaManager;
 @SuppressWarnings({"WeakerAccess", "SameParameterValue"})
 public abstract class EncodersAuto extends LinearOpMode {
 
-    private static final double DEFAULT_DRIVE_POWER = 0.4;
+    private static final double DEFAULT_DRIVE_POWER = 0.45;
 
     private final ExceptionHandler exceptionHandler = new ExceptionHandler();
     private final VuforiaManager vuforiaManager = new VuforiaManager();
@@ -210,9 +210,9 @@ public abstract class EncodersAuto extends LinearOpMode {
     //region Path
 
     protected final void movementWithSampling() {
-        moveForward(-300);
+        moveForward(-200);
         moveRight(1500);
-        moveForward(170);
+        moveForward(200);
 
         sampling();
     }

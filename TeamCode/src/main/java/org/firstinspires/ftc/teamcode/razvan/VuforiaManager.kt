@@ -40,6 +40,7 @@ class VuforiaManager {
         val parameters = VuforiaLocalizer.Parameters().apply {
             vuforiaLicenseKey = VUFORIA_KEY
             cameraDirection = VuforiaLocalizer.CameraDirection.BACK
+            //cameraName = WebcamNameImpl.forSerialNumber(SerialNumber.fromString(""))
         }
 
         vuforia = ClassFactory.getInstance().createVuforia(parameters)
@@ -69,7 +70,11 @@ class VuforiaManager {
     }
 
     fun waitForDetector() = runBlocking {
-        job?.join()
+        try {
+            job?.join()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     companion object {

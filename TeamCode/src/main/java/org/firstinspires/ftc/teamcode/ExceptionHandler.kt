@@ -56,13 +56,14 @@ class ExceptionHandler {
         @JvmStatic
         fun writeLogFile(content: String, tag: CharSequence?) {
             val folder = File(Environment.getExternalStorageDirectory(), FOLDER_NAME)
-            folder.mkdir()
+            folder.mkdirs()
 
-            val date: CharSequence = DateFormat.format("m:k_dd/MM", Calendar.getInstance())
+            val date: CharSequence = DateFormat.format("m:k_dd_MM", Calendar.getInstance())
             val name = StringBuilder(date)
 
             if (!tag.isNullOrBlank())
                 name.append('_').append(tag)
+            name.append(".txt")
 
             File(folder, name.toString()).writeText(content)
         }
