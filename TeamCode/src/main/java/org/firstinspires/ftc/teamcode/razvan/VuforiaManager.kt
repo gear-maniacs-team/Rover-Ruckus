@@ -63,14 +63,10 @@ class VuforiaManager {
     }
 
     fun searchForGold(): Boolean {
-        tfod?.let { tfObjectDetector ->
-            tfObjectDetector.activate()
+        val updatedRecognitions = tfod?.updatedRecognitions
 
-            val updatedRecognitions = tfObjectDetector.updatedRecognitions
-
-            if (updatedRecognitions != null)
-                return updatedRecognitions.any { it.label == LABEL_GOLD_MINERAL }
-        }
+        if (updatedRecognitions != null)
+            return updatedRecognitions.any { it.label == LABEL_GOLD_MINERAL }
 
         return false
     }
@@ -78,6 +74,7 @@ class VuforiaManager {
     fun waitForDetector() = runBlocking {
         try {
             job?.join()
+            tfod?.activate()
         } catch (e: Exception) {
             e.printStackTrace()
         }

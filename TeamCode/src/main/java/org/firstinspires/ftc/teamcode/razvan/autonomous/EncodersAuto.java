@@ -12,13 +12,12 @@ import org.firstinspires.ftc.teamcode.razvan.VuforiaManager;
 @SuppressWarnings({"WeakerAccess", "SameParameterValue"})
 public abstract class EncodersAuto extends LinearOpMode {
 
-    private static final double DEFAULT_DRIVE_POWER = 0.45;
+    private static final double DEFAULT_DRIVE_POWER = 0.6;
 
     private final ExceptionHandler exceptionHandler = new ExceptionHandler();
     private final VuforiaManager vuforiaManager = new VuforiaManager();
     private WheelMotors wheelMotors = null;
     private ArmMotors armMotors = null;
-    //protected Servo markerServo = null;
 
     //public final static double CIRC = 31.9024;
     //public final static double TICKS_PER_ROTATION = 1120;
@@ -29,7 +28,6 @@ public abstract class EncodersAuto extends LinearOpMode {
         exceptionHandler.clear();
         wheelMotors = new WheelMotors(hardwareMap.dcMotor);
         armMotors = new ArmMotors(hardwareMap.dcMotor);
-        //markerServo = hardwareMap.get(Servo.class, "Marker");
 
         vuforiaManager.startDetectorAsync(hardwareMap);
 
@@ -48,22 +46,29 @@ public abstract class EncodersAuto extends LinearOpMode {
 
     abstract protected void onStart();
 
+    protected void addTelemetryWithUpdate(String caption, String value) {
+        telemetry.addData(caption, value);
+        telemetry.update();
+    }
+
     //region Detector
 
-    protected final boolean hitGoldIfDetected() {
+    protected final boolean detectAndHitGold() {
         boolean goldHit = false;
 
+        sleep(500);
         if (vuforiaManager.searchForGold()) {
             goldHit = true;
-
-            moveRight(400);
-            sleep(300);
-
-            moveRight(-400);
-            sleep(300);
+            hitGold();
         }
 
         return goldHit;
+    }
+
+    protected final void hitGold() {
+        moveRight(850, 0.4);
+        moveRight(-850);
+        vuforiaManager.stopCamera();
     }
 
     protected final void waitForDetector() {
@@ -83,7 +88,7 @@ public abstract class EncodersAuto extends LinearOpMode {
         armMotors.latchMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         armMotors.latchMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        armMotors.latchMotor.setTargetPosition(-12000);
+        armMotors.latchMotor.setTargetPosition(-12200);
         armMotors.latchMotor.setPower(1);
 
         // Wait for the Latching Motor to finish
@@ -101,7 +106,7 @@ public abstract class EncodersAuto extends LinearOpMode {
     }
 
     protected final void deployMarker() {
-        armMotors.collector.setPower(1);
+        armMotors.collector.setPower(-1);
         sleep(600);
         armMotors.collector.setPower(0);
     }
@@ -129,7 +134,7 @@ public abstract class EncodersAuto extends LinearOpMode {
 
     protected final void lowerArm() {
         armMotors.armAngle.setPower(-0.45);
-        sleep(1100);
+        sleep(900);
     }
 
     protected final void moveForward(int position) {
@@ -200,18 +205,13 @@ public abstract class EncodersAuto extends LinearOpMode {
         waitForMotors();
     }
 
-    protected final void addTelemetryWithUpdate(String caption, String value) {
-        telemetry.addData(caption, value);
-        telemetry.update();
-    }
-
     //endregion Motors
 
     //region Path
 
     protected final void movementWithSampling() {
         moveForward(-200);
-        moveRight(1500);
+        moveRight(1200, 0.5);
         moveForward(200);
 
         sampling();
@@ -221,28 +221,21 @@ public abstract class EncodersAuto extends LinearOpMode {
         int dist = 1600;
         int restDist;
 
-        if (hitGoldIfDetected()) {
+        if (detectAndHitGold()) {
             restDist = 1600 - dist;
             moveForward(dist + restDist + 600);
-            stopCamera();
         } else {
             moveForward(-700);
-            if (hitGoldIfDetected()) {
+            if (detectAndHitGold()) {
                 restDist = dist - 700;
                 moveForward(dist + restDist + 450);
-                stopCamera();
             } else {
                 moveForward(dist);
 
-                moveRight(500);
-                sleep(300);
-
-                moveRight(-400);
-                sleep(300);
+                hitGold();
 
                 restDist = 800 - dist;
                 moveForward(dist + restDist + 500);
-                stopCamera();
             }
         }
     }

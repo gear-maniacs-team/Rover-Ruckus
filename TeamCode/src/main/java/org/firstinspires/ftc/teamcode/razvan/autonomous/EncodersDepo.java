@@ -12,14 +12,14 @@ public class EncodersDepo extends EncodersAuto {
         movementWithSampling();
 
         rotateRight(-540);
-        moveRight(800, 0.2);
-        moveRight(-280);
+        moveRight(750, 0.25);
+        moveRight(-380);
 
-        moveForward(-1900);
+        moveForward(-2200, 0.7);
 
         deployMarker();
 
-        moveForward(3400);
+        moveForward(2500);
 
         lowerArm();
     }

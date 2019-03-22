@@ -12,14 +12,14 @@ public class EncodersCrater extends EncodersAuto {
         movementWithSampling();
 
         rotateRight(1600);
-        moveRight(-800, 0.2);
-        moveRight(280);
+        moveRight(-750, 0.25);
+        moveRight(100);
 
-        moveForward(-2500);
+        moveForward(-2500, 0.7);
 
         deployMarker();
 
-        moveForward(3400);
+        moveForward(3350, 0.7);
 
         lowerArm();
     }
