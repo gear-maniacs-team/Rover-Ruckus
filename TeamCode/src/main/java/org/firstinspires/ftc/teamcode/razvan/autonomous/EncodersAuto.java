@@ -31,7 +31,10 @@ public abstract class EncodersAuto extends LinearOpMode {
 
         vuforiaManager.startDetectorAsync(hardwareMap);
 
-        waitForStart();
+        // Wait for Start
+        while (!opModeIsActive() && !isStopRequested())
+            addTelemetryWithUpdate("Status", "Waiting for start command");
+
         try {
             onStart();
         } catch (Exception e) {
@@ -66,9 +69,9 @@ public abstract class EncodersAuto extends LinearOpMode {
     }
 
     protected final void hitGold() {
-        moveRight(850, 0.4);
-        moveRight(-850);
-        vuforiaManager.stopCamera();
+        moveRight(800, 0.4);
+        moveRight(-800);
+        stopCamera();
     }
 
     protected final void waitForDetector() {
@@ -84,7 +87,7 @@ public abstract class EncodersAuto extends LinearOpMode {
     //region Motors
 
     protected final void lowerRobot() {
-        // Starting and resetting counter
+        // Reset and start latching encoders
         armMotors.latchMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         armMotors.latchMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
@@ -112,7 +115,7 @@ public abstract class EncodersAuto extends LinearOpMode {
     }
 
     private void waitForMotors() {
-        // Wait for the Motor to finish
+        // Wait for the Motors to finish
         while (opModeIsActive()
                 && wheelMotors.TL.isBusy()
                 && wheelMotors.TR.isBusy()

@@ -13,20 +13,19 @@ public class FinalTeleOp extends OpMode {
     private static final double PRECISION_MODE_MULTIPLIER = 0.45;
     private static final double MOTOR_SPEED_MULTIPLIER = 0.8;
     private static final double MOTOR_SPEED_STRAFE = 0.6;
-    private static final double ARM_SPEED_MULTIPLIER = 0.5;
+    private static final double ARM_EXTENSION_SPEED_MULTIPLIER = 0.65;
+    private static final double ARM_ANGLE_SPEED_MULTIPLIER = 0.55;
     private static final double COLLECTOR_SPEED = 0.5;
     private static final double LATCH_SPEED = 1;
 
     private WheelMotors wheelMotors = null;
     private ArmMotors armMotors = null;
-    private boolean precisionModeOn;
 
     @Override
     public void init()
     {
         wheelMotors = new WheelMotors(hardwareMap.dcMotor);
         armMotors = new ArmMotors(hardwareMap.dcMotor);
-        precisionModeOn = false;
 
         wheelMotors.setModeAll(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
@@ -65,14 +64,7 @@ public class FinalTeleOp extends OpMode {
             pbr /= max;
         }
 
-        if (gamepad1.a) {
-            precisionModeOn = !precisionModeOn;
-            try {
-                Thread.sleep(200);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-        }
+        final boolean precisionModeOn = gamepad1.a;
 
         if (precisionModeOn) {
             ptr *= PRECISION_MODE_MULTIPLIER;
@@ -133,10 +125,10 @@ public class FinalTeleOp extends OpMode {
 
     private void ArmMovement()
     {
-        final double armAnglePower = -gamepad2.left_stick_y * ARM_SPEED_MULTIPLIER;
+        final double armAnglePower = -gamepad2.left_stick_y * ARM_ANGLE_SPEED_MULTIPLIER;
         armMotors.armAngle.setPower(armAnglePower);
 
-        final double armExtensionPower = gamepad2.right_stick_y * ARM_SPEED_MULTIPLIER;
+        final double armExtensionPower = gamepad2.right_stick_y * ARM_EXTENSION_SPEED_MULTIPLIER;
         armMotors.armExtension.setPower(armExtensionPower);
 
         telemetry.addData("Arm Angle Power", armAnglePower);
@@ -146,6 +138,7 @@ public class FinalTeleOp extends OpMode {
     private void Collector()
     {
         double collectorPower = 0;
+
         if (gamepad2.right_bumper)
             collectorPower = COLLECTOR_SPEED;
         else if (gamepad2.left_bumper)
