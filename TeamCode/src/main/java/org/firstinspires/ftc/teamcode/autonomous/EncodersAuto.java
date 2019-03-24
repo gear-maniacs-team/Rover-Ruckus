@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.razvan.autonomous;
+package org.firstinspires.ftc.teamcode.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -29,7 +29,8 @@ public abstract class EncodersAuto extends LinearOpMode {
         wheelMotors = new WheelMotors(hardwareMap.dcMotor);
         armMotors = new ArmMotors(hardwareMap.dcMotor);
 
-        vuforiaManager.startDetectorAsync(hardwareMap);
+        if (isVuforiaEnabled())
+            vuforiaManager.startDetectorAsync(hardwareMap);
 
         // Wait for Start
         while (!opModeIsActive() && !isStopRequested())
@@ -55,6 +56,10 @@ public abstract class EncodersAuto extends LinearOpMode {
     }
 
     //region Detector
+
+    protected boolean isVuforiaEnabled() {
+        return true;
+    }
 
     protected final boolean detectAndHitGold() {
         boolean goldHit = false;
@@ -102,7 +107,7 @@ public abstract class EncodersAuto extends LinearOpMode {
             sleep(10);
         }
 
-        sleep(500);
+        sleep(300);
 
         armMotors.latchMotor.setPower(0);
         moveRight(-100, 0.2);
