@@ -22,8 +22,7 @@ public class FinalTeleOp extends OpMode {
     private ArmMotors armMotors = null;
 
     @Override
-    public void init()
-    {
+    public void init() {
         wheelMotors = new WheelMotors(hardwareMap.dcMotor);
         armMotors = new ArmMotors(hardwareMap.dcMotor);
 
@@ -31,8 +30,7 @@ public class FinalTeleOp extends OpMode {
     }
 
     @Override
-    public void loop()
-    {
+    public void loop() {
         Movement();
         Strafe();
         Latching();
@@ -42,8 +40,7 @@ public class FinalTeleOp extends OpMode {
         telemetry.update();
     }
 
-    private void Movement()
-    {
+    private void Movement() {
         final double leftX = gamepad1.left_stick_x;
         final double leftY = -gamepad1.left_stick_y;
 
@@ -81,8 +78,7 @@ public class FinalTeleOp extends OpMode {
         telemetry.addData("Precision Mode On", "%b\n", precisionModeOn);
     }
 
-    private void Strafe()
-    {
+    private void Strafe() {
         /*final double rightX = gamepad1.right_stick_x;
         final double rightY = -gamepad1.right_stick_y;
 
@@ -109,8 +105,7 @@ public class FinalTeleOp extends OpMode {
         }
     }
 
-    private void Latching()
-    {
+    private void Latching() {
         double latchingPower = 0;
 
         if (gamepad1.dpad_up)
@@ -123,8 +118,7 @@ public class FinalTeleOp extends OpMode {
         telemetry.addData("Latching Power", latchingPower);
     }
 
-    private void ArmMovement()
-    {
+    private void ArmMovement() {
         final double armAnglePower = -gamepad2.left_stick_y * ARM_ANGLE_SPEED_MULTIPLIER;
         armMotors.armAngle.setPower(armAnglePower);
 
@@ -135,8 +129,7 @@ public class FinalTeleOp extends OpMode {
         telemetry.addData("Arm Extension Power", armExtensionPower);
     }
 
-    private void Collector()
-    {
+    private void Collector() {
         double collectorPower = 0;
 
         if (gamepad2.right_bumper)
