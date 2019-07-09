@@ -29,8 +29,17 @@ public abstract class EncodersAuto extends LinearOpMode {
         wheelMotors = new WheelMotors(hardwareMap.dcMotor);
         armMotors = new ArmMotors(hardwareMap.dcMotor);
 
-        if (isVuforiaEnabled())
-            vuforiaManager.startDetectorAsync(hardwareMap);
+        try {
+            if (isVuforiaEnabled())
+                vuforiaManager.startDetectorAsync(hardwareMap);
+        } catch (Exception e) {
+            e.printStackTrace();
+            exceptionHandler.parseException(e);
+            exceptionHandler.writeToFile(true, "Vuforia");
+            exceptionHandler.clear();
+            throw e;
+        }
+
 
         // Wait for Start
         while (!opModeIsActive() && !isStopRequested())

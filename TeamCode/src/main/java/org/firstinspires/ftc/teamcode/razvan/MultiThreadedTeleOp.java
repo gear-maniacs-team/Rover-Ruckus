@@ -1,14 +1,17 @@
 package org.firstinspires.ftc.teamcode.razvan;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.motors.ArmMotors;
 import org.firstinspires.ftc.teamcode.motors.WheelMotors;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 @TeleOp(name = "Multi-Threaded TeleOp", group = "Good")
-public class MultiThreadedTeleOp extends LinearOpMode {
+public class MultiThreadedTeleOp extends OpMode {
 
     private static final double PRECISION_MODE_MULTIPLIER = 0.45;
     private static final double MOTOR_SPEED_MULTIPLIER = 0.8;
@@ -18,41 +21,43 @@ public class MultiThreadedTeleOp extends LinearOpMode {
     private static final double COLLECTOR_SPEED = 0.5;
     private static final double LATCH_SPEED = 1;
 
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
+
+    private volatile boolean isRunning = false;
     private WheelMotors wheelMotors = null;
     private ArmMotors armMotors = null;
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void init() {
         wheelMotors = new WheelMotors(hardwareMap.dcMotor);
         armMotors = new ArmMotors(hardwareMap.dcMotor);
 
-        Runnable wheelsThread = new Runnable() {
-            @Override
-            public void run() {
-                while (opModeIsActive()) {
-                    movement();
-                    strafe();
-                    latching();
-                }
-            }
-        };
-        Runnable armThread = new Runnable() {
-            @Override
-            public void run() {
-                while (opModeIsActive()) {
-                    armMovement();
-                    collector();
-                }
-            }
-        };
-
         wheelMotors.setModeAll(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
 
-        waitForStart();
+    @Override
+    public void start() {
+        isRunning = true;
+        Runnable armRunnable = () -> {
+            while (isRunning) {
+                armMovement();
+                collector();
+            }
+        };
+        executor.execute(armRunnable);
+    }
 
-        wheelsThread.run();
-        armThread.run();
-        idle();
+    @Override
+    public void loop() {
+        movement();
+        strafe();
+        latching();
+        telemetry.update();
+    }
+
+    @Override
+    public void stop() {
+        isRunning = false;
     }
 
     private void movement() {
@@ -121,7 +126,7 @@ public class MultiThreadedTeleOp extends LinearOpMode {
 
         armMotors.latchMotor.setPower(latchingPower);
 
-       //telemetry.addData("Latching Power", latchingPower);
+       telemetry.addData("Latching Power", latchingPower);
     }
 
     private void armMovement() {

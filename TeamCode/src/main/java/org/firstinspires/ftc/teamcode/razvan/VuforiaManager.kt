@@ -2,18 +2,20 @@ package org.firstinspires.ftc.teamcode.razvan
 
 import android.content.Context
 import com.qualcomm.robotcore.hardware.HardwareMap
-import kotlinx.coroutines.*
 import org.firstinspires.ftc.robotcore.external.ClassFactory
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector
+import java.util.concurrent.Executors
+import java.util.concurrent.Future
 
 class VuforiaManager {
 
     private lateinit var webcamName: WebcamName
     @Volatile
     private var initializing = false
-    private var job: Job? = null
+    private val executor = Executors.newSingleThreadExecutor()
+    private var startTask: Future<*>? = null
     private var vuforia: VuforiaLocalizer? = null
     private var tfod: TFObjectDetector? = null
 
@@ -23,7 +25,7 @@ class VuforiaManager {
 
         if (initializing) return
 
-        job = GlobalScope.launch(Dispatchers.Default) {
+        startTask = executor.submit {
             initializing = true
             initVuforia()
 
@@ -37,8 +39,8 @@ class VuforiaManager {
         }
     }
 
-    fun stopCamera() = GlobalScope.launch(Dispatchers.Default) {
-        job?.cancel()
+    fun stopCamera() {
+        startTask?.cancel(true)
         tfod?.shutdown()
     }
 
@@ -71,9 +73,9 @@ class VuforiaManager {
         return false
     }
 
-    fun waitForDetector() = runBlocking {
+    fun waitForDetector() {
         try {
-            job?.join()
+            startTask?.get()
             tfod?.activate()
         } catch (e: Exception) {
             e.printStackTrace()

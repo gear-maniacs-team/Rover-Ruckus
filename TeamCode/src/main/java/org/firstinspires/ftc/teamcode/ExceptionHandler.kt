@@ -2,11 +2,9 @@ package org.firstinspires.ftc.teamcode
 
 import android.os.Environment
 import android.text.format.DateFormat
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import java.io.File
 import java.util.*
+import java.util.concurrent.Executors
 
 class ExceptionHandler {
 
@@ -26,7 +24,7 @@ class ExceptionHandler {
             .append("\n\n")
             .append("Stack Trace: ")
 
-        e.stackTrace?.forEach {
+        e.stackTrace.forEach {
             addLine(it.toString())
         }
 
@@ -48,10 +46,14 @@ class ExceptionHandler {
 
     companion object {
         private const val FOLDER_NAME = "FTC: Crash Logs/"
+        private val executor = Executors.newSingleThreadExecutor()
 
         @JvmStatic
-        fun writeLogFileAsync(content: String, tag: CharSequence?) =
-            GlobalScope.launch(Dispatchers.IO) { writeLogFile(content, tag) }
+        fun writeLogFileAsync(content: String, tag: CharSequence?) {
+            executor.execute {
+                writeLogFile(content, tag)
+            }
+        }
 
         @JvmStatic
         fun writeLogFile(content: String, tag: CharSequence?) {
