@@ -33,13 +33,8 @@ public abstract class EncodersAuto extends LinearOpMode {
             if (isVuforiaEnabled())
                 vuforiaManager.startDetectorAsync(hardwareMap);
         } catch (Exception e) {
-            e.printStackTrace();
-            exceptionHandler.parseException(e);
-            exceptionHandler.writeToFile(true, "Vuforia");
-            exceptionHandler.clear();
-            throw e;
+            handleException("Vuforia", e);
         }
-
 
         // Wait for Start
         while (!opModeIsActive() && !isStopRequested())
@@ -48,10 +43,7 @@ public abstract class EncodersAuto extends LinearOpMode {
         try {
             onStart();
         } catch (Exception e) {
-            exceptionHandler.parseException(e);
-            exceptionHandler.writeToFile(true, "Autonomous-Encoder");
-            exceptionHandler.clear();
-            throw e;
+            handleException("Autonomous-Encoder", e);
         }
 
         addTelemetryWithUpdate("Status", "Path Completed");
@@ -62,6 +54,14 @@ public abstract class EncodersAuto extends LinearOpMode {
     protected void addTelemetryWithUpdate(String caption, String value) {
         telemetry.addData(caption, value);
         telemetry.update();
+    }
+
+    private void handleException(String tag, Exception e) {
+        exceptionHandler.parseException(e);
+        exceptionHandler.writeToFile(true, tag);
+        exceptionHandler.clear();
+        addTelemetryWithUpdate(tag, e.getMessage());
+        stop();
     }
 
     //region Detector
