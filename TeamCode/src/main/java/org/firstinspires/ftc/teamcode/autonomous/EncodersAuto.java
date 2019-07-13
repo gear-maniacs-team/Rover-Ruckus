@@ -4,10 +4,10 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import org.firstinspires.ftc.teamcode.ExceptionHandler;
+import org.firstinspires.ftc.teamcode.utils.ExceptionHandler;
 import org.firstinspires.ftc.teamcode.motors.ArmMotors;
 import org.firstinspires.ftc.teamcode.motors.WheelMotors;
-import org.firstinspires.ftc.teamcode.razvan.VuforiaManager;
+import org.firstinspires.ftc.teamcode.utils.VuforiaManager;
 
 @SuppressWarnings({"WeakerAccess", "SameParameterValue"})
 public abstract class EncodersAuto extends LinearOpMode {
@@ -29,11 +29,12 @@ public abstract class EncodersAuto extends LinearOpMode {
         wheelMotors = new WheelMotors(hardwareMap.dcMotor);
         armMotors = new ArmMotors(hardwareMap.dcMotor);
 
-        try {
-            if (isVuforiaEnabled())
+        if (isVuforiaEnabled()) {
+            try {
                 vuforiaManager.startDetectorAsync(hardwareMap);
-        } catch (Exception e) {
-            handleException("Vuforia", e);
+            } catch (Exception e) {
+                handleException("Vuforia", e);
+            }
         }
 
         // Wait for Start

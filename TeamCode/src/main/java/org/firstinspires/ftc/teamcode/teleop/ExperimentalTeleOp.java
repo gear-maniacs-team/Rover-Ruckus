@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -7,8 +7,11 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.teamcode.motors.ArmMotors;
 import org.firstinspires.ftc.teamcode.motors.WheelMotors;
 
-@TeleOp(name = "Final: TeleOp", group = "Good")
-public class FinalTeleOp extends OpMode {
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+@TeleOp(name = "Experimental", group = "Test")
+public class ExperimentalTeleOp extends OpMode {
 
     private static final double PRECISION_MODE_MULTIPLIER = 0.45;
     private static final double MOTOR_SPEED_MULTIPLIER = 0.8;
@@ -18,6 +21,9 @@ public class FinalTeleOp extends OpMode {
     private static final double COLLECTOR_SPEED = 0.5;
     private static final double LATCH_SPEED = 1;
 
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
+
+    private volatile boolean isRunning = false;
     private WheelMotors wheelMotors = null;
     private ArmMotors armMotors = null;
 
@@ -26,21 +32,35 @@ public class FinalTeleOp extends OpMode {
         wheelMotors = new WheelMotors(hardwareMap.dcMotor);
         armMotors = new ArmMotors(hardwareMap.dcMotor);
 
-        wheelMotors.setModeAll(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        wheelMotors.setModeAll(DcMotor.RunMode.RUN_USING_ENCODER);
+        armMotors.latchMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+
+    @Override
+    public void start() {
+        isRunning = true;
+        Runnable armRunnable = () -> {
+            while (isRunning) {
+                armMovement();
+                collector();
+            }
+        };
+        executor.execute(armRunnable);
     }
 
     @Override
     public void loop() {
-        Movement();
-        Strafe();
-        Latching();
-        ArmMovement();
-        Collector();
-
+        movement();
+        latching();
         telemetry.update();
     }
 
-    private void Movement() {
+    @Override
+    public void stop() {
+        isRunning = false;
+    }
+
+    private void movement() {
         final double leftX = gamepad1.left_stick_x;
         final double leftY = -gamepad1.left_stick_y;
 
@@ -50,9 +70,12 @@ public class FinalTeleOp extends OpMode {
         double pbr = -leftY + leftX;
 
         double max = ptl;
-        if (max < pbl) max = pbl;
-        else if (max < ptr) max = ptr;
-        else if (max < pbr) max = pbr;
+        if (max < pbl)
+            max = pbl;
+        else if (max < ptr)
+            max = ptr;
+        else if (max < pbr)
+            max = pbr;
 
         if (max > 1) {
             ptl /= max;
@@ -70,42 +93,34 @@ public class FinalTeleOp extends OpMode {
             pbl *= PRECISION_MODE_MULTIPLIER;
         }
 
-        wheelMotors.TR.setPower(ptr * MOTOR_SPEED_MULTIPLIER);
-        wheelMotors.TL.setPower(ptl * MOTOR_SPEED_MULTIPLIER);
-        wheelMotors.BR.setPower(pbr * MOTOR_SPEED_MULTIPLIER);
-        wheelMotors.BL.setPower(pbl * MOTOR_SPEED_MULTIPLIER);
+        ptr *= MOTOR_SPEED_MULTIPLIER;
+        ptl *= MOTOR_SPEED_MULTIPLIER;
+        pbr *= MOTOR_SPEED_MULTIPLIER;
+        pbl *= MOTOR_SPEED_MULTIPLIER;
+
+        if (gamepad1.right_stick_x > 0) {
+            // Right Strafe
+            wheelMotors.TR.setPower(ptr + MOTOR_SPEED_STRAFE);
+            wheelMotors.TL.setPower(ptl + MOTOR_SPEED_STRAFE);
+            wheelMotors.BR.setPower(pbr - MOTOR_SPEED_STRAFE);
+            wheelMotors.BL.setPower(pbl - MOTOR_SPEED_STRAFE);
+        } else if (gamepad1.right_stick_x < 0) {
+            // Left Strafe
+            wheelMotors.TR.setPower(ptr - MOTOR_SPEED_STRAFE);
+            wheelMotors.TL.setPower(ptl - MOTOR_SPEED_STRAFE);
+            wheelMotors.BR.setPower(pbr + MOTOR_SPEED_STRAFE);
+            wheelMotors.BL.setPower(pbl + MOTOR_SPEED_STRAFE);
+        } else {
+            wheelMotors.TR.setPower(ptr);
+            wheelMotors.TL.setPower(ptl);
+            wheelMotors.BR.setPower(pbr);
+            wheelMotors.BL.setPower(pbl);
+        }
 
         telemetry.addData("Precision Mode On", "%b\n", precisionModeOn);
     }
 
-    private void Strafe() {
-        /*final double rightX = gamepad1.right_stick_x;
-        final double rightY = -gamepad1.right_stick_y;
-
-        final double wheelsSpeed = Math.hypot(rightY, rightX);
-        final double direction = Math.atan2(rightX, rightY) - WheelMotors.PI_4;
-
-        double speed1 = wheelsSpeed * Math.cos(direction) * MOTOR_SPEED_MULTIPLIER;
-        double speed2 = wheelsSpeed * Math.sin(direction) * MOTOR_SPEED_MULTIPLIER;*/
-
-        // Strafe Right
-        while (gamepad1.right_stick_x > 0) {
-            wheelMotors.TR.setPower(MOTOR_SPEED_STRAFE);
-            wheelMotors.TL.setPower(MOTOR_SPEED_STRAFE);
-            wheelMotors.BR.setPower(-MOTOR_SPEED_STRAFE);
-            wheelMotors.BL.setPower(-MOTOR_SPEED_STRAFE);
-        }
-
-        // Strafe Left
-        while (gamepad1.right_stick_x < 0) {
-            wheelMotors.TR.setPower(-MOTOR_SPEED_STRAFE);
-            wheelMotors.TL.setPower(-MOTOR_SPEED_STRAFE);
-            wheelMotors.BR.setPower(MOTOR_SPEED_STRAFE);
-            wheelMotors.BL.setPower(MOTOR_SPEED_STRAFE);
-        }
-    }
-
-    private void Latching() {
+    private void latching() {
         double latchingPower = 0;
 
         if (gamepad1.dpad_up)
@@ -118,18 +133,18 @@ public class FinalTeleOp extends OpMode {
         telemetry.addData("Latching Power", latchingPower);
     }
 
-    private void ArmMovement() {
+    private void armMovement() {
         final double armAnglePower = -gamepad2.left_stick_y * ARM_ANGLE_SPEED_MULTIPLIER;
         armMotors.armAngle.setPower(armAnglePower);
 
         final double armExtensionPower = gamepad2.right_stick_y * ARM_EXTENSION_SPEED_MULTIPLIER;
         armMotors.armExtension.setPower(armExtensionPower);
 
-        telemetry.addData("Arm Angle Power", armAnglePower);
-        telemetry.addData("Arm Extension Power", armExtensionPower);
+        //telemetry.addData("Arm Angle Power", armAnglePower);
+        //telemetry.addData("Arm Extension Power", armExtensionPower);
     }
 
-    private void Collector() {
+    private void collector() {
         double collectorPower = 0;
 
         if (gamepad2.right_bumper)
@@ -138,6 +153,6 @@ public class FinalTeleOp extends OpMode {
             collectorPower = -COLLECTOR_SPEED;
         armMotors.collector.setPower(collectorPower);
 
-        telemetry.addData("Collector Power", collectorPower);
+        //telemetry.addData("Collector Power", collectorPower);
     }
 }

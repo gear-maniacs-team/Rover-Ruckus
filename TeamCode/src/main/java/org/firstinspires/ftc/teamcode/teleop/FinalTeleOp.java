@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -7,11 +7,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.teamcode.motors.ArmMotors;
 import org.firstinspires.ftc.teamcode.motors.WheelMotors;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-@TeleOp(name = "Multi-Threaded TeleOp", group = "Good")
-public class MultiThreadedTeleOp extends OpMode {
+@TeleOp(name = "Final", group = "Good")
+public class FinalTeleOp extends OpMode {
 
     private static final double PRECISION_MODE_MULTIPLIER = 0.45;
     private static final double MOTOR_SPEED_MULTIPLIER = 0.8;
@@ -21,9 +18,6 @@ public class MultiThreadedTeleOp extends OpMode {
     private static final double COLLECTOR_SPEED = 0.5;
     private static final double LATCH_SPEED = 1;
 
-    private final ExecutorService executor = Executors.newSingleThreadExecutor();
-
-    private volatile boolean isRunning = false;
     private WheelMotors wheelMotors = null;
     private ArmMotors armMotors = null;
 
@@ -32,35 +26,21 @@ public class MultiThreadedTeleOp extends OpMode {
         wheelMotors = new WheelMotors(hardwareMap.dcMotor);
         armMotors = new ArmMotors(hardwareMap.dcMotor);
 
-        wheelMotors.setModeAll(DcMotor.RunMode.RUN_USING_ENCODER);
-    }
-
-    @Override
-    public void start() {
-        isRunning = true;
-        Runnable armRunnable = () -> {
-            while (isRunning) {
-                armMovement();
-                collector();
-            }
-        };
-        executor.execute(armRunnable);
+        wheelMotors.setModeAll(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     @Override
     public void loop() {
-        movement();
-        strafe();
-        latching();
+        Movement();
+        Strafe();
+        Latching();
+        ArmMovement();
+        Collector();
+
         telemetry.update();
     }
 
-    @Override
-    public void stop() {
-        isRunning = false;
-    }
-
-    private void movement() {
+    private void Movement() {
         final double leftX = gamepad1.left_stick_x;
         final double leftY = -gamepad1.left_stick_y;
 
@@ -98,7 +78,16 @@ public class MultiThreadedTeleOp extends OpMode {
         telemetry.addData("Precision Mode On", "%b\n", precisionModeOn);
     }
 
-    private void strafe() {
+    private void Strafe() {
+        /*final double rightX = gamepad1.right_stick_x;
+        final double rightY = -gamepad1.right_stick_y;
+
+        final double wheelsSpeed = Math.hypot(rightY, rightX);
+        final double direction = Math.atan2(rightX, rightY) - WheelMotors.PI_4;
+
+        double speed1 = wheelsSpeed * Math.cos(direction) * MOTOR_SPEED_MULTIPLIER;
+        double speed2 = wheelsSpeed * Math.sin(direction) * MOTOR_SPEED_MULTIPLIER;*/
+
         // Strafe Right
         while (gamepad1.right_stick_x > 0) {
             wheelMotors.TR.setPower(MOTOR_SPEED_STRAFE);
@@ -116,7 +105,7 @@ public class MultiThreadedTeleOp extends OpMode {
         }
     }
 
-    private void latching() {
+    private void Latching() {
         double latchingPower = 0;
 
         if (gamepad1.dpad_up)
@@ -126,21 +115,21 @@ public class MultiThreadedTeleOp extends OpMode {
 
         armMotors.latchMotor.setPower(latchingPower);
 
-       telemetry.addData("Latching Power", latchingPower);
+        telemetry.addData("Latching Power", latchingPower);
     }
 
-    private void armMovement() {
+    private void ArmMovement() {
         final double armAnglePower = -gamepad2.left_stick_y * ARM_ANGLE_SPEED_MULTIPLIER;
         armMotors.armAngle.setPower(armAnglePower);
 
         final double armExtensionPower = gamepad2.right_stick_y * ARM_EXTENSION_SPEED_MULTIPLIER;
         armMotors.armExtension.setPower(armExtensionPower);
 
-        //telemetry.addData("Arm Angle Power", armAnglePower);
-        //telemetry.addData("Arm Extension Power", armExtensionPower);
+        telemetry.addData("Arm Angle Power", armAnglePower);
+        telemetry.addData("Arm Extension Power", armExtensionPower);
     }
 
-    private void collector() {
+    private void Collector() {
         double collectorPower = 0;
 
         if (gamepad2.right_bumper)
@@ -149,6 +138,6 @@ public class MultiThreadedTeleOp extends OpMode {
             collectorPower = -COLLECTOR_SPEED;
         armMotors.collector.setPower(collectorPower);
 
-        //telemetry.addData("Collector Power", collectorPower);
+        telemetry.addData("Collector Power", collectorPower);
     }
 }
